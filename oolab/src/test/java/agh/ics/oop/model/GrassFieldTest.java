@@ -1,10 +1,9 @@
 package agh.ics.oop.model;
 
+import agh.ics.oop.model.MapObjects.Grass;
 import agh.ics.oop.model.util.RandomPositionGenerator;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;

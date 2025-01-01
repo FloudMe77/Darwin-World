@@ -4,12 +4,20 @@ public enum MapDirection {
     NORTH,
     SOUTH,
     WEST,
-    EAST;
+    EAST,
+    NORTHWEST,
+    SOUTHWEST,
+    NORTHEAST,
+    SOUTHEAST;
 
     static final Vector2d unitNorth = new Vector2d(0, 1);
     static final Vector2d unitSouth = new Vector2d(0, -1);
     static final Vector2d unitWest = new Vector2d(-1, 0);
     static final Vector2d unitEast = new Vector2d(1, 0);
+    static final Vector2d unitNorthEast = new Vector2d(1, 1);
+    static final Vector2d unitNorthWest = new Vector2d(-1, 1);
+    static final Vector2d unitSouthEast = new Vector2d(1, -1);
+    static final Vector2d unitSouthWest = new Vector2d(-1, -1);
 
     public String toString() {
         return switch (this) {
@@ -17,25 +25,20 @@ public enum MapDirection {
             case SOUTH -> "Południe";
             case EAST -> "Wschód";
             case WEST -> "Zachód";
+            case NORTHEAST -> "Północny wschód";
+            case SOUTHEAST -> "Południowy wschód";
+            case NORTHWEST -> "Północny zachód";
+            case SOUTHWEST -> "Południowy zachód";
         };
     }
-
-    public MapDirection next() {
-        return switch (this) {
-            case NORTH -> EAST;
-            case SOUTH -> WEST;
-            case EAST -> SOUTH;
-            case WEST -> NORTH;
-        };
+    // Przesunięcie do następnej wartości
+    public MapDirection next(int jumpTo) {
+        return values()[(ordinal() + jumpTo) % values().length];
     }
 
-    public MapDirection previous() {
-        return switch (this) {
-            case NORTH -> WEST;
-            case SOUTH -> EAST;
-            case EAST -> NORTH;
-            case WEST -> SOUTH;
-        };
+    // Przesunięcie do poprzedniej wartości
+    public MapDirection previous(int jumpTo) {
+        return values()[(ordinal() - jumpTo + values().length) % values().length];
     }
 
     public Vector2d toUnitVector() {
@@ -44,6 +47,10 @@ public enum MapDirection {
             case SOUTH -> unitSouth;
             case EAST -> unitEast;
             case WEST -> unitWest;
+            case NORTHEAST -> unitNorthEast;
+            case NORTHWEST -> unitNorthWest;
+            case SOUTHEAST -> unitSouthEast;
+            case SOUTHWEST -> unitSouthWest;
         };
     }
 }
