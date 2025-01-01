@@ -7,7 +7,7 @@ import agh.ics.oop.model.util.MapVisualizer;
 
 import java.util.*;
 
-public class BasicRectangularMap implements WorldMap {
+abstract public class BasicRectangularMap implements WorldMap {
     protected final Map<Vector2d, List<Animal>> animals = new HashMap<>();
     protected final Map<Vector2d, Grass> grasses = new HashMap<>();
     private final MapVisualizer visualizer = new MapVisualizer(this);
@@ -19,25 +19,24 @@ public class BasicRectangularMap implements WorldMap {
 
     private static int counterOfId = 1;
 
-    public BasicRectangularMap(int height, int width){
+    public BasicRectangularMap(int height, int width) {
         mapId = counterOfId++;
-        this.lowerLeft = new Vector2d(0,0);
-        this.upperRight = new Vector2d(width-1,height-1);
+        this.lowerLeft = new Vector2d(0, 0);
+        this.upperRight = new Vector2d(width - 1, height - 1);
         boundary = new Boundary(lowerLeft, upperRight);
     }
 
-
-    public void addObserver(MapChangeListener observer){
+    public void addObserver(MapChangeListener observer) {
         observers.add(observer);
     }
 
-    public void removeObserver(MapChangeListener observer){
+    public void removeObserver(MapChangeListener observer) {
         observers.remove(observer);
     }
 
-    private void notifyObservers(String message){
-        for(var observer:observers){
-            observer.mapChanged(this,message, mapId);
+    private void notifyObservers(String message) {
+        for (var observer : observers) {
+            observer.mapChanged(this, message, mapId);
         }
     }
 
@@ -71,41 +70,14 @@ public class BasicRectangularMap implements WorldMap {
     public void move(Animal animal, MoveDirection direction) {
         var oldPosition = animal.getPosition();
         removeFromAnimals(animal.getPosition(), animal);
-        animal.move(direction, this);
+        animal.move(direction, getValidator(animal));
         addToAnimals(animal.getPosition(), animal);
         notifyObservers("Przeniesiono Animal z " + oldPosition + " do " + animal.getPosition());
-    }
-
-    public List<WorldElement> getElements(){
-        List<WorldElement> elements = new ArrayList<>();
-
-        for (List<Animal> animalList : animals.values()) {
-            elements.addAll(animalList);
-        }
-
-        elements.addAll(grasses.values());
-        return Collections.unmodifiableList(elements);
     }
 
     @Override
     public boolean canMoveTo(Vector2d position) {
         return position.follows(lowerLeft) && position.precedes(upperRight);
-    }
-
-    @Override
-    public String toString(){
-        var boundary = getCurrentBounds();
-        return visualizer.draw(boundary.leftDownCornerMap(),boundary.rightUpperCornerMap());
-    }
-
-    @Override
-    public int getId(){
-        return mapId;
-    }
-
-    @Override
-    public Boundary getCurrentBounds(){
-        return boundary;
     }
 
     @Override
@@ -118,7 +90,39 @@ public class BasicRectangularMap implements WorldMap {
         return mapDirection;
     }
 
-    private void addToAnimals(Vector2d position, Animal animal) {
+    public List<WorldElement> getElements() {
+        List<WorldElement> elements = new ArrayList<>();
+
+        for (List<Animal> animalList : animals.values()) {
+            elements.addAll(animalList);
+        }
+
+        elements.addAll(grasses.values());
+        return Collections.unmodifiableList(elements);
+    }
+
+    public WorldMap getValidator(Animal animal) {
+        return this;
+    };
+
+    @Override
+    public String toString() {
+        var boundary = getCurrentBounds();
+        return visualizer.draw(boundary.leftDownCornerMap(), boundary.rightUpperCornerMap());
+    }
+
+    @Override
+    public int getId() {
+        return mapId;
+    }
+
+    @Override
+    public Boundary getCurrentBounds() {
+        return boundary;
+    }
+
+    // możliwe ze w przyszłosci to będzie public?
+    protected void addToAnimals(Vector2d position, Animal animal) {
         if (!animals.containsKey(position)) {
             animals.put(position, new ArrayList<>());
         }
@@ -126,7 +130,7 @@ public class BasicRectangularMap implements WorldMap {
         animals.get(position).add(animal);
     }
 
-    private void removeFromAnimals(Vector2d position, Animal animal) {
+    protected void removeFromAnimals(Vector2d position, Animal animal) {
         List<Animal> animalList = animals.get(position);
         if (animalList != null) {
             animalList.remove(animal);

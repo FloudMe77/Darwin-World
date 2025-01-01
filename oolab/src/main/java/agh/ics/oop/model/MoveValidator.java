@@ -1,6 +1,6 @@
 package agh.ics.oop.model;
 
-import agh.ics.oop.model.Vector2d;
+import agh.ics.oop.model.maps.WorldMap;
 
 public interface MoveValidator {
 
@@ -12,4 +12,8 @@ public interface MoveValidator {
      * @return True if the object can move to that position.
      */
     boolean canMoveTo(Vector2d position);
+    // Custom move validation that can be tailored to specific map
+    MapDirection getNewMapDirection(Vector2d potentialPosition, MapDirection mapDirection);
+    Vector2d getNewPosition(Vector2d oldPosition, Vector2d newPosition);
+    WorldMap getValidator(Animal animal);
 }

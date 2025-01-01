@@ -1,9 +1,7 @@
 package agh.ics.oop.model.maps;
 
-import agh.ics.oop.model.Animal;
-import agh.ics.oop.model.Vector2d;
-import agh.ics.oop.model.WorldElement;
-import agh.ics.oop.model.WorldMap;
+import agh.ics.oop.model.*;
+import agh.ics.oop.model.MoveValidator;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -17,6 +15,7 @@ public class WildOwlBearMap extends BasicRectangularMap {
         super(height, width);
         int bearSideLength = (int) Math.floor(Math.sqrt(height * width * 0.2));
         owlBearMap = new RectangularMap(bearSideLength, bearSideLength);
+        Vector2d owlBearPosition = new Vector2d(0, 0);
     }
 
     @Override
@@ -36,4 +35,10 @@ public class WildOwlBearMap extends BasicRectangularMap {
         return Collections.unmodifiableList(elements);
     }
 
+    @Override
+    public WorldMap getValidator(Animal animal) {
+//        return animal.getClass() == OwlBear.class ? wildOwlBearValidator : animalValidator
+        return owlBearMap;
+    }
 }
+
