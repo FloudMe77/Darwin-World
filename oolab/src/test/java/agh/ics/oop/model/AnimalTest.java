@@ -1,16 +1,17 @@
 package agh.ics.oop.model;
 
+import agh.ics.oop.model.maps.EarthMap;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class AnimalTest {
-    WorldMap map = new RectangularMap(5,5);
+    WorldMap map = new EarthMap(5,5);
 
     @Test
     void defaultConstructor(){
         //given
-        WorldMap map = new RectangularMap(3,3);
+        WorldMap map = new EarthMap(3,3);
         // when
         var a1 = new Animal();
         // then
