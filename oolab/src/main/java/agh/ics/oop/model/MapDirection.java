@@ -66,7 +66,7 @@ public enum MapDirection {
                 return direction;
             }
         }
-        
+
         throw new IllegalArgumentException("No direction for vector: " + vector);
     }
 }

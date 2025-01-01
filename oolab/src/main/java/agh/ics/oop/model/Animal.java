@@ -1,8 +1,7 @@
 package agh.ics.oop.model;
 
-import agh.ics.oop.model.RectangularMap;
 
-public class Animal implements WorldElement{
+public class Animal implements WorldElement {
     private MapDirection currentDirection = MapDirection.NORTH;
     private Vector2d currentPosition;
 
@@ -23,19 +22,20 @@ public class Animal implements WorldElement{
         return currentDirection;
     }
 
-    public String toString() {
-        return switch (currentDirection) {
-            case NORTH -> "^";
-            case SOUTH -> "v";
-            case EAST -> ">";
-            case WEST -> "<";
-        };
-    }
+//    public String toString() {
+//        return switch (currentDirection) {
+//            case NORTH -> "^";
+//            case SOUTH -> "v";
+//            case EAST -> ">";
+//            case WEST -> "<";
+//        };
+//    }
 
     @Override
     public boolean isAt(Vector2d position) {
         return currentPosition.equals(position);
     }
+
     public boolean atDirection(MapDirection direction) {
         return currentDirection.equals(direction);
     }
@@ -49,13 +49,17 @@ public class Animal implements WorldElement{
             case FORWARD -> {
                 var positionAfterMove = currentPosition.add(currentDirection.toUnitVector());
                 if (validator.canMoveTo(positionAfterMove)) {
-                    currentPosition = positionAfterMove;
+                    currentPosition = validator.getNewPosition(currentPosition, positionAfterMove);
+                } else {
+                    currentDirection = validator.getNewMapDirection(positionAfterMove, currentDirection);
                 }
             }
             case BACKWARD -> {
                 var positionAfterMove = currentPosition.add(currentDirection.toUnitVector().opposite());
                 if (validator.canMoveTo(positionAfterMove)) {
-                    currentPosition = positionAfterMove;
+                    currentPosition = validator.getNewPosition(currentPosition, positionAfterMove);
+                } else {
+                    currentDirection = validator.getNewMapDirection(positionAfterMove, currentDirection);
                 }
             }
         }
