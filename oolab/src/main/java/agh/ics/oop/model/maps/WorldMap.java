@@ -1,6 +1,7 @@
 package agh.ics.oop.model.maps;
 
 import agh.ics.oop.model.*;
+import agh.ics.oop.model.MapObjects.Animal;
 import agh.ics.oop.model.util.Boundary;
 
 import java.util.List;
@@ -22,10 +23,10 @@ public interface WorldMap extends MoveValidator {
     void place(Animal animal) throws IncorrectPositionException;
 
     /**
-     * Moves an animal (if it is present on the map) according to specified direction.
+     * Moves an animal (if it is present on the map) forward.
      * If the move is not possible, this method has no effect.
      */
-    void move(Animal animal, MoveDirection direction);
+    void move(Animal animal);
 
     /**
      * Return true if given position on the map is occupied. Should not be

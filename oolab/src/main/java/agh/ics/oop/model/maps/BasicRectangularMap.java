@@ -1,6 +1,8 @@
 package agh.ics.oop.model.maps;
 
 import agh.ics.oop.model.*;
+import agh.ics.oop.model.MapObjects.Animal;
+import agh.ics.oop.model.MapObjects.Grass;
 import agh.ics.oop.model.util.Boundary;
 import agh.ics.oop.model.util.MapChangeListener;
 import agh.ics.oop.model.util.MapVisualizer;
@@ -67,10 +69,10 @@ abstract public class BasicRectangularMap implements WorldMap {
     }
 
     @Override
-    public void move(Animal animal, MoveDirection direction) {
+    public void move(Animal animal) {
         var oldPosition = animal.getPosition();
         removeFromAnimals(animal.getPosition(), animal);
-        animal.move(direction, getValidator(animal));
+        animal.move(getValidator(animal));
         addToAnimals(animal.getPosition(), animal);
         notifyObservers("Przeniesiono Animal z " + oldPosition + " do " + animal.getPosition());
     }

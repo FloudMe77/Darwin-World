@@ -1,7 +1,7 @@
 package agh.ics.oop.model.maps;
 
 import agh.ics.oop.model.*;
-import agh.ics.oop.model.MoveValidator;
+import agh.ics.oop.model.MapObjects.Animal;
 
 import java.util.ArrayList;
 import java.util.Collections;

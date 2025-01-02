@@ -30,29 +30,16 @@ public enum MapDirection {
         };
     }
 
-    public MapDirection next() {
-        return switch (this) {
-            case NORTH -> NORTHEAST;
-            case NORTHEAST -> EAST;
-            case EAST -> SOUTHEAST;
-            case SOUTHEAST -> SOUTH;
-            case SOUTH -> SOUTHWEST;
-            case SOUTHWEST -> WEST;
-            case WEST -> NORTHWEST;
-            case NORTHWEST -> NORTH;
-        };
-    }
-
-    public MapDirection previous() {
-        return switch (this) {
-            case NORTH -> NORTHWEST;
-            case NORTHWEST -> WEST;
-            case WEST -> SOUTHWEST;
-            case SOUTHWEST -> SOUTH;
-            case SOUTH -> SOUTHEAST;
-            case SOUTHEAST -> EAST;
-            case EAST -> NORTHEAST;
-            case NORTHEAST -> NORTH;
+    public MapDirection getDirection(GenomeDirection genomeDirection) {
+        return switch (genomeDirection) {
+            case ZERO -> NORTH;
+            case ONE -> NORTHEAST;
+            case TWO -> EAST;
+            case THREE -> SOUTHEAST;
+            case FOUR -> SOUTH;
+            case FIVE -> SOUTHWEST;
+            case SIX -> WEST;
+            case SEVEN -> NORTHWEST;
         };
     }
 
