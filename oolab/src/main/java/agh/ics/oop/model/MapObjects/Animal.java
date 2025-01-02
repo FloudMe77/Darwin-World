@@ -34,7 +34,7 @@ public class Animal extends AbstractAnimal {
         return child;
     }
 
-    public ArrayList<Integer> shuffleGenomes(Animal other) {
+    public ArrayList<GenomeDirection> shuffleGenomes(Animal other) {
         Random random = new Random();
         int otherEnergy = other.getEnergy();
 
@@ -53,7 +53,7 @@ public class Animal extends AbstractAnimal {
 
         // Wyznaczenie dominującej strony
         int dominantSide = random.nextInt(2);
-        var newGenList = new ArrayList<Integer>();
+        var newGenList = new ArrayList<GenomeDirection>();
 
         // Obliczenie indeksu podziału
         int divideIndex = (int) Math.ceil(

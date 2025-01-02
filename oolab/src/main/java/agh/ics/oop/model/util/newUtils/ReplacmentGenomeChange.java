@@ -1,5 +1,6 @@
 package agh.ics.oop.model.util.newUtils;
 
+import agh.ics.oop.model.GenomeDirection;
 import agh.ics.oop.model.Vector2d;
 
 import java.util.ArrayList;
@@ -9,7 +10,7 @@ import java.util.Random;
 
 public class ReplacmentGenomeChange implements GenomeChange {
     @Override
-    public void changeGenome(ArrayList<Integer> GenomeList, int minMutationAmount, int maxMutationAmount) {
+    public void changeGenome(ArrayList<GenomeDirection> GenomeList, int minMutationAmount, int maxMutationAmount) {
         Random random = new Random();
         int mutationAmount = random.nextInt(minMutationAmount, maxMutationAmount + 1);
         int genomeLen = GenomeList.size();
@@ -19,7 +20,7 @@ public class ReplacmentGenomeChange implements GenomeChange {
         for(var pair : allPossiblePairs) {
             int index1 = pair.getFirst();
             int index2 = pair.getLast();
-            int buffer = GenomeList.get(index1);
+            GenomeDirection buffer = GenomeList.get(index1);
             GenomeList.set(index1, GenomeList.get(index2));
             GenomeList.set(index2, buffer);
         }

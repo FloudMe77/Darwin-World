@@ -66,8 +66,8 @@ public abstract class AbstractAnimal implements WorldElement {
     }
 
     public void move(MoveValidator validator) {
-//        GenomeDirection genomeDirection = genome.getGenVal(currentGen); current gen will be of type genomedirection
-//        currentDirection = currentDirection.getDirection(genomeDirection);
+        GenomeDirection genomeDirection = genome.getGenVal(currentIndexOfGen);
+        currentDirection = currentDirection.getDirection(genomeDirection);
         var positionAfterMove = currentPosition.add(currentDirection.toUnitVector());
         if (validator.canMoveTo(positionAfterMove)) {
             currentPosition = validator.getNewPosition(currentPosition, positionAfterMove);
@@ -75,7 +75,7 @@ public abstract class AbstractAnimal implements WorldElement {
             currentDirection = validator.getNewMapDirection(positionAfterMove, currentDirection);
         }
 
-        currentIndexOfGen = (currentIndexOfGen +1)%(genome.getGenLength());
+        currentIndexOfGen = (currentIndexOfGen + 1) % (genome.getGenLength());
     }
 
 }

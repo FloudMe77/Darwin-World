@@ -1,24 +1,25 @@
 package agh.ics.oop.model.util.newUtils;
 
+import agh.ics.oop.model.GenomeDirection;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
 public class Genome {
-    private final List<Integer> genList;
+    private final List<GenomeDirection> genList;
     private final int genLength;
 
     public Genome(int genLength) {
-        Random random = new Random();
         this.genLength = genLength;
         genList = new ArrayList<>();
 
         for (int i = 0; i < genLength; i++) {
-            genList.add(random.nextInt(8));
+            genList.add(GenomeDirection.getRandomGenome());
         }
     }
 
-    public Genome(ArrayList<Integer> genList) {
+    public Genome(ArrayList<GenomeDirection> genList) {
         this.genList = genList;
         this.genLength = genList.size();
     }
@@ -27,11 +28,11 @@ public class Genome {
         return genLength;
     }
 
-    public int getGenVal(int index) {
+    public GenomeDirection getGenVal(int index) {
         return genList.get(index);
     }
 
-    public List<Integer> getGenList() {
+    public List<GenomeDirection> getGenList() {
         return List.copyOf(genList);
     }
 }
