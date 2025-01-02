@@ -1,5 +1,6 @@
 package agh.ics.oop.model;
 
+import agh.ics.oop.model.MapObjects.AbstractAnimal;
 import agh.ics.oop.model.MapObjects.Animal;
 import agh.ics.oop.model.maps.WorldMap;
 
@@ -16,5 +17,5 @@ public interface MoveValidator {
     // Custom move validation that can be tailored to specific map
     MapDirection getNewMapDirection(Vector2d potentialPosition, MapDirection mapDirection);
     Vector2d getNewPosition(Vector2d oldPosition, Vector2d newPosition);
-    WorldMap getValidator(Animal animal);
+    WorldMap getValidator(AbstractAnimal animal);
 }

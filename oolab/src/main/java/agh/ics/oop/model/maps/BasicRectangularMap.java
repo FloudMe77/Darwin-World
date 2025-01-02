@@ -1,6 +1,7 @@
 package agh.ics.oop.model.maps;
 
 import agh.ics.oop.model.*;
+import agh.ics.oop.model.MapObjects.AbstractAnimal;
 import agh.ics.oop.model.MapObjects.Animal;
 import agh.ics.oop.model.MapObjects.Grass;
 import agh.ics.oop.model.util.Boundary;
@@ -10,7 +11,7 @@ import agh.ics.oop.model.util.MapVisualizer;
 import java.util.*;
 
 abstract public class BasicRectangularMap implements WorldMap {
-    protected final Map<Vector2d, List<Animal>> animals = new HashMap<>();
+    protected final Map<Vector2d, List<AbstractAnimal>> animals = new HashMap<>();
     protected final Map<Vector2d, Grass> grasses = new HashMap<>();
     private final MapVisualizer visualizer = new MapVisualizer(this);
     private final List<MapChangeListener> observers = new ArrayList<>();
@@ -69,7 +70,7 @@ abstract public class BasicRectangularMap implements WorldMap {
     }
 
     @Override
-    public void move(Animal animal) {
+    public void move(AbstractAnimal animal) {
         var oldPosition = animal.getPosition();
         removeFromAnimals(animal.getPosition(), animal);
         animal.move(getValidator(animal));
@@ -95,7 +96,7 @@ abstract public class BasicRectangularMap implements WorldMap {
     public List<WorldElement> getElements() {
         List<WorldElement> elements = new ArrayList<>();
 
-        for (List<Animal> animalList : animals.values()) {
+        for (List<AbstractAnimal> animalList : animals.values()) {
             elements.addAll(animalList);
         }
 
@@ -103,7 +104,7 @@ abstract public class BasicRectangularMap implements WorldMap {
         return Collections.unmodifiableList(elements);
     }
 
-    public WorldMap getValidator(Animal animal) {
+    public WorldMap getValidator(AbstractAnimal animal) {
         return this;
     };
 
@@ -124,7 +125,7 @@ abstract public class BasicRectangularMap implements WorldMap {
     }
 
     // możliwe ze w przyszłosci to będzie public?
-    protected void addToAnimals(Vector2d position, Animal animal) {
+    protected void addToAnimals(Vector2d position, AbstractAnimal animal) {
         if (!animals.containsKey(position)) {
             animals.put(position, new ArrayList<>());
         }
@@ -132,8 +133,8 @@ abstract public class BasicRectangularMap implements WorldMap {
         animals.get(position).add(animal);
     }
 
-    protected void removeFromAnimals(Vector2d position, Animal animal) {
-        List<Animal> animalList = animals.get(position);
+    protected void removeFromAnimals(Vector2d position, AbstractAnimal animal) {
+        List<AbstractAnimal> animalList = animals.get(position);
         if (animalList != null) {
             animalList.remove(animal);
             if (animalList.isEmpty()) {

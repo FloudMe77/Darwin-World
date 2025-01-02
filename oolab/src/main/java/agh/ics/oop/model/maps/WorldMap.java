@@ -1,6 +1,7 @@
 package agh.ics.oop.model.maps;
 
 import agh.ics.oop.model.*;
+import agh.ics.oop.model.MapObjects.AbstractAnimal;
 import agh.ics.oop.model.MapObjects.Animal;
 import agh.ics.oop.model.util.Boundary;
 
@@ -26,7 +27,7 @@ public interface WorldMap extends MoveValidator {
      * Moves an animal (if it is present on the map) forward.
      * If the move is not possible, this method has no effect.
      */
-    void move(Animal animal);
+    void move(AbstractAnimal animal);
 
     /**
      * Return true if given position on the map is occupied. Should not be
