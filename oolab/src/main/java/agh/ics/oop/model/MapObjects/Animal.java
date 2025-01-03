@@ -14,8 +14,7 @@ public class Animal extends AbstractAnimal {
     private int childrenAmount = 0;
     private int dayOfDeath;
     private boolean isAlive = true;
-    private final int actualIndexOfGen = 0;
-    private List<Animal> kids = new ArrayList<>();
+    private final List<Animal> kids = new ArrayList<>();
 
     public Animal(Vector2d position, Genome genome, int startEnergy) {
         super(position, genome);
@@ -37,6 +36,7 @@ public class Animal extends AbstractAnimal {
     public ArrayList<GenomeDirection> shuffleGenomes(Animal other) {
         Random random = new Random();
         int otherEnergy = other.getEnergy();
+        int genomeLen = getGenome().getGenLength();
 
         // Deklaracja zmiennych przed if/else
         Animal betterAnimal;
@@ -57,9 +57,9 @@ public class Animal extends AbstractAnimal {
 
         // Obliczenie indeksu podziału
         int divideIndex = (int) Math.ceil(
-                betterAnimal.getEnergy() / (double) (betterAnimal.getEnergy() + worseAnimal.getEnergy())
+                genomeLen * (betterAnimal.getEnergy() / (double) (betterAnimal.getEnergy() + worseAnimal.getEnergy()))
         );
-
+        System.out.println(divideIndex);
         // Dodawanie genów w zależności od dominującej strony
         if (dominantSide == 0) {
             // Dominująca strona po lewej
@@ -67,8 +67,8 @@ public class Animal extends AbstractAnimal {
             newGenList.addAll(worseAnimal.getGenome().getGenList().subList(divideIndex, worseAnimal.getGenome().getGenLength()));
         } else {
             // Dominująca strona po prawej
-            newGenList.addAll(worseAnimal.getGenome().getGenList().subList(0, divideIndex));
-            newGenList.addAll(betterAnimal.getGenome().getGenList().subList(divideIndex, betterAnimal.getGenome().getGenLength()));
+            newGenList.addAll(worseAnimal.getGenome().getGenList().subList(0, genomeLen-divideIndex));
+            newGenList.addAll(betterAnimal.getGenome().getGenList().subList(genomeLen-divideIndex, betterAnimal.getGenome().getGenLength()));
         }
 
         return newGenList;
@@ -110,6 +110,8 @@ public class Animal extends AbstractAnimal {
         isAlive = false;
         dayOfDeath = age;
     }
-
+    public List<Animal> getKids(){
+        return kids;
+    }
 
 }

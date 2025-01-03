@@ -4,7 +4,6 @@ import agh.ics.oop.model.GenomeDirection;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 public class Genome {
     private final List<GenomeDirection> genList;
