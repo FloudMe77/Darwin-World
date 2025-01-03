@@ -3,8 +3,10 @@ package agh.ics.oop.model.MapObjects;
 import agh.ics.oop.model.*;
 import agh.ics.oop.model.util.newUtils.Genome;
 
+import java.util.Random;
+
 public abstract class AbstractAnimal implements WorldElement {
-    protected MapDirection currentDirection = MapDirection.NORTH;
+    protected MapDirection currentDirection;
     protected Vector2d currentPosition;
     protected int age = 0;
     protected int eaten = 0;
@@ -15,6 +17,9 @@ public abstract class AbstractAnimal implements WorldElement {
     public AbstractAnimal(Vector2d position, Genome genome) {
         this.currentPosition = position;
         this.genome = genome;
+        Random random = new Random();
+        // losowy kierunek początkowy
+        currentDirection = MapDirection.values()[random.nextInt(8)];
     }
 
 

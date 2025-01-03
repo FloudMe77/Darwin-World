@@ -35,4 +35,9 @@ public class Genome {
     public List<GenomeDirection> getGenList() {
         return List.copyOf(genList);
     }
+
+    @Override
+    public int hashCode() {
+        return genList.hashCode();
+    }
 }

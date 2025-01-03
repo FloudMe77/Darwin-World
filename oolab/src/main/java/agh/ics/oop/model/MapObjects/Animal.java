@@ -110,4 +110,6 @@ public class Animal extends AbstractAnimal {
         isAlive = false;
         dayOfDeath = age;
     }
+
+
 }

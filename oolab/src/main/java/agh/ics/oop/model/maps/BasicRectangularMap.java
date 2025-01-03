@@ -7,12 +7,14 @@ import agh.ics.oop.model.MapObjects.Grass;
 import agh.ics.oop.model.util.Boundary;
 import agh.ics.oop.model.util.MapChangeListener;
 import agh.ics.oop.model.util.MapVisualizer;
+import agh.ics.oop.model.util.newUtils.Genome;
 
 import java.util.*;
 
 abstract public class BasicRectangularMap implements WorldMap {
     protected final Map<Vector2d, List<AbstractAnimal>> animals = new HashMap<>();
     protected final Map<Vector2d, Grass> grasses = new HashMap<>();
+    protected final List<AbstractAnimal> deathAnimals = new ArrayList<>(); //nie potrzebuje pozycji zmarłych zwierząt
     private final MapVisualizer visualizer = new MapVisualizer(this);
     private final List<MapChangeListener> observers = new ArrayList<>();
     private final Vector2d upperRight;
@@ -127,6 +129,7 @@ abstract public class BasicRectangularMap implements WorldMap {
     // możliwe ze w przyszłosci to będzie public?
     protected void addToAnimals(Vector2d position, AbstractAnimal animal) {
         if (!animals.containsKey(position)) {
+
             animals.put(position, new ArrayList<>());
         }
 
@@ -139,7 +142,69 @@ abstract public class BasicRectangularMap implements WorldMap {
             animalList.remove(animal);
             if (animalList.isEmpty()) {
                 animals.remove(position);
+
             }
+        }
+        deathAnimals.add(animal);
+    }
+    public int getAnimalAmount(){
+        return animals.values().stream()
+                .mapToInt(List::size) // Pobieramy rozmiar każdej listy
+                .sum(); // Sumujemy rozmiary
+    }
+
+    public int getGrassAmount(){
+        return grasses.size();
+    }
+
+    public float getAverageEnergy(){
+        int energySum = animals.values().stream()
+                .flatMap(List::stream) // Spłaszczenie wszystkich list z mapy do jednego strumienia
+                .filter(abstractAnimal -> abstractAnimal instanceof Animal animal) // Filtrujemy tylko instancje Animal
+                .mapToInt(animal -> ((Animal) animal).getEnergy()) // Rzutowanie i pobranie energii
+                .sum(); // Sumujemy wartości energii
+        return (float) energySum /getAnimalAmount();
+    }
+
+    public float getAverageLifeTime(){
+        int ageSum = deathAnimals.stream()
+                .mapToInt(AbstractAnimal::getAge) // Pobieramy wiek każdego zwierzęcia
+                .sum(); // Sumujemy wartości
+        return (float) ageSum /deathAnimals.size();
+    }
+
+    public float getAverageChildrenAmount(){
+        int childrenSum = animals.values().stream()
+                .flatMap(List::stream) // Spłaszczenie list w mapie do pojedynczego strumienia obiektów
+                .filter(abstractAnimal -> abstractAnimal instanceof Animal) // Filtrujemy tylko instancje Animal
+                .mapToInt(abstractAnimal -> ((Animal) abstractAnimal).getChildrenAmount()) // Rzutujemy i pobieramy ilość dzieci
+                .sum(); // Sumujemy wartości
+        return (float) childrenSum /getAnimalAmount();
+    }
+
+    public Genome getDominantGenome(){
+        HashMap<Genome,Integer> genomesCounter = new HashMap<>();
+        for(var animalList: animals.values()){
+            for(var animal:animalList){
+                if(!(animal instanceof Animal)){
+                    continue;
+                }
+                Genome genome = animal.getGenome();
+                if(genomesCounter.containsKey(genome)){
+                    genomesCounter.put(genome,1);
+                }
+                else{
+                    genomesCounter.put(genome,genomesCounter.get(genome)+1);
+                }
+            }
+        }
+        Optional<Map.Entry<Genome, Integer>> maxEntry = genomesCounter.entrySet().stream()
+                .max(Map.Entry.comparingByValue()); // Porównujemy po wartościach
+
+        if (maxEntry.isPresent()) {
+            return maxEntry.get().getKey();
+        } else {
+            throw new RuntimeException("brak elementów w liście"); //tymczasowe, żeby tylko zabezpieczyć
         }
     }
 }
