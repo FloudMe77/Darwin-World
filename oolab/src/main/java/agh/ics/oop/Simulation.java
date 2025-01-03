@@ -13,6 +13,7 @@ import agh.ics.oop.model.util.newUtils.Genome;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class Simulation implements Runnable {
     private final List<Animal> animals;
@@ -43,15 +44,44 @@ public class Simulation implements Runnable {
         // jak coś to do zmiany
         var bounds = worldMap.getCurrentBounds();
 
-        Vector2d lowerLeftEquator = new Vector2d(bounds.leftDownCornerMap().getX(),
+        // to jest do całkowitego refactora, ale jak na razie sprawdzam, czy działa
+
+        Vector2d lowerLeftBelowEquator = new Vector2d(bounds.leftDownCornerMap().getX(),
+                (int) (bounds.leftDownCornerMap().getY() ));
+        Vector2d upperRightBelowEquator = new Vector2d(bounds.leftDownCornerMap().getX(),
                 (int) (bounds.leftDownCornerMap().getY() + 2/5 * config.high()));
 
+        Vector2d lowerLeftEquator = new Vector2d(bounds.leftDownCornerMap().getX(),
+                (int) (bounds.leftDownCornerMap().getY() + 2/5 * config.high()));
         Vector2d upperRightEquator = new Vector2d(bounds.leftDownCornerMap().getX(),
                 (int) (bounds.leftDownCornerMap().getY() + 3/5 * config.high()));
 
+        Vector2d lowerLeftAboveEquator = new Vector2d(bounds.leftDownCornerMap().getX(),
+                (int) (bounds.leftDownCornerMap().getY() + 3/5 * config.high()));
+        Vector2d upperRightAboveEquator = new Vector2d(bounds.leftDownCornerMap().getX(),
+                (int) (bounds.leftDownCornerMap().getY() + config.high()));
+
+        var belowGenerator = new RandomPositionGenerator(lowerLeftBelowEquator, upperRightBelowEquator, config.startGrassAmount());
+        var aboveGenerator = new RandomPositionGenerator(lowerLeftAboveEquator,upperRightAboveEquator, config.startGrassAmount());
+
+        // chyba do zmiany ten RandomPositionGenerator, żeby przy każdym wywołaniu next na iteratorze było losowane, które
+        // pozycje. byłoby chyba prościej
         for (Vector2d position : new RandomPositionGenerator(lowerLeftEquator, upperRightEquator, config.startGrassAmount())) {
+
+            // parytet 80:20
+            Random random = new Random();
+            // jeżeli trafiło do tych 20%
+            if(random.nextInt(5)==0) {
+                // losuje, czy bierzemy pole nad, czy pod równikiem
+                if(random.nextBoolean()){
+                    position = belowGenerator.iterator().next();
+                }
+                else{
+                    position = aboveGenerator.iterator().next();
+                }
+            }
             Grass grass = new Grass(position);
-            try{
+            try {
                 worldMap.place(grass);
             } catch (IncorrectPositionException e) {
                 System.out.println("Uwaga: " + e.getMessage());
@@ -75,6 +105,6 @@ public class Simulation implements Runnable {
 
         // reprodukcja zwierząt
         animals.addAll(worldMap.reproduceAnimals(config));
-        
+
     }
 }
