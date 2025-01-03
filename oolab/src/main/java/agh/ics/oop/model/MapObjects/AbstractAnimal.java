@@ -11,7 +11,7 @@ public abstract class AbstractAnimal implements WorldElement {
     protected int age = 0;
     protected int eaten = 0;
     protected final Genome genome;
-    protected int currentIndexOfGen = 0;
+    protected int currentIndexOfGen;
 
 
     public AbstractAnimal(Vector2d position, Genome genome) {
@@ -20,6 +20,7 @@ public abstract class AbstractAnimal implements WorldElement {
         Random random = new Random();
         // losowy kierunek początkowy
         currentDirection = MapDirection.values()[random.nextInt(8)];
+        currentIndexOfGen = random.nextInt(0,genome.getGenLength());
     }
 
 

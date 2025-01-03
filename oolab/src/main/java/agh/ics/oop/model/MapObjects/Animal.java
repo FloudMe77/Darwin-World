@@ -22,14 +22,22 @@ public class Animal extends AbstractAnimal {
         this.energy = startEnergy;
     }
 
-    public Animal reproduce(Animal other, GenomeChange genomeChange, int minMutationAmount, int maxMutationAmount) {
+    public Animal reproduce(Animal other, GenomeChange genomeChange, int minMutationAmount, int maxMutationAmount, int energyToReproduce) {
+        // tworze liste genów
         var newGenList = shuffleGenomes(other);
+        // dokonuje mutacji
         genomeChange.changeGenome(newGenList, minMutationAmount, maxMutationAmount);
+        // zwiększam liczniki dzieci zwierząt
         increaseChildrenAmount();
         other.increaseChildrenAmount();
-        var child = new Animal(currentPosition, new Genome(newGenList), START_ENERGY);
+        // tworze nowego zwierzaka
+        var child = new Animal(currentPosition, new Genome(newGenList), 2 * energyToReproduce);
+        // dodaje zwierzaka do list
         addChild(child);
         other.addChild(child);
+        // obniżam energie rodziców
+        reduceEnergy(energyToReproduce);
+        other.reduceEnergy(energyToReproduce);
         return child;
     }
 
@@ -59,7 +67,7 @@ public class Animal extends AbstractAnimal {
         int divideIndex = (int) Math.ceil(
                 genomeLen * (betterAnimal.getEnergy() / (double) (betterAnimal.getEnergy() + worseAnimal.getEnergy()))
         );
-        System.out.println(divideIndex);
+//        System.out.println(divideIndex);
         // Dodawanie genów w zależności od dominującej strony
         if (dominantSide == 0) {
             // Dominująca strona po lewej
@@ -114,4 +122,11 @@ public class Animal extends AbstractAnimal {
         return kids;
     }
 
+    public void eat(int feedVal) {
+        energy+=feedVal;
+    }
+
+    public void reduceEnergy(int val){
+        energy-=val;
+    }
 }

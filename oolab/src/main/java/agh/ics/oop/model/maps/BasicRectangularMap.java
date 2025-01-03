@@ -8,6 +8,7 @@ import agh.ics.oop.model.util.Boundary;
 import agh.ics.oop.model.util.MapChangeListener;
 import agh.ics.oop.model.util.MapVisualizer;
 import agh.ics.oop.model.util.newUtils.Genome;
+import agh.ics.oop.model.util.newUtils.GenomeChange;
 
 import java.util.*;
 
@@ -49,6 +50,11 @@ abstract public class BasicRectangularMap implements WorldMap {
     public void place(Animal animal) {
         addToAnimals(animal.getPosition(), animal);
         notifyObservers("Ustawiono animal na " + animal.getPosition());
+    }
+
+    @Override
+    public void place(Grass grass) {
+        grasses.put(grass.getPosition(),grass);
     }
 
     @Override
@@ -206,5 +212,58 @@ abstract public class BasicRectangularMap implements WorldMap {
         } else {
             throw new RuntimeException("brak elementów w liście"); //tymczasowe, żeby tylko zabezpieczyć
         }
+    }
+    @Override
+    public void feedAnimals(int feedVal) {
+        for (var animalList : animals.values()) {
+            List<Animal> animals = new ArrayList<>(animalList.stream()
+                    .filter(Animal.class::isInstance) // Zachowaj tylko instancje klasy Animal
+                    .map(Animal.class::cast)          // Zamień AbstractAnimal na Animal
+                    .toList());                        // Tworzy niemodyfikowalną listę (JDK 16+)
+
+            if (grasses.containsKey(animalList.getFirst().getPosition())) {
+                animals.sort(Comparator
+                        .comparingInt(Animal::getEnergy).reversed() // Najpierw sortuj po energii malejąco
+                        .thenComparingInt(Animal::getAge).reversed() // Następnie po wieku malejąco
+                        .thenComparingInt(Animal::getChildrenAmount).reversed() // Na końcu po liczbie dzieci malejąco
+                );
+                Animal bestAnimal = animals.getFirst();
+                bestAnimal.eat(feedVal);
+                grasses.remove(bestAnimal.getPosition());
+            }
+        }
+    }
+
+    public List<Animal> reproduceAnimals(Config config){
+        // daje config bo byloby 5 parametrów. chyba tak jest bardziej elegancko
+
+        List<Animal> newAnimalList = new ArrayList<>();
+
+        for(var animalList:animals.values()){
+            List<Animal> animals = new ArrayList<>(animalList.stream()
+                    .filter(Animal.class::isInstance) // Zachowaj tylko instancje klasy Animal
+                    .map(Animal.class::cast)          // Zamień AbstractAnimal na Animal
+                    .toList());                        // Tworzy niemodyfikowalną listę (JDK 16+)
+
+            // sortuje po największej ilości energii
+            animals.sort(Comparator
+                    .comparingInt(Animal::getEnergy).reversed() // Najpierw sortuj po energii malejąco
+            );
+            for(int i = 0; i < (int) animals.size()/2; i++){
+                var animal1 = animals.get(2 * i);
+                var animal2 = animals.get(2 * i + 1);
+                // jezeli drugi może się rozmnożyć
+                if(animal2.getEnergy() >= config.energyRequireToReproduce()){
+                    // można się zastanowić nad rzuceniem tu configu
+                    var newAnimal = animal1.reproduce(animal2,
+                            config.genomeChange(),
+                            config.minimalMutationAmount(),
+                            config.maximalMutationAmount(),
+                            config.energyToReproduce());
+                    newAnimalList.add(newAnimal);
+                }
+            }
+        }
+        return newAnimalList;
     }
 }
