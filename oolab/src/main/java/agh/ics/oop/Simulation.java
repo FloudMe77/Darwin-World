@@ -3,7 +3,6 @@ package agh.ics.oop;
 import agh.ics.oop.model.Config;
 import agh.ics.oop.model.MapObjects.Animal;
 import agh.ics.oop.model.MapObjects.Grass;
-import agh.ics.oop.model.MoveDirection;
 import agh.ics.oop.model.Vector2d;
 
 import agh.ics.oop.model.IncorrectPositionException;
@@ -48,17 +47,17 @@ public class Simulation implements Runnable {
 
         Vector2d lowerLeftBelowEquator = new Vector2d(bounds.leftDownCornerMap().getX(),
                 (int) (bounds.leftDownCornerMap().getY() ));
-        Vector2d upperRightBelowEquator = new Vector2d(bounds.leftDownCornerMap().getX(),
-                (int) (bounds.leftDownCornerMap().getY() + 2/5 * config.high()));
+        Vector2d upperRightBelowEquator = new Vector2d(bounds.rightUpperCornerMap().getX(),
+                (int) (bounds.leftDownCornerMap().getY() + (2.0/5) * config.high()));
 
         Vector2d lowerLeftEquator = new Vector2d(bounds.leftDownCornerMap().getX(),
-                (int) (bounds.leftDownCornerMap().getY() + 2/5 * config.high()));
-        Vector2d upperRightEquator = new Vector2d(bounds.leftDownCornerMap().getX(),
-                (int) (bounds.leftDownCornerMap().getY() + 3/5 * config.high()));
+                (int) (bounds.leftDownCornerMap().getY() + (2.0/5) * config.high()));
+        Vector2d upperRightEquator = new Vector2d(bounds.rightUpperCornerMap().getX(),
+                (int) (bounds.leftDownCornerMap().getY() + (3.0/5) * config.high()));
 
         Vector2d lowerLeftAboveEquator = new Vector2d(bounds.leftDownCornerMap().getX(),
-                (int) (bounds.leftDownCornerMap().getY() + 3/5 * config.high()));
-        Vector2d upperRightAboveEquator = new Vector2d(bounds.leftDownCornerMap().getX(),
+                (int) (bounds.leftDownCornerMap().getY() + (3.0/5) * config.high()));
+        Vector2d upperRightAboveEquator = new Vector2d(bounds.rightUpperCornerMap().getX(),
                 (int) (bounds.leftDownCornerMap().getY() + config.high()));
 
         var belowGenerator = new RandomPositionGenerator(lowerLeftBelowEquator, upperRightBelowEquator, config.startGrassAmount());
@@ -94,17 +93,19 @@ public class Simulation implements Runnable {
     }
 
     public void run() {
+        // duży for tylko na potrzeby testów
         // najpierw zwierzęta się poruszają
         // można przemyśleć, żeby tą metodę umieścić w samej mapie
-        for(var animal : animals){
-            animal.move(worldMap);
+        for(int i=0;i<5;i++) {
+            for (var animal : animals) {
+                animal.move(worldMap);
+            }
+
+            // następnie jedzą
+            worldMap.feedAnimals(config.energyFromGrass());
+
+            // reprodukcja zwierząt
+            animals.addAll(worldMap.reproduceAnimals(config));
         }
-
-        // następnie jedzą
-        worldMap.feedAnimals(config.energyFromGrass());
-
-        // reprodukcja zwierząt
-        animals.addAll(worldMap.reproduceAnimals(config));
-
     }
 }

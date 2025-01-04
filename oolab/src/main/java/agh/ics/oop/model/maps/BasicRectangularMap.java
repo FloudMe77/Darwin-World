@@ -264,6 +264,7 @@ abstract public class BasicRectangularMap implements WorldMap {
                 }
             }
         }
+        notifyObservers("utworzono nowe zwierzeta");
         return newAnimalList;
     }
 }
