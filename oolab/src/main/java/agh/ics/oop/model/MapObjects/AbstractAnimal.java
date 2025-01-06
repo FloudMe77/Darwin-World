@@ -6,7 +6,7 @@ import agh.ics.oop.model.util.newUtils.Genome;
 import java.util.Random;
 
 public abstract class AbstractAnimal implements WorldElement {
-    protected MapDirection currentDirection;
+    protected MapDirection currentDirection = MapDirection.NORTH;
     protected Vector2d currentPosition;
     protected int age = 0;
     protected int eaten = 0;
@@ -19,8 +19,10 @@ public abstract class AbstractAnimal implements WorldElement {
         this.genome = genome;
         Random random = new Random();
         // losowy kierunek początkowy
-        currentDirection = MapDirection.values()[random.nextInt(8)];
+
         currentIndexOfGen = random.nextInt(0,genome.getGenLength());
+        GenomeDirection genomeDirection = genome.getGenVal(currentIndexOfGen);
+        currentDirection = currentDirection.getDirection(genomeDirection);
     }
 
 
@@ -72,8 +74,7 @@ public abstract class AbstractAnimal implements WorldElement {
     }
 
     public void move(MoveValidator validator) {
-        GenomeDirection genomeDirection = genome.getGenVal(currentIndexOfGen);
-        currentDirection = currentDirection.getDirection(genomeDirection);
+
         var positionAfterMove = currentPosition.add(currentDirection.toUnitVector());
         if (validator.canMoveTo(positionAfterMove)) {
             currentPosition = validator.getNewPosition(currentPosition, positionAfterMove);
@@ -82,6 +83,9 @@ public abstract class AbstractAnimal implements WorldElement {
         }
 
         currentIndexOfGen = (currentIndexOfGen + 1) % (genome.getGenLength());
+        GenomeDirection genomeDirection = genome.getGenVal(currentIndexOfGen);
+        currentDirection = currentDirection.getDirection(genomeDirection);
+
     }
 
 }

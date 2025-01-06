@@ -14,7 +14,7 @@ public class MapStatistic {
     private float averageLifeTime = 0;
     private float averageChildrenAmount = 0;
 
-    MapStatistic(BasicRectangularMap worldMap){
+    public MapStatistic(BasicRectangularMap worldMap){
         this.worldMap = worldMap;
     }
 
@@ -49,5 +49,16 @@ public class MapStatistic {
         averageEnergy = worldMap.getAverageEnergy();
         averageChildrenAmount = worldMap.getAverageChildrenAmount();
         averageLifeTime = worldMap.getAverageLifeTime();
+    }
+
+    // only for debug
+    public void printStatistic(){
+        System.out.println();
+        System.out.println(totalAnimalAmount);
+        System.out.println(totalGrasAmount);
+        System.out.println(dominantGenomeType);
+        System.out.println(averageEnergy);
+        System.out.println(averageChildrenAmount);
+        System.out.println(averageLifeTime);
     }
 }

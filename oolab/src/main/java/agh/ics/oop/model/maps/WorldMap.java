@@ -56,9 +56,11 @@ public interface WorldMap extends MoveValidator {
 
     int getId();
 
-    void place(Grass grass) throws IncorrectPositionException;
+    void addGrass();
 
     void feedAnimals(int feedVal);
 
-    public List<Animal> reproduceAnimals(Config config);
+    List<Animal> reproduceAnimals(Config config);
+
+    List<Animal> removeDepthAnimals();
 }

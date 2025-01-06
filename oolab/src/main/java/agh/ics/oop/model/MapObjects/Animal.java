@@ -102,12 +102,8 @@ public class Animal extends AbstractAnimal {
         return energy;
     }
 
-    public void getOlder(int dailyDeclineValue) {
+    public void getOlder() {
         age += 1;
-        energy -= dailyDeclineValue;
-        if (energy < 0) {
-            die();
-        }
     }
 
     public boolean isAlive() {

@@ -29,7 +29,7 @@ class AnimalTest {
         // given
         var animal = new Animal(new Vector2d(2,2), new Genome(5),10);
         // when
-        animal.getOlder(15);
+        animal.getOlder();
         assertFalse(animal.isAlive());
         assertEquals(1,animal.getDayOfDeath());
     }

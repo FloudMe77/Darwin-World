@@ -11,15 +11,17 @@ public class Genome {
 
     public Genome(int genLength) {
         this.genLength = genLength;
-        genList = new ArrayList<>();
+        List<GenomeDirection> genListTmp = new ArrayList<>();
 
         for (int i = 0; i < genLength; i++) {
-            genList.add(GenomeDirection.getRandomGenome());
+            genListTmp.add(GenomeDirection.getRandomGenome());
         }
+        // niemodyfikowalna lista
+        genList = List.copyOf(genListTmp);
     }
 
     public Genome(ArrayList<GenomeDirection> genList) {
-        this.genList = genList;
+        this.genList = List.copyOf(genList);
         this.genLength = genList.size();
     }
 
@@ -33,6 +35,11 @@ public class Genome {
 
     public List<GenomeDirection> getGenList() {
         return List.copyOf(genList);
+    }
+
+    @Override
+    public String toString() {
+        return genList.toString();
     }
 
     @Override

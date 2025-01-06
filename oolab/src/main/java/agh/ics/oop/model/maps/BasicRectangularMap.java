@@ -10,6 +10,8 @@ import agh.ics.oop.model.util.MapVisualizer;
 import agh.ics.oop.model.util.newUtils.Genome;
 import agh.ics.oop.model.util.newUtils.GenomeChange;
 
+import javax.swing.*;
+import javax.swing.text.Position;
 import java.util.*;
 
 abstract public class BasicRectangularMap implements WorldMap {
@@ -22,14 +24,33 @@ abstract public class BasicRectangularMap implements WorldMap {
     private final Vector2d lowerLeft;
     private final Boundary boundary;
     private final int mapId;
+    private final List<Vector2d> equator;
+    private final List<Vector2d> beyondEquator;
+    private final Vector2d lowerLeftEquator;
+    private final Vector2d upperRightEquator;
 
     private static int counterOfId = 1;
 
     public BasicRectangularMap(int height, int width) {
         mapId = counterOfId++;
         this.lowerLeft = new Vector2d(0, 0);
-        this.upperRight = new Vector2d(width - 1, height - 1);
+        this.upperRight = new Vector2d(width , height );
         boundary = new Boundary(lowerLeft, upperRight);
+
+        Vector2d lowerLeftBelowEquator = new Vector2d(0, 0);
+        Vector2d upperRightBelowEquator = new Vector2d(width, (int) ((1.0/3) * height));
+
+        lowerLeftEquator = new Vector2d(0, (int) ((1.0/3) * height)+1);
+        upperRightEquator = new Vector2d(width, (int) ((2.0/3) * height));
+
+        Vector2d lowerLeftAboveEquator = new Vector2d(0, (int) ((2.0/3) * height)+1);
+        Vector2d upperRightAboveEquator = new Vector2d(width, height);
+
+
+        equator = getAllPositionBetween(lowerLeftEquator,upperRightEquator);
+
+        beyondEquator = getAllPositionBetween(lowerLeftBelowEquator,upperRightBelowEquator);
+        beyondEquator.addAll(getAllPositionBetween(lowerLeftAboveEquator,upperRightAboveEquator));
     }
 
     public void addObserver(MapChangeListener observer) {
@@ -53,13 +74,29 @@ abstract public class BasicRectangularMap implements WorldMap {
     }
 
     @Override
-    public void place(Grass grass) {
-        grasses.put(grass.getPosition(),grass);
+    public void addGrass() {
+        // parytet 80:20
+        Random random = new Random();
+        // jeżeli trafiło do tych 20%
+        if(!beyondEquator.isEmpty() && random.nextInt(5)==0){
+            int index = random.nextInt(0,beyondEquator.size());
+            var grass = new Grass(beyondEquator.get(index));
+            beyondEquator.remove(index);
+            grasses.put(grass.getPosition(),grass);
+            System.out.println("dodano " + grass.getPosition().toString());
+        }
+        else if(!equator.isEmpty()){
+            int index = random.nextInt(0,equator.size());
+            var grass = new Grass(equator.get(index));
+            equator.remove(index);
+            grasses.put(grass.getPosition(),grass);
+            System.out.println("dodano " + grass.getPosition().toString());
+        }
     }
 
     @Override
     public boolean isOccupied(Vector2d position) {
-        return animals.containsKey(position);
+        return animals.containsKey(position) || grasses.containsKey(position);
     }
 
     @Override
@@ -79,11 +116,11 @@ abstract public class BasicRectangularMap implements WorldMap {
 
     @Override
     public void move(AbstractAnimal animal) {
-        var oldPosition = animal.getPosition();
+//        var oldPosition = animal.getPosition();
         removeFromAnimals(animal.getPosition(), animal);
         animal.move(getValidator(animal));
         addToAnimals(animal.getPosition(), animal);
-        notifyObservers("Przeniesiono Animal z " + oldPosition + " do " + animal.getPosition());
+//        notifyObservers("Przeniesiono Animal z " + oldPosition + " do " + animal.getPosition());
     }
 
     @Override
@@ -151,7 +188,6 @@ abstract public class BasicRectangularMap implements WorldMap {
 
             }
         }
-        deathAnimals.add(animal);
     }
     public int getAnimalAmount(){
         return animals.values().stream()
@@ -176,6 +212,7 @@ abstract public class BasicRectangularMap implements WorldMap {
         int ageSum = deathAnimals.stream()
                 .mapToInt(AbstractAnimal::getAge) // Pobieramy wiek każdego zwierzęcia
                 .sum(); // Sumujemy wartości
+        System.out.println(deathAnimals.size() + " to dlugość deathAnimal");
         return (float) ageSum /deathAnimals.size();
     }
 
@@ -189,6 +226,7 @@ abstract public class BasicRectangularMap implements WorldMap {
     }
 
     public Genome getDominantGenome(){
+        if(animals.isEmpty()) return new Genome(0);
         HashMap<Genome,Integer> genomesCounter = new HashMap<>();
         for(var animalList: animals.values()){
             for(var animal:animalList){
@@ -196,11 +234,10 @@ abstract public class BasicRectangularMap implements WorldMap {
                     continue;
                 }
                 Genome genome = animal.getGenome();
-                if(genomesCounter.containsKey(genome)){
-                    genomesCounter.put(genome,1);
-                }
-                else{
-                    genomesCounter.put(genome,genomesCounter.get(genome)+1);
+                if (genomesCounter.containsKey(genome)) {
+                    genomesCounter.put(genome, genomesCounter.get(genome) + 1);
+                } else {
+                    genomesCounter.put(genome, 1);
                 }
             }
         }
@@ -219,7 +256,7 @@ abstract public class BasicRectangularMap implements WorldMap {
             List<Animal> animals = new ArrayList<>(animalList.stream()
                     .filter(Animal.class::isInstance) // Zachowaj tylko instancje klasy Animal
                     .map(Animal.class::cast)          // Zamień AbstractAnimal na Animal
-                    .toList());                        // Tworzy niemodyfikowalną listę (JDK 16+)
+                    .toList());                        // Tworzy niemodyfikowalną listę
 
             if (grasses.containsKey(animalList.getFirst().getPosition())) {
                 animals.sort(Comparator
@@ -228,8 +265,15 @@ abstract public class BasicRectangularMap implements WorldMap {
                         .thenComparingInt(Animal::getChildrenAmount).reversed() // Na końcu po liczbie dzieci malejąco
                 );
                 Animal bestAnimal = animals.getFirst();
+                var position = bestAnimal.getPosition();
                 bestAnimal.eat(feedVal);
-                grasses.remove(bestAnimal.getPosition());
+                grasses.remove(position);
+                if(position.follows(lowerLeftEquator) && position.precedes(upperRightEquator)){
+                    equator.add(position);
+                }
+                else{
+                    beyondEquator.add(position);
+                }
             }
         }
     }
@@ -249,11 +293,13 @@ abstract public class BasicRectangularMap implements WorldMap {
             animals.sort(Comparator
                     .comparingInt(Animal::getEnergy).reversed() // Najpierw sortuj po energii malejąco
             );
-            for(int i = 0; i < (int) animals.size()/2; i++){
+            for(int i = 0; i < (int) (animals.size()/2); i++){
+
                 var animal1 = animals.get(2 * i);
                 var animal2 = animals.get(2 * i + 1);
                 // jezeli drugi może się rozmnożyć
                 if(animal2.getEnergy() >= config.energyRequireToReproduce()){
+                    System.out.println("jejsafjsagjsdgosdjigjsdjgsd" + animal1.getPosition());
                     // można się zastanowić nad rzuceniem tu configu
                     var newAnimal = animal1.reproduce(animal2,
                             config.genomeChange(),
@@ -266,5 +312,44 @@ abstract public class BasicRectangularMap implements WorldMap {
         }
         notifyObservers("utworzono nowe zwierzeta");
         return newAnimalList;
+    }
+
+    public List<Animal> removeDepthAnimals(){
+        // daje config bo byloby 5 parametrów. chyba tak jest bardziej elegancko
+
+        List<Animal> removedAnimalList = new ArrayList<>();
+
+        for(var animalList:animals.values()){
+            System.out.println(animalList);
+            List<Animal> animals = new ArrayList<>(animalList.stream()
+                    .filter(Animal.class::isInstance) // Zachowaj tylko instancje klasy Animal
+                    .map(Animal.class::cast)          // Zamień AbstractAnimal na Animal
+                    .toList());                        // Tworzy niemodyfikowalną listę (JDK 16+)
+
+            for(var animal : animals){
+                if(animal.getEnergy()<0){
+                    removedAnimalList.add(animal);
+                }
+            }
+        }
+        // usuwam zwierzęta
+        for(var animal: removedAnimalList){
+            animal.die();
+            removeFromAnimals(animal.getPosition(),animal);
+            deathAnimals.add(animal);
+        }
+        notifyObservers("usunieto zwierzeta");
+        return removedAnimalList;
+    }
+
+    private List<Vector2d> getAllPositionBetween(Vector2d lowerLeft, Vector2d upperRight){
+        List<Vector2d> allPossiblePositions = new ArrayList<>();
+
+        for (int x = lowerLeft.getX(); x < upperRight.getX()+1; x++) {
+            for (int y = lowerLeft.getY(); y < upperRight.getY()+1; y++) {
+                allPossiblePositions.add(new Vector2d(x, y));
+            }
+        }
+        return allPossiblePositions;
     }
 }
