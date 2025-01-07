@@ -3,8 +3,11 @@ package agh.ics.oop.model.maps;
 import agh.ics.oop.model.*;
 import agh.ics.oop.model.MapObjects.AbstractAnimal;
 import agh.ics.oop.model.MapObjects.Animal;
+import agh.ics.oop.model.MapObjects.Grass;
 import agh.ics.oop.model.util.Boundary;
+import agh.ics.oop.model.util.newUtils.GenomeChange;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -52,4 +55,14 @@ public interface WorldMap extends MoveValidator {
     Boundary getCurrentBounds();
 
     int getId();
+
+    void addGrass();
+
+    void feedAnimals(int feedVal);
+
+    List<Animal> reproduceAnimals(Config config);
+
+    List<Animal> removeDepthAnimals();
+
+//    void moveAllAnimals(int dailyDeclineValue);
 }

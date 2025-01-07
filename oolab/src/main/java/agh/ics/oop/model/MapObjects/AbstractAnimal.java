@@ -3,18 +3,26 @@ package agh.ics.oop.model.MapObjects;
 import agh.ics.oop.model.*;
 import agh.ics.oop.model.util.newUtils.Genome;
 
+import java.util.Random;
+
 public abstract class AbstractAnimal implements WorldElement {
     protected MapDirection currentDirection = MapDirection.NORTH;
     protected Vector2d currentPosition;
     protected int age = 0;
     protected int eaten = 0;
     protected final Genome genome;
-    protected int currentIndexOfGen = 0;
+    protected int currentIndexOfGen;
 
 
     public AbstractAnimal(Vector2d position, Genome genome) {
         this.currentPosition = position;
         this.genome = genome;
+        Random random = new Random();
+        // losowy kierunek początkowy
+
+        currentIndexOfGen = random.nextInt(0,genome.getGenLength());
+        GenomeDirection genomeDirection = genome.getGenVal(currentIndexOfGen);
+        currentDirection = currentDirection.getDirection(genomeDirection);
     }
 
 
@@ -30,12 +38,20 @@ public abstract class AbstractAnimal implements WorldElement {
         return age;
     }
 
+    public void getOlder() {
+        age += 1;
+    }
+
     public Vector2d getPosition() {
         return currentPosition;
     }
 
     public int getEaten() {
         return eaten;
+    }
+
+    public void increaseEaten(){
+        eaten+=1;
     }
 
     public MapDirection getCurrentDirection() {
@@ -66,8 +82,7 @@ public abstract class AbstractAnimal implements WorldElement {
     }
 
     public void move(MoveValidator validator) {
-        GenomeDirection genomeDirection = genome.getGenVal(currentIndexOfGen);
-        currentDirection = currentDirection.getDirection(genomeDirection);
+
         var positionAfterMove = currentPosition.add(currentDirection.toUnitVector());
         if (validator.canMoveTo(positionAfterMove)) {
             currentPosition = validator.getNewPosition(currentPosition, positionAfterMove);
@@ -76,6 +91,9 @@ public abstract class AbstractAnimal implements WorldElement {
         }
 
         currentIndexOfGen = (currentIndexOfGen + 1) % (genome.getGenLength());
+        GenomeDirection genomeDirection = genome.getGenVal(currentIndexOfGen);
+        currentDirection = currentDirection.getDirection(genomeDirection);
+
     }
 
 }

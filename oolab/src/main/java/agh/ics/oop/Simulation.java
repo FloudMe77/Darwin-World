@@ -1,51 +1,83 @@
-//package agh.ics.oop;
-//
-//import agh.ics.oop.model.MapObjects.Animal;
-//import agh.ics.oop.model.MoveDirection;
-//import agh.ics.oop.model.Vector2d;
-//import agh.ics.oop.model.WorldMap;
-//import agh.ics.oop.model.IncorrectPositionException;
-//
-//import java.util.ArrayList;
-//import java.util.List;
-//
-//public class Simulation implements Runnable {
-//    private final List<Animal> animals;
-//    private final List<MoveDirection> directionList;
-//    private final WorldMap worldMap;
-//
-//    public Simulation(List<Vector2d> positionList, List<MoveDirection> directionList, WorldMap worldMap) {
-//        this.animals = new ArrayList<>();
-//        this.directionList = directionList;
-//        this.worldMap = worldMap;
-//
-//        for (Vector2d position : positionList) {
-//            Animal animal = new Animal(position);
-//            try{
-//                worldMap.place(animal);
-//                animals.add(animal);
-//            } catch (IncorrectPositionException e) {
-//                System.out.println("Uwaga: " + e.getMessage());
-//            }
-//        }
-//
-//    }
-//
-//    public List<Animal> getAnimals() {
-//        return List.copyOf(animals);
-//    }
-//
-//    public void run() {
-//        int numberOfAnimal = 0;
-//        for (MoveDirection direction : directionList) {
-//            var currentAnimal = animals.get(numberOfAnimal);
-//            worldMap.move(currentAnimal, direction);
-//            numberOfAnimal = (numberOfAnimal + 1) % animals.size();
-//            try {
-//                Thread.sleep(500);
-//            } catch (InterruptedException e) {
-//                System.out.println("Wątek został przerwany"+e.getMessage());
-//            }
-//        }
-//    }
-//}
+package agh.ics.oop;
+
+import agh.ics.oop.model.Config;
+import agh.ics.oop.model.MapObjects.Animal;
+import agh.ics.oop.model.MapObjects.Grass;
+import agh.ics.oop.model.Vector2d;
+
+import agh.ics.oop.model.IncorrectPositionException;
+import agh.ics.oop.model.maps.WorldMap;
+import agh.ics.oop.model.util.RandomPositionGenerator;
+import agh.ics.oop.model.util.newUtils.Genome;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+
+public class Simulation implements Runnable {
+    private final List<Animal> animals;
+    private final WorldMap worldMap;
+    private final Config config;
+
+    // jak narazie dostosowuje do EarthMap
+    public Simulation(Config config) {
+        worldMap = config.worldMap();
+        animals = new ArrayList<>();
+        this.config = config;
+        // dodawanie zwierząt
+        for (Vector2d position : new RandomPositionGenerator(new Vector2d(0,0), new Vector2d(config.width(),config.high()), config.startAnimalAmount())) {
+            Animal animal = new Animal(position,new Genome(config.genomeLength()),config.startEnergy());
+            try{
+                worldMap.place(animal);
+                animals.add(animal);
+            } catch (IncorrectPositionException e) {
+                System.out.println("Uwaga: " + e.getMessage());
+            }
+        }
+
+        // dodawanie trawy
+        // mamy tylko jeden wariant generowania trawy więc nie będę się rozdrabniał na pojedyncze klasy
+        // uznaje, że równik to pas o szerokości 1/5 mapy na środku
+        // pewnie lepiej by było wsadzić metodę do wordlmap
+
+        for(int i = 0; i < config.startGrassAmount();i++){
+            worldMap.addGrass();
+        }
+    }
+
+    public List<Animal> getAnimals() {
+        return List.copyOf(animals);
+    }
+
+    public void run() {
+        // duży for tylko na potrzeby testów
+        // najpierw zwierzęta się poruszają
+
+        for(int i=0;i<5;i++) {
+
+            // usuwanie zdechłych zwierząt
+            animals.removeAll(worldMap.removeDepthAnimals());
+
+            // można przemyśleć, żeby tą metodę umieścić w samej mapie
+            for (var animal : animals) {
+                worldMap.move(animal);
+                // nie wiem, czy to nie jest za wysoki level abstrakcji, żeby dawać takie wstawki
+                // ale nie miałem pomysłu jak to ładnie zrobić
+                animal.reduceEnergy(config.dailyDeclineValue());
+                animal.getOlder();
+            }
+
+            // następnie jedzą
+            worldMap.feedAnimals(config.energyFromGrass());
+
+            // reprodukcja zwierząt
+            animals.addAll(worldMap.reproduceAnimals(config));
+
+
+            // porost traw
+            for(int j=0; j < config.everyDayGrassAmount();j++){
+                worldMap.addGrass();
+            }
+        }
+    }
+}
