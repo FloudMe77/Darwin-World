@@ -38,12 +38,20 @@ public abstract class AbstractAnimal implements WorldElement {
         return age;
     }
 
+    public void getOlder() {
+        age += 1;
+    }
+
     public Vector2d getPosition() {
         return currentPosition;
     }
 
     public int getEaten() {
         return eaten;
+    }
+
+    public void increaseEaten(){
+        eaten+=1;
     }
 
     public MapDirection getCurrentDirection() {

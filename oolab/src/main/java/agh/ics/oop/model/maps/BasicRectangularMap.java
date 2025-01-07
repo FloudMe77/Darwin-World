@@ -69,6 +69,7 @@ abstract public class BasicRectangularMap implements WorldMap {
 
     @Override
     public void place(Animal animal) {
+
         addToAnimals(animal.getPosition(), animal);
         notifyObservers("Ustawiono animal na " + animal.getPosition());
     }
@@ -78,7 +79,7 @@ abstract public class BasicRectangularMap implements WorldMap {
         // parytet 80:20
         Random random = new Random();
         // jeżeli trafiło do tych 20%
-        if(!beyondEquator.isEmpty() && random.nextInt(5)==0){
+        if((!beyondEquator.isEmpty() && random.nextInt(5)==0) || (!beyondEquator.isEmpty() && equator.isEmpty())){
             int index = random.nextInt(0,beyondEquator.size());
             var grass = new Grass(beyondEquator.get(index));
             beyondEquator.remove(index);
@@ -212,7 +213,6 @@ abstract public class BasicRectangularMap implements WorldMap {
         int ageSum = deathAnimals.stream()
                 .mapToInt(AbstractAnimal::getAge) // Pobieramy wiek każdego zwierzęcia
                 .sum(); // Sumujemy wartości
-        System.out.println(deathAnimals.size() + " to dlugość deathAnimal");
         return (float) ageSum /deathAnimals.size();
     }
 
@@ -267,6 +267,7 @@ abstract public class BasicRectangularMap implements WorldMap {
                 Animal bestAnimal = animals.getFirst();
                 var position = bestAnimal.getPosition();
                 bestAnimal.eat(feedVal);
+                bestAnimal.increaseEaten();
                 grasses.remove(position);
                 if(position.follows(lowerLeftEquator) && position.precedes(upperRightEquator)){
                     equator.add(position);
@@ -282,7 +283,6 @@ abstract public class BasicRectangularMap implements WorldMap {
         // daje config bo byloby 5 parametrów. chyba tak jest bardziej elegancko
 
         List<Animal> newAnimalList = new ArrayList<>();
-
         for(var animalList:animals.values()){
             List<Animal> animals = new ArrayList<>(animalList.stream()
                     .filter(Animal.class::isInstance) // Zachowaj tylko instancje klasy Animal
@@ -299,7 +299,7 @@ abstract public class BasicRectangularMap implements WorldMap {
                 var animal2 = animals.get(2 * i + 1);
                 // jezeli drugi może się rozmnożyć
                 if(animal2.getEnergy() >= config.energyRequireToReproduce()){
-                    System.out.println("jejsafjsagjsdgosdjigjsdjgsd" + animal1.getPosition());
+//                    System.out.println("jejsafjsagjsdgosdjigjsdjgsd" + animal1.getPosition());
                     // można się zastanowić nad rzuceniem tu configu
                     var newAnimal = animal1.reproduce(animal2,
                             config.genomeChange(),
@@ -307,6 +307,7 @@ abstract public class BasicRectangularMap implements WorldMap {
                             config.maximalMutationAmount(),
                             config.energyToReproduce());
                     newAnimalList.add(newAnimal);
+                    addToAnimals(newAnimal.getPosition(),newAnimal);
                 }
             }
         }
@@ -318,9 +319,7 @@ abstract public class BasicRectangularMap implements WorldMap {
         // daje config bo byloby 5 parametrów. chyba tak jest bardziej elegancko
 
         List<Animal> removedAnimalList = new ArrayList<>();
-
         for(var animalList:animals.values()){
-            System.out.println(animalList);
             List<Animal> animals = new ArrayList<>(animalList.stream()
                     .filter(Animal.class::isInstance) // Zachowaj tylko instancje klasy Animal
                     .map(Animal.class::cast)          // Zamień AbstractAnimal na Animal
@@ -352,4 +351,20 @@ abstract public class BasicRectangularMap implements WorldMap {
         }
         return allPossiblePositions;
     }
+
+    // nie działa z uwagi na modyfikacje listy w trakcie przechodzenia przez nią
+//    public void moveAllAnimals(int dailyDeclineValue){
+//        // metoda przygotowana także dla OwlBear
+//        for(var animalList : animals.values()){
+//            for(var animal : animalList){
+//                move(animal);
+//                if (animal instanceof Animal) {
+//                    ((Animal) animal).reduceEnergy(dailyDeclineValue);
+//                }
+//
+//                animal.getOlder();
+//            }
+//        }
+//    }
+
 }

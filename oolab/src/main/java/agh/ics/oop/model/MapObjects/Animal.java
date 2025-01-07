@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.Random;
 
 public class Animal extends AbstractAnimal {
-    private final int START_ENERGY;
     private int energy;
     private int childrenAmount = 0;
     private int dayOfDeath;
@@ -18,7 +17,6 @@ public class Animal extends AbstractAnimal {
 
     public Animal(Vector2d position, Genome genome, int startEnergy) {
         super(position, genome);
-        this.START_ENERGY = startEnergy;
         this.energy = startEnergy;
     }
 
@@ -102,9 +100,6 @@ public class Animal extends AbstractAnimal {
         return energy;
     }
 
-    public void getOlder() {
-        age += 1;
-    }
 
     public boolean isAlive() {
         return isAlive;
@@ -119,10 +114,10 @@ public class Animal extends AbstractAnimal {
     }
 
     public void eat(int feedVal) {
-        energy+=feedVal;
+        energy += feedVal;
     }
 
     public void reduceEnergy(int val){
-        energy-=val;
+        energy -= val;
     }
 }

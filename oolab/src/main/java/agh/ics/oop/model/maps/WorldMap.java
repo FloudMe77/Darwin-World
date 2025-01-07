@@ -63,4 +63,6 @@ public interface WorldMap extends MoveValidator {
     List<Animal> reproduceAnimals(Config config);
 
     List<Animal> removeDepthAnimals();
+
+//    void moveAllAnimals(int dailyDeclineValue);
 }
