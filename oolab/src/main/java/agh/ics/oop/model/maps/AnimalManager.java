@@ -6,6 +6,7 @@ import agh.ics.oop.model.MapObjects.Animal;
 import agh.ics.oop.model.MapStatistic;
 import agh.ics.oop.model.MapStatisticAction;
 import agh.ics.oop.model.Vector2d;
+import agh.ics.oop.model.util.newUtils.Genome;
 
 import java.util.*;
 
@@ -27,12 +28,22 @@ public class AnimalManager {
     }
 
     public void moveAllAnimals(int dailyDeclineValue, WorldMap map) {
-        animals.values().stream()
+        // Tworzymy kopię wszystkich zwierząt w mapie
+        List<AbstractAnimal> allAnimals = animals.values().stream()
                 .flatMap(List::stream)
-                .forEach(animal -> move(animal, dailyDeclineValue, map));
+                .toList(); // Kopia wszystkich zwierząt
+
+        // Iterujemy przez kopię, dzięki czemu możemy bezpiecznie modyfikować oryginalną strukturę
+        allAnimals.forEach(animal -> move(animal, dailyDeclineValue, map));
     }
 
-    private void move(AbstractAnimal animal, int dailyDeclineValue, WorldMap map) {
+    public List<AbstractAnimal> getElements() {
+        return animals.values().stream()
+                .flatMap(List::stream)
+                .toList();
+    }
+
+    public void move(AbstractAnimal animal, int dailyDeclineValue, WorldMap map) {
         Vector2d oldPosition = animal.getPosition();
         removeFromAnimals(oldPosition, animal);
 
@@ -143,11 +154,37 @@ public class AnimalManager {
         animals.get(position).add(animal);
     }
 
-    private void removeFromAnimals(Vector2d position, AbstractAnimal animal) {
+    void removeFromAnimals(Vector2d position, AbstractAnimal animal) {
         var list = animals.get(position);
         if (list != null) {
             list.remove(animal);
             if (list.isEmpty()) animals.remove(position);
         }
     }
+    public Genome getDominantGenome(){
+        if(animals.isEmpty()) return new Genome(0);
+        HashMap<Genome,Integer> genomesCounter = new HashMap<>();
+        for(var animalList: animals.values()){
+            for(var animal:animalList){
+                if(!(animal instanceof Animal)){
+                    continue;
+                }
+                Genome genome = animal.getGenome();
+                if (genomesCounter.containsKey(genome)) {
+                    genomesCounter.put(genome, genomesCounter.get(genome) + 1);
+                } else {
+                    genomesCounter.put(genome, 1);
+                }
+            }
+        }
+        Optional<Map.Entry<Genome, Integer>> maxEntry = genomesCounter.entrySet().stream()
+                .max(Map.Entry.comparingByValue()); // Porównujemy po wartościach
+
+        if (maxEntry.isPresent()) {
+            return maxEntry.get().getKey();
+        } else {
+            throw new RuntimeException("brak elementów w liście"); //tymczasowe, żeby tylko zabezpieczyć
+        }
+    }
+
 }

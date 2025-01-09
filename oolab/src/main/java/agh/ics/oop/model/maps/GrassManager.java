@@ -43,5 +43,8 @@ public class GrassManager {
         grasses.remove(position);
         grassField.addGrassPosition(position);
     }
+    public List<Grass> getElements() {
+        return List.copyOf(grasses.values()); // Zwraca niemodyfikowalną listę traw
+    }
 
 }

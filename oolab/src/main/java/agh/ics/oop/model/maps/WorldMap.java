@@ -64,5 +64,5 @@ public interface WorldMap extends MoveValidator {
 
     List<Animal> removeDepthAnimals();
 
-//    void moveAllAnimals(int dailyDeclineValue);
+    void moveAllAnimals(int dailyDeclineValue);
 }
