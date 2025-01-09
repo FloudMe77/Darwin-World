@@ -67,11 +67,11 @@ class AnimalTest {
 
         //then
         for(int i=0;i<3;i++) {
-            map.move(animal1);
+            map.move(animal1,0);
             assertTrue(animal1.isAt(new Vector2d(2,2+i+1)));
-            map.move(animal2);
+            map.move(animal2,0);
         }
-        map.move(animal2);
+        map.move(animal2,0);
         assertTrue(animal2.isAt(new Vector2d(2,2)));
     }
 
@@ -107,8 +107,7 @@ class AnimalTest {
             System.out.println("Uwaga: " + e.getMessage());
         }
 
-        map.move(animal1);
-        animal1.getOlder();
+        map.move(animal1,0);
 
 
         //then

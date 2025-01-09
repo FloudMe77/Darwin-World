@@ -17,49 +17,36 @@ import java.util.*;
 abstract public class BasicRectangularMap implements WorldMap {
     protected final Map<Vector2d, List<AbstractAnimal>> animals = new HashMap<>();
     protected final Map<Vector2d, Grass> grasses = new HashMap<>();
-    protected final List<AbstractAnimal> deathAnimals = new ArrayList<>(); //nie potrzebuje pozycji zmarłych zwierząt
     private final MapVisualizer visualizer = new MapVisualizer(this);
     private final List<MapChangeListener> observers = new ArrayList<>();
     private final Vector2d upperRight;
     private final Vector2d lowerLeft;
     private final Boundary boundary;
     private final int mapId;
-    private final List<Vector2d> equator;
-    private final List<Vector2d> beyondEquator;
-    private final Vector2d lowerLeftEquator;
-    private final Vector2d upperRightEquator;
+    private final MapStatistic mapStatistic;
+    private final GrassField grassField;
+
 
     private static int counterOfId = 1;
 
     public BasicRectangularMap(int height, int width) {
+
+        mapStatistic = new MapStatistic(this);
         mapId = counterOfId++;
         this.lowerLeft = new Vector2d(0, 0);
         this.upperRight = new Vector2d(width , height );
         boundary = new Boundary(lowerLeft, upperRight);
+        grassField = new GrassField(height, width);
+    }
 
-        Vector2d lowerLeftBelowEquator = new Vector2d(0, 0);
-        Vector2d upperRightBelowEquator = new Vector2d(width, (int) ((1.0/3) * height));
-
-        lowerLeftEquator = new Vector2d(0, (int) ((1.0/3) * height)+1);
-        upperRightEquator = new Vector2d(width, (int) ((2.0/3) * height));
-
-        Vector2d lowerLeftAboveEquator = new Vector2d(0, (int) ((2.0/3) * height)+1);
-        Vector2d upperRightAboveEquator = new Vector2d(width, height);
-
-
-        equator = getAllPositionBetween(lowerLeftEquator,upperRightEquator);
-
-        beyondEquator = getAllPositionBetween(lowerLeftBelowEquator,upperRightBelowEquator);
-        beyondEquator.addAll(getAllPositionBetween(lowerLeftAboveEquator,upperRightAboveEquator));
+    public MapStatistic getMapStatistic() {
+        return mapStatistic;
     }
 
     public void addObserver(MapChangeListener observer) {
         observers.add(observer);
     }
 
-    public void removeObserver(MapChangeListener observer) {
-        observers.remove(observer);
-    }
 
     private void notifyObservers(String message) {
         for (var observer : observers) {
@@ -67,31 +54,29 @@ abstract public class BasicRectangularMap implements WorldMap {
         }
     }
 
+    private void notifyMapStatistic(MapStatisticAction mapStatisticAction, int val){
+        mapStatistic.updateStatistic(mapStatisticAction,val);
+    }
+
     @Override
     public void place(Animal animal) {
 
         addToAnimals(animal.getPosition(), animal);
         notifyObservers("Ustawiono animal na " + animal.getPosition());
+
+        mapStatistic.newAnimalUpdate(animal);
+
     }
 
     @Override
     public void addGrass() {
-        // parytet 80:20
-        Random random = new Random();
-        // jeżeli trafiło do tych 20%
-        if((!beyondEquator.isEmpty() && random.nextInt(5)==0) || (!beyondEquator.isEmpty() && equator.isEmpty())){
-            int index = random.nextInt(0,beyondEquator.size());
-            var grass = new Grass(beyondEquator.get(index));
-            beyondEquator.remove(index);
-            grasses.put(grass.getPosition(),grass);
-            System.out.println("dodano " + grass.getPosition().toString());
-        }
-        else if(!equator.isEmpty()){
-            int index = random.nextInt(0,equator.size());
-            var grass = new Grass(equator.get(index));
-            equator.remove(index);
-            grasses.put(grass.getPosition(),grass);
-            System.out.println("dodano " + grass.getPosition().toString());
+        Optional<Vector2d> newPositionOpt = grassField.getNewGrassPosition();
+
+        if(newPositionOpt.isPresent()){
+            var newPosition = newPositionOpt.get();
+            var grass = new Grass(newPosition);
+            grasses.put(newPosition,grass);
+            notifyMapStatistic(MapStatisticAction.GRASS_AMOUNT,1);
         }
     }
 
@@ -116,11 +101,18 @@ abstract public class BasicRectangularMap implements WorldMap {
     }
 
     @Override
-    public void move(AbstractAnimal animal) {
+    public void move(AbstractAnimal animal, int dailyDeclineValue) {
 //        var oldPosition = animal.getPosition();
         removeFromAnimals(animal.getPosition(), animal);
         animal.move(getValidator(animal));
         addToAnimals(animal.getPosition(), animal);
+
+        if(animal instanceof Animal){
+            ((Animal) animal).reduceEnergy(dailyDeclineValue);
+            animal.getOlder();
+            notifyMapStatistic(MapStatisticAction.ENERGY, -dailyDeclineValue);
+        }
+
 //        notifyObservers("Przeniesiono Animal z " + oldPosition + " do " + animal.getPosition());
     }
 
@@ -190,40 +182,6 @@ abstract public class BasicRectangularMap implements WorldMap {
             }
         }
     }
-    public int getAnimalAmount(){
-        return animals.values().stream()
-                .mapToInt(List::size) // Pobieramy rozmiar każdej listy
-                .sum(); // Sumujemy rozmiary
-    }
-
-    public int getGrassAmount(){
-        return grasses.size();
-    }
-
-    public float getAverageEnergy(){
-        int energySum = animals.values().stream()
-                .flatMap(List::stream) // Spłaszczenie wszystkich list z mapy do jednego strumienia
-                .filter(abstractAnimal -> abstractAnimal instanceof Animal animal) // Filtrujemy tylko instancje Animal
-                .mapToInt(animal -> ((Animal) animal).getEnergy()) // Rzutowanie i pobranie energii
-                .sum(); // Sumujemy wartości energii
-        return (float) energySum /getAnimalAmount();
-    }
-
-    public float getAverageLifeTime(){
-        int ageSum = deathAnimals.stream()
-                .mapToInt(AbstractAnimal::getAge) // Pobieramy wiek każdego zwierzęcia
-                .sum(); // Sumujemy wartości
-        return (float) ageSum /deathAnimals.size();
-    }
-
-    public float getAverageChildrenAmount(){
-        int childrenSum = animals.values().stream()
-                .flatMap(List::stream) // Spłaszczenie list w mapie do pojedynczego strumienia obiektów
-                .filter(abstractAnimal -> abstractAnimal instanceof Animal) // Filtrujemy tylko instancje Animal
-                .mapToInt(abstractAnimal -> ((Animal) abstractAnimal).getChildrenAmount()) // Rzutujemy i pobieramy ilość dzieci
-                .sum(); // Sumujemy wartości
-        return (float) childrenSum /getAnimalAmount();
-    }
 
     public Genome getDominantGenome(){
         if(animals.isEmpty()) return new Genome(0);
@@ -250,6 +208,7 @@ abstract public class BasicRectangularMap implements WorldMap {
             throw new RuntimeException("brak elementów w liście"); //tymczasowe, żeby tylko zabezpieczyć
         }
     }
+
     @Override
     public void feedAnimals(int feedVal) {
         for (var animalList : animals.values()) {
@@ -267,14 +226,12 @@ abstract public class BasicRectangularMap implements WorldMap {
                 Animal bestAnimal = animals.getFirst();
                 var position = bestAnimal.getPosition();
                 bestAnimal.eat(feedVal);
+
                 bestAnimal.increaseEaten();
                 grasses.remove(position);
-                if(position.follows(lowerLeftEquator) && position.precedes(upperRightEquator)){
-                    equator.add(position);
-                }
-                else{
-                    beyondEquator.add(position);
-                }
+                mapStatistic.feedAnimalUpdate(feedVal);
+
+                grassField.addGrassPosition(position);
             }
         }
     }
@@ -308,6 +265,9 @@ abstract public class BasicRectangularMap implements WorldMap {
                             config.energyToReproduce());
                     newAnimalList.add(newAnimal);
                     addToAnimals(newAnimal.getPosition(),newAnimal);
+
+                    mapStatistic.newBornUpdate(newAnimal);
+
                 }
             }
         }
@@ -316,14 +276,13 @@ abstract public class BasicRectangularMap implements WorldMap {
     }
 
     public List<Animal> removeDepthAnimals(){
-        // daje config bo byloby 5 parametrów. chyba tak jest bardziej elegancko
 
         List<Animal> removedAnimalList = new ArrayList<>();
         for(var animalList:animals.values()){
             List<Animal> animals = new ArrayList<>(animalList.stream()
                     .filter(Animal.class::isInstance) // Zachowaj tylko instancje klasy Animal
                     .map(Animal.class::cast)          // Zamień AbstractAnimal na Animal
-                    .toList());                        // Tworzy niemodyfikowalną listę (JDK 16+)
+                    .toList());
 
             for(var animal : animals){
                 if(animal.getEnergy()<0){
@@ -333,38 +292,21 @@ abstract public class BasicRectangularMap implements WorldMap {
         }
         // usuwam zwierzęta
         for(var animal: removedAnimalList){
+            // nie wiem czy potrzebne
             animal.die();
+
             removeFromAnimals(animal.getPosition(),animal);
-            deathAnimals.add(animal);
+            // do funkcji
+            mapStatistic.deathAnimalUpdate(animal);
         }
         notifyObservers("usunieto zwierzeta");
         return removedAnimalList;
     }
 
-    private List<Vector2d> getAllPositionBetween(Vector2d lowerLeft, Vector2d upperRight){
-        List<Vector2d> allPossiblePositions = new ArrayList<>();
-
-        for (int x = lowerLeft.getX(); x < upperRight.getX()+1; x++) {
-            for (int y = lowerLeft.getY(); y < upperRight.getY()+1; y++) {
-                allPossiblePositions.add(new Vector2d(x, y));
-            }
-        }
-        return allPossiblePositions;
+    public void moveAllAnimals(int dailyDeclineValue) {
+        animals.values().stream()
+                .flatMap(List::stream)
+                .forEach(animal -> move(animal, dailyDeclineValue));
     }
-
-    // nie działa z uwagi na modyfikacje listy w trakcie przechodzenia przez nią
-//    public void moveAllAnimals(int dailyDeclineValue){
-//        // metoda przygotowana także dla OwlBear
-//        for(var animalList : animals.values()){
-//            for(var animal : animalList){
-//                move(animal);
-//                if (animal instanceof Animal) {
-//                    ((Animal) animal).reduceEnergy(dailyDeclineValue);
-//                }
-//
-//                animal.getOlder();
-//            }
-//        }
-//    }
 
 }
