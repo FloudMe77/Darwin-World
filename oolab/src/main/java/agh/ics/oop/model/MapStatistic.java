@@ -8,9 +8,6 @@ import agh.ics.oop.model.util.newUtils.Genome;
 public class MapStatistic {
     private final BasicRectangularMap worldMap;
 
-//    private float averageEnergy =0 ;
-//    private float averageLifeTime = 0;
-//    private float averageChildrenAmount = 0;
     private int totalAnimalAmount = 0;
     private int totalGrasAmount = 0;
     private int totalEnergy =0 ;

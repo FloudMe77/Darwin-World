@@ -47,6 +47,7 @@ public class AnimalManager {
         Vector2d oldPosition = animal.getPosition();
         removeFromAnimals(oldPosition, animal);
 
+        // nie można tu wrzucić WorldMap co dostaliśmy?
         animal.move(map.getValidator(animal));
         addToAnimals(animal.getPosition(), animal);
 
@@ -58,6 +59,9 @@ public class AnimalManager {
     }
 
     public void feedAnimals(int feedVal, GrassField grassField) {
+        // podzielić na osobne funkcje
+
+
         for (var animalList : animals.values()) {
             List<Animal> animals = new ArrayList<>(animalList.stream()
                     .filter(Animal.class::isInstance) // Zachowaj tylko instancje klasy Animal
@@ -161,6 +165,7 @@ public class AnimalManager {
             if (list.isEmpty()) animals.remove(position);
         }
     }
+
     public Genome getDominantGenome(){
         if(animals.isEmpty()) return new Genome(0);
         HashMap<Genome,Integer> genomesCounter = new HashMap<>();
