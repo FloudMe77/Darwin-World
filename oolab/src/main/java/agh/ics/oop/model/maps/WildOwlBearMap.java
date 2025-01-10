@@ -29,7 +29,6 @@ public class WildOwlBearMap extends BasicRectangularMap {
 
     @Override
     public boolean isOccupied(Vector2d position) {
-        if(owlBear.isAt(position)) System.out.println("cos");
         return owlBear.isAt(position) || super.isOccupied(position);
     }
 
@@ -53,7 +52,8 @@ public class WildOwlBearMap extends BasicRectangularMap {
     public void feedAnimals(int feedVal){
         List<AbstractAnimal> animalsAtPosition = animalManager.getAnimals(owlBear.getPosition());
         if (animalsAtPosition != null) {
-            for (var animal : new ArrayList<>(animalsAtPosition)) { // Tworzymy kopię
+            for (var animal : new ArrayList<>(animalsAtPosition)) {
+                // można by to pominąc, jakby animals to po prostu tablica animali
                 if (animal instanceof Animal concreatAnimal) {
                     concreatAnimal.die();
                     animalManager.removeFromAnimals(animal.getPosition(), animal);
@@ -71,9 +71,9 @@ public class WildOwlBearMap extends BasicRectangularMap {
     }
 
     // trzeba się zastanowić nad sensem tego
-    @Override
-    public WorldMap getValidator(AbstractAnimal animal) {
-        return animal.getClass() == OwlBear.class ? owlBearMap : this;
-    }
+//    @Override
+//    public WorldMap getValidator(AbstractAnimal animal) {
+//        return animal.getClass() == OwlBear.class ? owlBearMap : this;
+//    }
 }
 

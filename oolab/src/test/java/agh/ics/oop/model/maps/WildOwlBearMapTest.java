@@ -83,5 +83,6 @@ class WildOwlBearMapTest {
         var stats= map.getMapStatistic();
         stats.printStatistic();
         assertTrue(map.isOccupied(new Vector2d(0,4)));
+        assertEquals(1,map.getElements().size());
     }
 }

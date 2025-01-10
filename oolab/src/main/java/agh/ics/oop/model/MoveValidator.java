@@ -17,5 +17,5 @@ public interface MoveValidator {
     // Custom move validation that can be tailored to specific map
     MapDirection getNewMapDirection(Vector2d potentialPosition, MapDirection mapDirection);
     Vector2d getNewPosition(Vector2d oldPosition, Vector2d newPosition);
-    WorldMap getValidator(AbstractAnimal animal);
+//    WorldMap getValidator(AbstractAnimal animal);
 }

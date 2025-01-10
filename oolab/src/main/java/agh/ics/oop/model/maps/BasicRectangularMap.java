@@ -120,9 +120,9 @@ abstract public class BasicRectangularMap implements WorldMap {
         ).toList();
     }
 
-    public WorldMap getValidator(AbstractAnimal animal) {
-        return this;
-    };
+//    public WorldMap getValidator(AbstractAnimal animal) {
+//        return this;
+//    };
 
     @Override
     public String toString() {

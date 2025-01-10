@@ -48,7 +48,7 @@ public class AnimalManager {
         removeFromAnimals(oldPosition, animal);
 
         // nie można tu wrzucić WorldMap co dostaliśmy?
-        animal.move(map.getValidator(animal));
+        animal.move(map);
         addToAnimals(animal.getPosition(), animal);
 
         if (animal instanceof Animal concreteAnimal) {
