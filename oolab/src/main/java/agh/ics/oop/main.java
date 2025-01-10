@@ -9,7 +9,10 @@ import agh.ics.oop.model.util.newUtils.FullRandomGenomeChange;
 // do testowania
 public class main {
     public static void main(String[] args) {
+
         var map = new EarthMap(10,10);
+        MapStatistic statistics = map.getMapStatistic();
+
         map.addObserver(new ConsoleMapDisplay());
 
         Config config = new Config(10,
@@ -29,8 +32,7 @@ public class main {
                 map);
         Simulation simulation = new Simulation(config);
         simulation.run();
-        var statistics = new MapStatistic(map);
-        statistics.updateStatistic();
+
         statistics.printStatistic();
     }
 }

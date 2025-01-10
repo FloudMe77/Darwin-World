@@ -59,13 +59,7 @@ public class Simulation implements Runnable {
             animals.removeAll(worldMap.removeDepthAnimals());
 
             // można przemyśleć, żeby tą metodę umieścić w samej mapie
-            for (var animal : animals) {
-                worldMap.move(animal);
-                // nie wiem, czy to nie jest za wysoki level abstrakcji, żeby dawać takie wstawki
-                // ale nie miałem pomysłu jak to ładnie zrobić
-                animal.reduceEnergy(config.dailyDeclineValue());
-                animal.getOlder();
-            }
+            worldMap.moveAllAnimals(config.dailyDeclineValue());
 
             // następnie jedzą
             worldMap.feedAnimals(config.energyFromGrass());

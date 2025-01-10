@@ -30,7 +30,7 @@ public interface WorldMap extends MoveValidator {
      * Moves an animal (if it is present on the map) forward.
      * If the move is not possible, this method has no effect.
      */
-    void move(AbstractAnimal animal);
+    void move(AbstractAnimal animal, int dailyDeclineValue);
 
     /**
      * Return true if given position on the map is occupied. Should not be
@@ -64,5 +64,5 @@ public interface WorldMap extends MoveValidator {
 
     List<Animal> removeDepthAnimals();
 
-//    void moveAllAnimals(int dailyDeclineValue);
+    void moveAllAnimals(int dailyDeclineValue);
 }

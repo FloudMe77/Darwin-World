@@ -71,13 +71,13 @@ class EarthMapTest {
             map.place(animal4);
         });
 
-        map.move(animal1);
-        map.move(animal2);
-        map.move(animal3);
-        map.move(animal4);
+        map.move(animal1,0);
+        map.move(animal2,0);
+        map.move(animal3,0);
+        map.move(animal4,0);
 
-        assertEquals(MapDirection.SOUTH, animal1.getCurrentDirection());
-        assertEquals(MapDirection.SOUTHWEST, animal2.getCurrentDirection());
+        assertEquals(MapDirection.NORTH, animal1.getCurrentDirection());
+        assertEquals(MapDirection.NORTHEAST, animal2.getCurrentDirection());
         assertEquals(animal3ExpectedPosition, animal3.getPosition());
         assertEquals(animal4ExpectedPosition, animal4.getPosition());
     }
