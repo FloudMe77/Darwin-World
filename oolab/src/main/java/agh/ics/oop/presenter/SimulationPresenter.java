@@ -1,8 +1,6 @@
 //package agh.ics.oop.presenter;
 //
 //import agh.ics.oop.Simulation;
-//import agh.ics.oop.SimulationApp;
-//import agh.ics.oop.SimulationEngine;
 //import agh.ics.oop.model.*;
 //import agh.ics.oop.model.util.MapChangeListener;
 //import javafx.application.Platform;
