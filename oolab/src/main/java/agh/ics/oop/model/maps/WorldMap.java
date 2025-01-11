@@ -5,6 +5,7 @@ import agh.ics.oop.model.MapObjects.AbstractAnimal;
 import agh.ics.oop.model.MapObjects.Animal;
 import agh.ics.oop.model.MapObjects.Grass;
 import agh.ics.oop.model.util.Boundary;
+import agh.ics.oop.model.util.MapChangeListener;
 import agh.ics.oop.model.util.newUtils.GenomeChange;
 
 import java.util.ArrayList;
@@ -65,4 +66,8 @@ public interface WorldMap extends MoveValidator {
     List<Animal> removeDepthAnimals();
 
     void moveAllAnimals(int dailyDeclineValue);
+
+    void addObserver(MapChangeListener observer);
+
+    void removeObserver(MapChangeListener observer);
 }

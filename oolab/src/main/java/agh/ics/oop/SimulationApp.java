@@ -1,6 +1,8 @@
 package agh.ics.oop;
 
+import agh.ics.oop.model.Config;
 import agh.ics.oop.presenter.ConfigPresenter;
+import agh.ics.oop.presenter.SimulationPresenter;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -17,7 +19,7 @@ public class SimulationApp extends Application {
         BorderPane viewRoot = loader.load();
         ConfigPresenter presenter = loader.getController();
 
-        configureFirstStage(primaryStage,viewRoot);
+        configureFirstStage(primaryStage, viewRoot);
 
         primaryStage.show();
     }
@@ -29,23 +31,24 @@ public class SimulationApp extends Application {
         primaryStage.minWidthProperty().bind(viewRoot.minWidthProperty());
         primaryStage.minHeightProperty().bind(viewRoot.minHeightProperty());
     }
-//
-//    public void creatNewSimulation(Stage primaryStage, String moves) throws Exception {
-//        FXMLLoader loader = new FXMLLoader();
-//        loader.setLocation(getClass().getClassLoader().getResource("newSimulation.fxml"));
-//        BorderPane viewRoot = loader.load();
-//        SimulationPresenter presenter = loader.getController();
-//
-//        configureNewStage(primaryStage,viewRoot);
-//
-//        primaryStage.show();
-//        presenter.simulationStart(moves);
-//    }
-//    private void configureNewStage(Stage primaryStage, BorderPane viewRoot) {
-//        var scene = new Scene(viewRoot);
-//        primaryStage.setScene(scene);
-//        primaryStage.setTitle("newSimulation app");
-//        primaryStage.minWidthProperty().bind(viewRoot.minWidthProperty());
-//        primaryStage.minHeightProperty().bind(viewRoot.minHeightProperty());
-//    }
+
+    public void createNewSimulation(Stage primaryStage, Config config) throws Exception {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getClassLoader().getResource("newSimulation.fxml"));
+        BorderPane viewRoot = loader.load();
+        SimulationPresenter presenter = loader.getController();
+
+        configureNewStage(primaryStage, viewRoot);
+
+        primaryStage.show();
+        presenter.simulationStart(config);
+    }
+
+    private void configureNewStage(Stage primaryStage, BorderPane viewRoot) {
+        var scene = new Scene(viewRoot);
+        primaryStage.setScene(scene);
+        primaryStage.setTitle("newSimulation app");
+        primaryStage.minWidthProperty().bind(viewRoot.minWidthProperty());
+        primaryStage.minHeightProperty().bind(viewRoot.minHeightProperty());
+    }
 }

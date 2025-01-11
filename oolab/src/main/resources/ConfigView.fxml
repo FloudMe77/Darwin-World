@@ -6,8 +6,10 @@
             fx:controller="agh.ics.oop.presenter.ConfigPresenter"
             minHeight="550.0" minWidth="850.0">
     <center>
+<!--        Przerób tu rzeczy na spinnery-->
         <GridPane hgap="10" vgap="10" alignment="CENTER">
             <Label text="Wysokość mapy:" GridPane.rowIndex="0" GridPane.columnIndex="0" />
+<!--            <Spinner GridPane.rowIndex="0" GridPane.columnIndex="2" fx:id="spinnerTest" />-->
             <TextField fx:id="heightField" promptText="np. 20" GridPane.rowIndex="0" GridPane.columnIndex="1" />
 
             <Label text="Szerokość mapy:" GridPane.rowIndex="1" GridPane.columnIndex="0" />

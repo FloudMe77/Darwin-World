@@ -1,6 +1,11 @@
 package agh.ics.oop.presenter;
 
+import agh.ics.oop.Simulation;
+import agh.ics.oop.SimulationApp;
 import agh.ics.oop.model.Config;
+import agh.ics.oop.model.maps.EarthMap;
+import agh.ics.oop.model.maps.WildOwlBearMap;
+import agh.ics.oop.model.maps.WorldMap;
 import agh.ics.oop.model.util.newUtils.*;
 import agh.ics.oop.view.ConfigValidatorHelper;
 import agh.ics.oop.view.ControlHelper;
@@ -15,6 +20,9 @@ import java.io.IOException;
 import java.util.Optional;
 
 public class ConfigPresenter {
+
+    @FXML
+    private Spinner spinnerTest;
 
     @FXML
     private TextField heightField, widthField, startGrassField, energyFromGrassField, dailyGrassField, startAnimalsField,
@@ -35,6 +43,12 @@ public class ConfigPresenter {
         genomeChangeBox.setValue("Pełna losowość");
         worldMapBox.getItems().addAll("Kula ziemska", "Dziki sowoniedźwiedź");
         worldMapBox.setValue("Kula ziemska");
+
+        // to gowno przerobic na spinnery idk czemu na pocztku tak nie zrobiłem ...
+        SpinnerValueFactory<Integer> valueFactory =
+                new SpinnerValueFactory.IntegerSpinnerValueFactory(25, 100, 25);
+
+        spinnerTest.setValueFactory(valueFactory);
     }
 
     @FXML
@@ -68,26 +82,41 @@ public class ConfigPresenter {
 
     @FXML
     private void runSimulation(ActionEvent actionEvent) {
-        try {
-            int height = Integer.parseInt(heightField.getText());
-            int width = Integer.parseInt(widthField.getText());
-
-            if (height < 25 || height > 100) {
-                ControlHelper.showAlert("Wysokość mapy musi być w zakresie 25–100.");
-                return;
-            }
-            if (width < 25 || width > 100) {
-                ControlHelper.showAlert("Szerokość mapy musi być w zakresie 25–100.");
-                return;
-            }
-        } catch (NumberFormatException e) {
-            ControlHelper.showAlert("Podaj poprawne wartości liczbowe");
+        Optional<CsvConfigValues> csvConfigValuesOptional = createCsvConfigValues();
+        if (csvConfigValuesOptional.isEmpty()) {
+            return;
         }
-    }
 
-    // to do
-    private boolean validateConfigInput() {
-        return true;
+        CsvConfigValues csvConfigValues = csvConfigValuesOptional.get();
+
+        GenomeChange genomeChange = csvConfigValues.genomeChange().equals("Pełna losowość") ? new FullRandomGenomeChange() : new ReplacmentGenomeChange();
+        WorldMap worldMap = csvConfigValues.worldMap().equals("Kula ziemska") ? new EarthMap(csvConfigValues.height(), csvConfigValues.width()) : new WildOwlBearMap(csvConfigValues.height(), csvConfigValues.width());
+
+        Config config = new Config(
+            csvConfigValues.height(),
+            csvConfigValues.width(),
+            csvConfigValues.startGrassAmount(),
+            csvConfigValues.energyFromGrass(),
+            csvConfigValues.everyDayGrassAmount(),
+            csvConfigValues.startAnimalAmount(),
+            csvConfigValues.startEnergy(),
+            csvConfigValues.energyRequireToReproduce(),
+            csvConfigValues.energyToReproduce(),
+            csvConfigValues.dailyDeclineValue(),
+            csvConfigValues.minimalMutationAmount(),
+            csvConfigValues.maximalMutationAmount(),
+            genomeChange,
+            csvConfigValues.genomeLength(),
+            worldMap
+        );
+
+        SimulationApp simulationApp = new SimulationApp();
+        try {
+            simulationApp.createNewSimulation(new Stage(), config);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+
     }
 
     @FXML

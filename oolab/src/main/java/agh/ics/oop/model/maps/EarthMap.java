@@ -3,6 +3,7 @@ package agh.ics.oop.model.maps;
 import agh.ics.oop.model.MapDirection;
 import agh.ics.oop.model.MapStatistic;
 import agh.ics.oop.model.Vector2d;
+import agh.ics.oop.model.util.MapChangeListener;
 
 public class EarthMap extends BasicRectangularMap {
     private final int leftX = getCurrentBounds().leftDownCornerMap().getX();

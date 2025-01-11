@@ -33,6 +33,6 @@ public class main {
         Simulation simulation = new Simulation(config);
         simulation.run();
 
-        statistics.printStatistic();
+//        statistics.printStatistic();
     }
 }

@@ -40,6 +40,7 @@ abstract public class BasicRectangularMap implements WorldMap {
         return mapStatistic;
     }
 
+    @Override
     public void addObserver(MapChangeListener observer) {
         observers.add(observer);
     }
@@ -48,6 +49,11 @@ abstract public class BasicRectangularMap implements WorldMap {
         for (var observer : observers) {
             observer.mapChanged(this, message, mapId);
         }
+    }
+
+    @Override
+    public void removeObserver(MapChangeListener observer) {
+        observers.remove(observer);
     }
 
     private void notifyMapStatistic(MapStatisticAction mapStatisticAction, int val){
