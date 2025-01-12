@@ -14,6 +14,9 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.*;
 
 import java.util.Optional;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 public class SimulationPresenter implements MapChangeListener {
     private static final String EMPTY_CELL = " ";
@@ -41,6 +44,8 @@ public class SimulationPresenter implements MapChangeListener {
 
     private WorldMap worldMap;
     private MapStatistics mapStatistics;
+    private Thread simulationThread;
+    private ExecutorService executor;
     private int initialAnimalEnergy;
     private int mapWidth; // Number of columns
     private int mapHeight; // Number of rows
@@ -145,6 +150,7 @@ public class SimulationPresenter implements MapChangeListener {
         calculateCellSizes();
         setGridWidthAndHeight();
         drawWorldElementsOnGrid();
+        updateStatistics();
 //        System.out.println(worldMap);
     }
 
@@ -156,12 +162,32 @@ public class SimulationPresenter implements MapChangeListener {
         Simulation simulation = new Simulation(config);
         this.simulation = simulation;
         this.mapStatistics = map.getMapStatistics();
-        bindStatistics();
 //        SimulationEngine simulationEngine = new SimulationEngine(List.of(simulation));
-        Thread simulationThread = new Thread(simulation);
-        simulationThread.setDaemon(true);
-        simulationThread.start();
+        executor = Executors.newSingleThreadExecutor();
+        executor.submit(simulation);
         stopButton.disableProperty().bind(simulation.stoppedProperty());
+    }
+
+    public void onStop() {
+        try {
+            simulation.terminate();
+            executor.shutdown();
+            if (!executor.awaitTermination(10, TimeUnit.SECONDS)) {
+                executor.shutdownNow();
+            }
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private void updateStatistics() {
+        animalCountLabel.textProperty().set(String.format("Liczba zwierząt: %d", mapStatistics.getTotalAnimalAmount()));
+        grassCountLabel.textProperty().set(String.format("Liczba traw: %d", mapStatistics.getTotalGrasAmount()));
+        freeSpaceLabel.textProperty().set(String.format("Liczba wolny miejsc: %d", mapStatistics.getTotalFreeSpace()));
+//        dominujący genom nwm TODO
+        avgEnergyLabel.textProperty().set(String.format("Średni poziom energii: %.2f", mapStatistics.getAverageEnergy()));
+        avgLifespanLabel.textProperty().set(String.format("Średnia długość życia: %.2f",mapStatistics.getAverageLifeTime()));
+        avgChildrenAmountLabel.textProperty().set(String.format("Średnia liczba dzieci: %.2f", mapStatistics.getAverageChildrenAmount()));
     }
 
     public void handlePauseSimulation(ActionEvent actionEvent) {
@@ -184,12 +210,12 @@ public class SimulationPresenter implements MapChangeListener {
             throw new IllegalStateException("mapStatistics is not initialized yet");
         }
 
-        animalCountLabel.textProperty().bind(mapStatistics.totalAnimalAmountProperty().asString("Liczba zwierząt: %d"));
-        grassCountLabel.textProperty().bind(mapStatistics.totalGrassAmountProperty().asString("Liczba traw: %d"));
-        freeSpaceLabel.textProperty().bind(mapStatistics.totalFreeSpaceProperty().asString("Liczba wolny miejsc: %d"));
-        // dominujący genom nwm TODO
-        avgEnergyLabel.textProperty().bind(mapStatistics.averageAnimalEnergyProperty().asString("Średni poziom energii: %.2f"));
-        avgLifespanLabel.textProperty().bind(mapStatistics.averageLifespanProperty().asString("Średnia długość życia: %.2f"));
-        avgChildrenAmountLabel.textProperty().bind(mapStatistics.averageChildrenAmountProperty().asString("Średnia liczba dzieci: %.2f"));
+//        animalCountLabel.textProperty().bind(mapStatistics.totalAnimalAmountProperty().asString("Liczba zwierząt: %d"));
+//        grassCountLabel.textProperty().bind(mapStatistics.totalGrassAmountProperty().asString("Liczba traw: %d"));
+//        freeSpaceLabel.textProperty().bind(mapStatistics.totalFreeSpaceProperty().asString("Liczba wolny miejsc: %d"));
+//         dominujący genom nwm TODO
+//        avgEnergyLabel.textProperty().bind(mapStatistics.averageAnimalEnergyProperty().asString("Średni poziom energii: %.2f"));
+//        avgLifespanLabel.textProperty().bind(mapStatistics.averageLifespanProperty().asString("Średnia długość życia: %.2f"));
+//        avgChildrenAmountLabel.textProperty().bind(mapStatistics.averageChildrenAmountProperty().asString("Średnia liczba dzieci: %.2f"));
     }
 }

@@ -2,7 +2,6 @@ package agh.ics.oop;
 
 import agh.ics.oop.model.Config;
 import agh.ics.oop.model.MapObjects.Animal;
-import agh.ics.oop.model.MapObjects.Grass;
 import agh.ics.oop.model.Vector2d;
 
 import agh.ics.oop.model.IncorrectPositionException;
@@ -14,7 +13,6 @@ import javafx.beans.property.SimpleBooleanProperty;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 public class Simulation implements Runnable {
     private final List<Animal> animals;
@@ -22,6 +20,7 @@ public class Simulation implements Runnable {
     private final Config config;
     private BooleanProperty stopped = new SimpleBooleanProperty(true);
     private final Object pauseLock = new Object();
+    private boolean terminated = false;
 
     // jak narazie dostosowuje do EarthMap
     public Simulation(Config config) {
@@ -59,7 +58,6 @@ public class Simulation implements Runnable {
         setStopped(false);
 
         // tutaj rzecz jasna refactor musi byc
-
         for (int i = 0; i < 1000; i++) {
             synchronized (pauseLock) {
                 while (stopped.get()) {
@@ -71,7 +69,12 @@ public class Simulation implements Runnable {
                     }
                 }
 
+                if (terminated) {
+                    break;
+                }
+
                 // usuwanie zdechłych zwierząt
+                System.out.println("runninnng");
                 animals.removeAll(worldMap.removeDepthAnimals());
 
                 // można przemyśleć, żeby tą metodę umieścić w samej mapie
@@ -112,6 +115,10 @@ public class Simulation implements Runnable {
 
     public void pause() {
         this.setStopped(true);
+    }
+
+    public void terminate() {
+        terminated = true;
     }
 
     public void resume() {
