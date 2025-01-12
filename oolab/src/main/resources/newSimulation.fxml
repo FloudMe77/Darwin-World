@@ -9,7 +9,8 @@
 <?import javafx.scene.layout.StackPane?>
 <BorderPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
-            minHeight="550.0" minWidth="850.0"
+            fx:id="rootPane"
+            minHeight="750.0" minWidth="1050.0"
             fx:controller="agh.ics.oop.presenter.SimulationPresenter">
     <top>
         <Label fx:id="moveNotificationLabel" text="Opis ruchu" style="-fx-font-size: 15px;" wrapText="true"/>
@@ -32,7 +33,7 @@
     </left>
 
     <center>
-        <GridPane fx:id="mapGrid" gridLinesVisible="true" alignment="CENTER" style="-fx-border-color: #f30505;"/>
+        <GridPane fx:id="mapGrid" gridLinesVisible="true" BorderPane.alignment="CENTER" style="-fx-border-color: #f30505;"/>
     </center>
 
     <bottom>

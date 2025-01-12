@@ -1,6 +1,5 @@
 package agh.ics.oop.presenter;
 
-import agh.ics.oop.Simulation;
 import agh.ics.oop.SimulationApp;
 import agh.ics.oop.model.Config;
 import agh.ics.oop.model.maps.EarthMap;
@@ -19,20 +18,25 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Optional;
 
+
+// Używanie configvalidatorhelpera mozliwe ze jest zbędne po zmianie na spinnery ale idk potem zobacze
 public class ConfigPresenter {
+    @FXML
+    private Button loadConfigButton;
+    @FXML
+    private Button saveConfigButton;
+    @FXML
+    private CheckBox saveStatsCheckBox;
+    @FXML
+    private Button runSimulationButton;
+    @FXML
+    private Spinner<Integer> heightSpinner, widthSpinner, startGrassSpinner, energyFromGrassSpinner,
+            dailyGrassSpinner, startAnimalsSpinner, startEnergySpinner, energyToReproduceSpinner,
+            energyForOffspringSpinner, dailyDeclineSpinner, minMutationsSpinner,
+            maxMutationsSpinner, genomeLengthSpinner;
 
     @FXML
-    private Spinner spinnerTest;
-
-    @FXML
-    private TextField heightField, widthField, startGrassField, energyFromGrassField, dailyGrassField, startAnimalsField,
-            startEnergyField, energyToReproduceField, energyForOffspringField, dailyDeclineField, minMutationsField,
-            maxMutationsField, genomeLengthField;
-
-    @FXML
-    private ComboBox<String> genomeChangeBox;
-    @FXML
-    private ComboBox<String> worldMapBox;
+    private ComboBox<String> genomeChangeBox, worldMapBox;
 
     private Config config;
 
@@ -44,11 +48,19 @@ public class ConfigPresenter {
         worldMapBox.getItems().addAll("Kula ziemska", "Dziki sowoniedźwiedź");
         worldMapBox.setValue("Kula ziemska");
 
-        // to gowno przerobic na spinnery idk czemu na pocztku tak nie zrobiłem ...
-        SpinnerValueFactory<Integer> valueFactory =
-                new SpinnerValueFactory.IntegerSpinnerValueFactory(25, 100, 25);
-
-        spinnerTest.setValueFactory(valueFactory);
+        heightSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(25, 100, 25));
+        widthSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(25, 100, 25));
+        startGrassSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 1000, 10));
+        energyFromGrassSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 100, 5));
+        dailyGrassSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 100, 3));
+        startAnimalsSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 1000, 10));
+        startEnergySpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 1000, 50));
+        energyToReproduceSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 1000, 20));
+        energyForOffspringSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 1000, 10));
+        dailyDeclineSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 100, 1));
+        minMutationsSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 100, 1));
+        maxMutationsSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 100, 3));
+        genomeLengthSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 100, 8));
     }
 
     @FXML
@@ -69,11 +81,6 @@ public class ConfigPresenter {
             }
         }
 
-    }
-
-    @FXML
-    private void handleCancel() {
-        ((Stage) heightField.getScene().getWindow()).close();
     }
 
     public Config getConfig() {
@@ -146,38 +153,38 @@ public class ConfigPresenter {
     }
 
     private void loadConfigToFields(CsvConfigValues config) {
-        heightField.setText(String.valueOf(config.height()));
-        widthField.setText(String.valueOf(config.width()));
-        startGrassField.setText(String.valueOf(config.startGrassAmount()));
-        energyFromGrassField.setText(String.valueOf(config.energyFromGrass()));
-        dailyGrassField.setText(String.valueOf(config.everyDayGrassAmount()));
-        startAnimalsField.setText(String.valueOf(config.startAnimalAmount()));
-        startEnergyField.setText(String.valueOf(config.startEnergy()));
-        energyToReproduceField.setText(String.valueOf(config.energyRequireToReproduce()));
-        energyForOffspringField.setText(String.valueOf(config.energyToReproduce()));
-        dailyDeclineField.setText(String.valueOf(config.dailyDeclineValue()));
-        minMutationsField.setText(String.valueOf(config.minimalMutationAmount()));
-        maxMutationsField.setText(String.valueOf(config.maximalMutationAmount()));
-        genomeLengthField.setText(String.valueOf(config.genomeLength()));
+        heightSpinner.getValueFactory().setValue(config.height());
+        widthSpinner.getValueFactory().setValue(config.width());
+        startGrassSpinner.getValueFactory().setValue(config.startGrassAmount());
+        energyFromGrassSpinner.getValueFactory().setValue(config.energyFromGrass());
+        dailyGrassSpinner.getValueFactory().setValue(config.everyDayGrassAmount());
+        startAnimalsSpinner.getValueFactory().setValue(config.startAnimalAmount());
+        startEnergySpinner.getValueFactory().setValue(config.startEnergy());
+        energyToReproduceSpinner.getValueFactory().setValue(config.energyToReproduce());
+        energyForOffspringSpinner.getValueFactory().setValue(config.energyRequireToReproduce());
+        dailyDeclineSpinner.getValueFactory().setValue(config.dailyDeclineValue());
+        minMutationsSpinner.getValueFactory().setValue(config.minimalMutationAmount());
+        maxMutationsSpinner.getValueFactory().setValue(config.maximalMutationAmount());
+        genomeLengthSpinner.getValueFactory().setValue(config.genomeLength());
         genomeChangeBox.setValue(config.genomeChange());
         worldMapBox.setValue(config.worldMap());
     }
 
     private Optional<CsvConfigValues> createCsvConfigValues() {
         try {
-            int height = Integer.parseInt(heightField.getText());
-            int width = Integer.parseInt(widthField.getText());
-            int startGrass = Integer.parseInt(startGrassField.getText());
-            int energyFromGrass = Integer.parseInt(energyFromGrassField.getText());
-            int dailyGrass = Integer.parseInt(dailyGrassField.getText());
-            int startAnimals = Integer.parseInt(startAnimalsField.getText());
-            int startEnergy = Integer.parseInt(startEnergyField.getText());
-            int energyToReproduce = Integer.parseInt(energyToReproduceField.getText());
-            int energyForOffspring = Integer.parseInt(energyForOffspringField.getText());
-            int dailyDecline = Integer.parseInt(dailyDeclineField.getText());
-            int minMutations = Integer.parseInt(minMutationsField.getText());
-            int maxMutations = Integer.parseInt(maxMutationsField.getText());
-            int genomeLength = Integer.parseInt(genomeLengthField.getText());
+            int height = heightSpinner.getValue();
+            int width = widthSpinner.getValue();
+            int startGrass = startGrassSpinner.getValue();
+            int energyFromGrass = energyFromGrassSpinner.getValue();
+            int dailyGrass = dailyGrassSpinner.getValue();
+            int startAnimals = startAnimalsSpinner.getValue();
+            int startEnergy = startEnergySpinner.getValue();
+            int energyToReproduce = energyToReproduceSpinner.getValue();
+            int energyForOffspring = energyForOffspringSpinner.getValue();
+            int dailyDecline = dailyDeclineSpinner.getValue();
+            int minMutations = minMutationsSpinner.getValue();
+            int maxMutations = maxMutationsSpinner.getValue();
+            int genomeLength = genomeLengthSpinner.getValue();
             String genomeChangeValue = genomeChangeBox.getValue();
             String worldMapValue = worldMapBox.getValue();
 

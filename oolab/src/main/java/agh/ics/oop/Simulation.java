@@ -53,7 +53,7 @@ public class Simulation implements Runnable {
         // duży for tylko na potrzeby testów
         // najpierw zwierzęta się poruszają
 
-        for(int i=0;i<5;i++) {
+        for(int i=0;i<100;i++) {
 
             // usuwanie zdechłych zwierząt
             animals.removeAll(worldMap.removeDepthAnimals());
@@ -71,6 +71,12 @@ public class Simulation implements Runnable {
             // porost traw
             for(int j=0; j < config.everyDayGrassAmount();j++){
                 worldMap.addGrass();
+            }
+
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+                System.out.println(e.getMessage());
             }
         }
     }

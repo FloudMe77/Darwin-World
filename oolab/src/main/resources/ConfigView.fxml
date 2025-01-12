@@ -6,47 +6,45 @@
             fx:controller="agh.ics.oop.presenter.ConfigPresenter"
             minHeight="550.0" minWidth="850.0">
     <center>
-<!--        Przerób tu rzeczy na spinnery-->
         <GridPane hgap="10" vgap="10" alignment="CENTER">
             <Label text="Wysokość mapy:" GridPane.rowIndex="0" GridPane.columnIndex="0" />
-<!--            <Spinner GridPane.rowIndex="0" GridPane.columnIndex="2" fx:id="spinnerTest" />-->
-            <TextField fx:id="heightField" promptText="np. 20" GridPane.rowIndex="0" GridPane.columnIndex="1" />
+            <Spinner fx:id="heightSpinner" GridPane.rowIndex="0" GridPane.columnIndex="1" />
 
             <Label text="Szerokość mapy:" GridPane.rowIndex="1" GridPane.columnIndex="0" />
-            <TextField fx:id="widthField" promptText="np. 20" GridPane.rowIndex="1" GridPane.columnIndex="1" />
+            <Spinner fx:id="widthSpinner" GridPane.rowIndex="1" GridPane.columnIndex="1" />
 
             <Label text="Początkowa liczba trawy:" GridPane.rowIndex="2" GridPane.columnIndex="0" />
-            <TextField fx:id="startGrassField" promptText="np. 10" GridPane.rowIndex="2" GridPane.columnIndex="1" />
+            <Spinner fx:id="startGrassSpinner" GridPane.rowIndex="2" GridPane.columnIndex="1" />
 
             <Label text="Energia z trawy:" GridPane.rowIndex="3" GridPane.columnIndex="0" />
-            <TextField fx:id="energyFromGrassField" promptText="np. 5" GridPane.rowIndex="3" GridPane.columnIndex="1" />
+            <Spinner fx:id="energyFromGrassSpinner" GridPane.rowIndex="3" GridPane.columnIndex="1" />
 
             <Label text="Trawa dodawana każdego dnia:" GridPane.rowIndex="4" GridPane.columnIndex="0" />
-            <TextField fx:id="dailyGrassField" promptText="np. 3" GridPane.rowIndex="4" GridPane.columnIndex="1" />
+            <Spinner fx:id="dailyGrassSpinner" GridPane.rowIndex="4" GridPane.columnIndex="1" />
 
             <Label text="Początkowa liczba zwierząt:" GridPane.rowIndex="5" GridPane.columnIndex="0" />
-            <TextField fx:id="startAnimalsField" promptText="np. 10" GridPane.rowIndex="5" GridPane.columnIndex="1" />
+            <Spinner fx:id="startAnimalsSpinner" GridPane.rowIndex="5" GridPane.columnIndex="1" />
 
             <Label text="Początkowa energia zwierząt:" GridPane.rowIndex="6" GridPane.columnIndex="0" />
-            <TextField fx:id="startEnergyField" promptText="np. 50" GridPane.rowIndex="6" GridPane.columnIndex="1" />
+            <Spinner fx:id="startEnergySpinner" GridPane.rowIndex="6" GridPane.columnIndex="1" />
 
             <Label text="Energia wymagana do rozmnażania:" GridPane.rowIndex="7" GridPane.columnIndex="0" />
-            <TextField fx:id="energyToReproduceField" promptText="np. 20" GridPane.rowIndex="7" GridPane.columnIndex="1" />
+            <Spinner fx:id="energyToReproduceSpinner" GridPane.rowIndex="7" GridPane.columnIndex="1" />
 
             <Label text="Energia przekazywana potomstwu:" GridPane.rowIndex="8" GridPane.columnIndex="0" />
-            <TextField fx:id="energyForOffspringField" promptText="np. 10" GridPane.rowIndex="8" GridPane.columnIndex="1" />
+            <Spinner fx:id="energyForOffspringSpinner" GridPane.rowIndex="8" GridPane.columnIndex="1" />
 
             <Label text="Dzienne zużycie energii:" GridPane.rowIndex="9" GridPane.columnIndex="0" />
-            <TextField fx:id="dailyDeclineField" promptText="np. 1" GridPane.rowIndex="9" GridPane.columnIndex="1" />
+            <Spinner fx:id="dailyDeclineSpinner" GridPane.rowIndex="9" GridPane.columnIndex="1" />
 
             <Label text="Minimalna liczba mutacji:" GridPane.rowIndex="10" GridPane.columnIndex="0" />
-            <TextField fx:id="minMutationsField" promptText="np. 1" GridPane.rowIndex="10" GridPane.columnIndex="1" />
+            <Spinner fx:id="minMutationsSpinner" GridPane.rowIndex="10" GridPane.columnIndex="1" />
 
             <Label text="Maksymalna liczba mutacji:" GridPane.rowIndex="11" GridPane.columnIndex="0" />
-            <TextField fx:id="maxMutationsField" promptText="np. 3" GridPane.rowIndex="11" GridPane.columnIndex="1" />
+            <Spinner fx:id="maxMutationsSpinner" GridPane.rowIndex="11" GridPane.columnIndex="1" />
 
             <Label text="Długość genomu:" GridPane.rowIndex="12" GridPane.columnIndex="0" />
-            <TextField fx:id="genomeLengthField" promptText="np. 8" GridPane.rowIndex="12" GridPane.columnIndex="1" />
+            <Spinner fx:id="genomeLengthSpinner" GridPane.rowIndex="12" GridPane.columnIndex="1" />
 
             <Label text="Zmiana genomu:" GridPane.rowIndex="13" GridPane.columnIndex="0" />
             <ComboBox fx:id="genomeChangeBox" GridPane.rowIndex="13" GridPane.columnIndex="1" />
@@ -62,7 +60,7 @@
                 <Button text="Uruchom symulację" fx:id="runSimulationButton" onAction="#runSimulation" />
                 <Button text="Wczytaj Konfigurację" fx:id="loadConfigButton" onAction="#handleLoadConfig" />
                 <Button text="Zapisz Konfigurację" fx:id="saveConfigButton" onAction="#handleSaveConfig" />
-                <Button text="Anuluj" fx:id="cancelButton" onAction="#handleCancel" />
+                <CheckBox text="Zapisuj statystyki do CSV" fx:id="saveStatsCheckBox" />
             </HBox>
         </VBox>
     </bottom>

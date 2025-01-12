@@ -70,4 +70,8 @@ public interface WorldMap extends MoveValidator {
     void addObserver(MapChangeListener observer);
 
     void removeObserver(MapChangeListener observer);
+
+    GrassManager getGrassManager();
+
+    AnimalManager getAnimalManager();
 }

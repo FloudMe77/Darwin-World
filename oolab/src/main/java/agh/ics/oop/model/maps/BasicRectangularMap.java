@@ -3,6 +3,7 @@ package agh.ics.oop.model.maps;
 import agh.ics.oop.model.*;
 import agh.ics.oop.model.MapObjects.AbstractAnimal;
 import agh.ics.oop.model.MapObjects.Animal;
+import agh.ics.oop.model.MapObjects.Grass;
 import agh.ics.oop.model.util.Boundary;
 import agh.ics.oop.model.util.MapChangeListener;
 import agh.ics.oop.model.util.MapVisualizer;
@@ -80,6 +81,7 @@ abstract public class BasicRectangularMap implements WorldMap {
         return animalManager.isAnimalAt(position) || grassManager.isGrassAt(position);
     }
 
+    // jest nie mała szansa ze ta metoda jest zbędna bo mozna uzywac managerów zamiennie
     @Override
     public List<WorldElement> objectsAt(Vector2d position) {
         List<WorldElement> elements = new ArrayList<>();
@@ -169,4 +171,12 @@ abstract public class BasicRectangularMap implements WorldMap {
         animalManager.moveAllAnimals(dailyDeclineValue, this);
     }
 
+    // Gettery do managerów przydatne w sprawdzaniu czy na danej pozycji jest trawa lub zwierzak albo to i to.
+    public GrassManager getGrassManager() {
+        return grassManager;
+    }
+
+    public AnimalManager getAnimalManager() {
+        return animalManager;
+    }
 }
