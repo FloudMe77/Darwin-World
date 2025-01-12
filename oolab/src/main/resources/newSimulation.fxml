@@ -17,29 +17,29 @@
     </top>
 
     <left>
-        <VBox spacing="20.0" alignment="TOP_LEFT" style="-fx-padding: 10; -fx-border-color: green;">
+        <VBox spacing="20.0" alignment="TOP_LEFT" style="-fx-padding: 10;">
             <VBox spacing="5.0">
                 <Label style="-fx-font-weight: bold;">Statystyki z mapy</Label>
                 <Label text="Statystyki symulacji" style="-fx-font-size: 14px; -fx-font-weight: bold;"/>
                 <Label fx:id="animalCountLabel" text="Liczba zwierząt: 0"/>
-                <Label fx:id="plantCountLabel" text="Liczba roślin: 0"/>
-                <Label fx:id="freeFieldsLabel" text="Liczba wolnych pól: 0"/>
-                <Label fx:id="dominantGenotypeLabel" text="Najpopularniejszy genotyp: Brak danych"/>
+                <Label fx:id="grassCountLabel" text="Liczba traw: 0"/>
+                <Label fx:id="freeSpaceLabel" text="Liczba wolnych pól: 0"/>
+                <Label fx:id="dominantGenomeLabel" text="Najpopularniejszy genotyp: Brak danych"/>
                 <Label fx:id="avgEnergyLabel" text="Średni poziom energii: 0"/>
                 <Label fx:id="avgLifespanLabel" text="Średnia długość życia: 0"/>
-                <Label fx:id="avgChildrenLabel" text="Średnia liczba dzieci: 0"/>
+                <Label fx:id="avgChildrenAmountLabel" text="Średnia liczba dzieci: 0"/>
             </VBox>
         </VBox>
     </left>
 
     <center>
-        <GridPane fx:id="mapGrid" gridLinesVisible="true" BorderPane.alignment="CENTER" style="-fx-border-color: #f30505;"/>
+        <GridPane fx:id="mapGrid" gridLinesVisible="true" BorderPane.alignment="CENTER"/>
     </center>
 
     <bottom>
         <HBox spacing="10" alignment="CENTER" style="-fx-padding: 10;">
-            <Button text="Zatrzymaj" onAction="#handlePauseSimulation"/>
-            <Button text="Wznów" onAction="#handleResumeSimulation"/>
+            <Button text="Wznów" fx:id="resumeButton" onAction="#handleResumeSimulation"/>
+            <Button text="Zatrzymaj" fx:id="stopButton" onAction="#handlePauseSimulation"/>
             <!--            <Button text="Oznacz zwierzaka" onAction="#handleTrackAnimal" />-->
             <!--            <Button text="Pokaż dominujące genotypy" onAction="#handleShowDominantGenotypes" />-->
             <!--            <Button text="Pokaż preferowane pola" onAction="#handleShowPreferredFields" />-->

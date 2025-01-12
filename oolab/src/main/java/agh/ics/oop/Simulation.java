@@ -9,6 +9,8 @@ import agh.ics.oop.model.IncorrectPositionException;
 import agh.ics.oop.model.maps.WorldMap;
 import agh.ics.oop.model.util.RandomPositionGenerator;
 import agh.ics.oop.model.util.newUtils.Genome;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,6 +20,8 @@ public class Simulation implements Runnable {
     private final List<Animal> animals;
     private final WorldMap worldMap;
     private final Config config;
+    private BooleanProperty stopped = new SimpleBooleanProperty(true);
+    private final Object pauseLock = new Object();
 
     // jak narazie dostosowuje do EarthMap
     public Simulation(Config config) {
@@ -25,9 +29,9 @@ public class Simulation implements Runnable {
         animals = new ArrayList<>();
         this.config = config;
         // dodawanie zwierząt
-        for (Vector2d position : new RandomPositionGenerator(new Vector2d(0,0), new Vector2d(config.width(),config.high()), config.startAnimalAmount())) {
-            Animal animal = new Animal(position,new Genome(config.genomeLength()),config.startEnergy());
-            try{
+        for (Vector2d position : new RandomPositionGenerator(new Vector2d(0, 0), new Vector2d(config.width(), config.high()), config.startAnimalAmount())) {
+            Animal animal = new Animal(position, new Genome(config.genomeLength()), config.startEnergy());
+            try {
                 worldMap.place(animal);
                 animals.add(animal);
             } catch (IncorrectPositionException e) {
@@ -40,7 +44,7 @@ public class Simulation implements Runnable {
         // uznaje, że równik to pas o szerokości 1/5 mapy na środku
         // pewnie lepiej by było wsadzić metodę do wordlmap
 
-        for(int i = 0; i < config.startGrassAmount();i++){
+        for (int i = 0; i < config.startGrassAmount(); i++) {
             worldMap.addGrass();
         }
     }
@@ -52,32 +56,68 @@ public class Simulation implements Runnable {
     public void run() {
         // duży for tylko na potrzeby testów
         // najpierw zwierzęta się poruszają
+        setStopped(false);
 
-        for(int i=0;i<100;i++) {
+        // tutaj rzecz jasna refactor musi byc
 
-            // usuwanie zdechłych zwierząt
-            animals.removeAll(worldMap.removeDepthAnimals());
+        for (int i = 0; i < 1000; i++) {
+            synchronized (pauseLock) {
+                while (stopped.get()) {
+                    try {
+                        pauseLock.wait();
+                    } catch (InterruptedException e) {
+                        Thread.currentThread().interrupt();
+                        return;
+                    }
+                }
 
-            // można przemyśleć, żeby tą metodę umieścić w samej mapie
-            worldMap.moveAllAnimals(config.dailyDeclineValue());
+                // usuwanie zdechłych zwierząt
+                animals.removeAll(worldMap.removeDepthAnimals());
 
-            // następnie jedzą
-            worldMap.feedAnimals(config.energyFromGrass());
+                // można przemyśleć, żeby tą metodę umieścić w samej mapie
+                worldMap.moveAllAnimals(config.dailyDeclineValue());
 
-            // reprodukcja zwierząt
-            animals.addAll(worldMap.reproduceAnimals(config));
+                // następnie jedzą
+                worldMap.feedAnimals(config.energyFromGrass());
+
+                // reprodukcja zwierząt
+                animals.addAll(worldMap.reproduceAnimals(config));
 
 
-            // porost traw
-            for(int j=0; j < config.everyDayGrassAmount();j++){
-                worldMap.addGrass();
+                // porost traw
+                for (int j = 0; j < config.everyDayGrassAmount(); j++) {
+                    worldMap.addGrass();
+                }
+
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException e) {
+                    System.out.println(e.getMessage());
+                }
             }
+        }
+    }
 
-            try {
-                Thread.sleep(500);
-            } catch (InterruptedException e) {
-                System.out.println(e.getMessage());
-            }
+    public boolean isStopped() {
+        return stopped.get();
+    }
+
+    public BooleanProperty stoppedProperty() {
+        return stopped;
+    }
+
+    public void setStopped(boolean stopped) {
+        this.stopped.set(stopped);
+    }
+
+    public void pause() {
+        this.setStopped(true);
+    }
+
+    public void resume() {
+        synchronized (pauseLock) {
+            this.setStopped(false);
+            pauseLock.notify();
         }
     }
 }

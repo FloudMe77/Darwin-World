@@ -1,33 +1,46 @@
 package agh.ics.oop.presenter;
 
 import agh.ics.oop.Simulation;
-import agh.ics.oop.SimulationEngine;
 import agh.ics.oop.model.*;
-import agh.ics.oop.model.MapObjects.AbstractAnimal;
 import agh.ics.oop.model.MapObjects.Animal;
-import agh.ics.oop.model.MapObjects.Grass;
 import agh.ics.oop.model.maps.WorldMap;
 import agh.ics.oop.model.util.MapChangeListener;
+import agh.ics.oop.view.AnimalElementBox;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.geometry.HPos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
 import javafx.scene.layout.*;
-import javafx.scene.shape.Circle;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 public class SimulationPresenter implements MapChangeListener {
     private static final String EMPTY_CELL = " ";
+    @FXML
+    private Label animalCountLabel;
+    @FXML
+    private Label grassCountLabel;
+    @FXML
+    private Label freeSpaceLabel;
+    @FXML
+    private Label dominantGenomeLabel;
+    @FXML
+    private Label avgEnergyLabel;
+    @FXML
+    private Label avgLifespanLabel;
+    @FXML
+    private Label avgChildrenAmountLabel;
+    @FXML
+    private Button resumeButton;
+    @FXML
+    private Button stopButton;
+
     private int cellWidth;
     private int cellHeight;
 
     private WorldMap worldMap;
+    private MapStatistics mapStatistics;
     private int initialAnimalEnergy;
     private int mapWidth; // Number of columns
     private int mapHeight; // Number of rows
@@ -35,24 +48,24 @@ public class SimulationPresenter implements MapChangeListener {
     private int minY;
     private int maxY;
     private int maxX;
-    private int singleCellSize;
-    private int sideLength;
 
     @FXML
     private BorderPane rootPane;
 
     @FXML
     private GridPane mapGrid;
-    @FXML
-    private Button StartButton;
+
     @FXML
     private Label moveNotificationLabel;
-    @FXML
-    private TextField moveListTextField;
+
+    private Simulation simulation;
 
     @FXML
     private void initialize() {
-
+        resumeButton.disableProperty().bind(stopButton.disableProperty().not());
+//        System.out.println(mapStatistics.totalAnimalAmountProperty());
+//        System.out.println("WTF???");
+//        animalCountLabel.textProperty().bind(mapStatistics.totalAnimalAmountProperty().asString("L zwirząt: %d"));
     }
 
     private void updateMapSize() {
@@ -65,7 +78,6 @@ public class SimulationPresenter implements MapChangeListener {
         int numberOfCellsInAColumn = maxY - minY + 1;
         mapWidth = numberOfCellsInAColumn;
         mapHeight = numberOfCellsInARow;
-        sideLength = Math.max(numberOfCellsInARow, numberOfCellsInAColumn);
     }
 
     @Override
@@ -85,27 +97,17 @@ public class SimulationPresenter implements MapChangeListener {
         mapGrid.getRowConstraints().clear();
     }
 
-    private void drawFirstCeil() {
-        Label label = new Label("y/x");
-        mapGrid.getColumnConstraints().add(new ColumnConstraints(singleCellSize));
-        mapGrid.getRowConstraints().add(new RowConstraints(singleCellSize));
-        mapGrid.add(label, 0, 0);
-        GridPane.setHalignment(label, HPos.CENTER);
-    }
-
     private void drawWorldElementsOnGrid() {
         for (int y = 0; y < mapHeight; y++) {
             for (int x = 0; x < mapWidth; x++) {
                 Vector2d thisPosition = new Vector2d(x, y);
-                // sprawdzamy czy na danej pozycji jest zwierzak:
                 Pane cell = new Pane();
                 cell.setPrefSize(cellWidth, cellHeight);
+                // początkowo przed sprawdzeniem czy mamy trawe to malujemy na sraczkowo
                 cell.setStyle("-fx-background-color: #8B4513;");
-                // na tej pozycji nie ma zwierzaka ani trawy więc malujemy na sraczkowo
                 if (worldMap.getGrassManager().isGrassAt(thisPosition)) {
-                    cell.setStyle("-fx-background-color: #118012;");
+                    cell.setStyle("-fx-background-color: #118012; -fx-border-style: none;");
                 }
-
 
                 if (worldMap.getAnimalManager().isAnimalAt(thisPosition)) {
                     Optional<Animal> animalOptional = worldMap.getAnimalManager()
@@ -118,24 +120,8 @@ public class SimulationPresenter implements MapChangeListener {
                         return;
                     }
                     Animal animal = animalOptional.get();
-
-                    VBox vbox = new VBox();
-                    vbox.setPrefSize(cellWidth, cellHeight);
-                    vbox.setAlignment(javafx.geometry.Pos.CENTER);
-
-                    Circle circle = new Circle();
-                    circle.setRadius(Math.min(cellWidth, cellHeight) / 4);
-                    circle.setStyle("-fx-fill: #ac00ff; -fx-stroke: black; -fx-stroke-width: 1;");
-
-                    double energyFraction = (double) animal.getEnergy() / initialAnimalEnergy;
-
-                    Label energyLabel = new Label(String.format("%.2f", energyFraction));
-                    energyLabel.setStyle("-fx-font-size: 10px;");
-                    energyLabel.setAlignment(javafx.geometry.Pos.CENTER);
-
-                    vbox.getChildren().addAll(circle, energyLabel);
-
-                    cell.getChildren().add(vbox);
+                    AnimalElementBox animalElement = new AnimalElementBox(animal, cellWidth, cellHeight, initialAnimalEnergy);
+                    cell.getChildren().add(animalElement);
                 }
 
                 mapGrid.add(cell, x, y);
@@ -159,24 +145,31 @@ public class SimulationPresenter implements MapChangeListener {
         calculateCellSizes();
         setGridWidthAndHeight();
         drawWorldElementsOnGrid();
-        System.out.println(worldMap);
+//        System.out.println(worldMap);
     }
 
+    // nwm czy tu koniecznie trzeba uzywac sim engine, ale moze trzeba do zastanowienia.
     public void simulationStart(Config config) {
-        List<Simulation> simulations = new ArrayList<>();
         initialAnimalEnergy = config.startEnergy();
         WorldMap map = config.worldMap();
         map.addObserver(this);
         Simulation simulation = new Simulation(config);
-        simulations.add(simulation);
-        SimulationEngine simulationEngine = new SimulationEngine(simulations);
-        new Thread(simulationEngine::runAsync).start();
+        this.simulation = simulation;
+        this.mapStatistics = map.getMapStatistics();
+        bindStatistics();
+//        SimulationEngine simulationEngine = new SimulationEngine(List.of(simulation));
+        Thread simulationThread = new Thread(simulation);
+        simulationThread.setDaemon(true);
+        simulationThread.start();
+        stopButton.disableProperty().bind(simulation.stoppedProperty());
     }
 
     public void handlePauseSimulation(ActionEvent actionEvent) {
+        this.simulation.setStopped(true);
     }
 
     public void handleResumeSimulation(ActionEvent actionEvent) {
+        simulation.resume();
     }
 
     private void calculateCellSizes() {
@@ -184,5 +177,19 @@ public class SimulationPresenter implements MapChangeListener {
         double availableHeight = rootPane.getCenter().getBoundsInParent().getHeight();
         cellWidth = (int) availableWidth / mapWidth;
         cellHeight = (int) availableHeight / mapHeight;
+    }
+
+    public void bindStatistics() {
+        if (mapStatistics == null) {
+            throw new IllegalStateException("mapStatistics is not initialized yet");
+        }
+
+        animalCountLabel.textProperty().bind(mapStatistics.totalAnimalAmountProperty().asString("Liczba zwierząt: %d"));
+        grassCountLabel.textProperty().bind(mapStatistics.totalGrassAmountProperty().asString("Liczba traw: %d"));
+        freeSpaceLabel.textProperty().bind(mapStatistics.totalFreeSpaceProperty().asString("Liczba wolny miejsc: %d"));
+        // dominujący genom nwm TODO
+        avgEnergyLabel.textProperty().bind(mapStatistics.averageAnimalEnergyProperty().asString("Średni poziom energii: %.2f"));
+        avgLifespanLabel.textProperty().bind(mapStatistics.averageLifespanProperty().asString("Średnia długość życia: %.2f"));
+        avgChildrenAmountLabel.textProperty().bind(mapStatistics.averageChildrenAmountProperty().asString("Średnia liczba dzieci: %.2f"));
     }
 }

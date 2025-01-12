@@ -6,7 +6,6 @@ import agh.ics.oop.model.MapObjects.Animal;
 import agh.ics.oop.model.MapObjects.OwlBear;
 import agh.ics.oop.model.util.newUtils.Genome;
 
-import javax.swing.plaf.PanelUI;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -57,7 +56,7 @@ public class WildOwlBearMap extends BasicRectangularMap {
                 if (animal instanceof Animal concreatAnimal) {
                     concreatAnimal.die();
                     animalManager.removeFromAnimals(animal.getPosition(), animal);
-                    mapStatistic.deathAnimalUpdate(concreatAnimal);
+                    mapStatistics.deathAnimalUpdate(concreatAnimal);
                 }
             }
         }

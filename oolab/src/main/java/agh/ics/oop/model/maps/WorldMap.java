@@ -6,6 +6,7 @@ import agh.ics.oop.model.MapObjects.Animal;
 import agh.ics.oop.model.MapObjects.Grass;
 import agh.ics.oop.model.util.Boundary;
 import agh.ics.oop.model.util.MapChangeListener;
+import agh.ics.oop.model.util.newUtils.Genome;
 import agh.ics.oop.model.util.newUtils.GenomeChange;
 
 import java.util.ArrayList;
@@ -74,4 +75,7 @@ public interface WorldMap extends MoveValidator {
     GrassManager getGrassManager();
 
     AnimalManager getAnimalManager();
+
+    Genome getDominantGenome();
+    MapStatistics getMapStatistics();
 }
