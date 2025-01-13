@@ -1,7 +1,6 @@
 package agh.ics.oop.model.maps;
 
 import agh.ics.oop.model.MapDirection;
-import agh.ics.oop.model.MapStatistic;
 import agh.ics.oop.model.Vector2d;
 
 public class EarthMap extends BasicRectangularMap {

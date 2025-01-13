@@ -16,7 +16,7 @@ abstract public class BasicRectangularMap implements WorldMap {
     private final List<MapChangeListener> observers = new ArrayList<>();
     private final Boundary boundary;
     private final int mapId;
-    protected final MapStatistic mapStatistic;
+    protected final MapStatistics mapStatistics;
     protected final GrassField grassField;
     protected final AnimalManager animalManager;
     protected final GrassManager grassManager;
@@ -25,7 +25,6 @@ abstract public class BasicRectangularMap implements WorldMap {
 
     public BasicRectangularMap(int height, int width) {
 
-        mapStatistic = new MapStatistic(this);
         mapId = counterOfId++;
         var lowerLeft = new Vector2d(0, 0);
         var upperRight = new Vector2d(width , height );
@@ -33,13 +32,15 @@ abstract public class BasicRectangularMap implements WorldMap {
         grassField = new GrassField(height, width);
 
         this.grassManager = new GrassManager(width, height);
-        this.animalManager = new AnimalManager(mapStatistic, grassManager);
+        mapStatistics = new MapStatistics(this);
+        this.animalManager = new AnimalManager(mapStatistics, grassManager);
     }
 
-    public MapStatistic getMapStatistic() {
-        return mapStatistic;
+    public MapStatistics getMapStatistics() {
+        return mapStatistics;
     }
 
+    @Override
     public void addObserver(MapChangeListener observer) {
         observers.add(observer);
     }
@@ -50,8 +51,13 @@ abstract public class BasicRectangularMap implements WorldMap {
         }
     }
 
+    @Override
+    public void removeObserver(MapChangeListener observer) {
+        observers.remove(observer);
+    }
+
     private void notifyMapStatistic(MapStatisticAction mapStatisticAction, int val){
-        mapStatistic.updateStatistic(mapStatisticAction,val);
+        mapStatistics.updateStatistic(mapStatisticAction,val);
     }
 
     @Override
@@ -59,7 +65,7 @@ abstract public class BasicRectangularMap implements WorldMap {
         animalManager.addToAnimals(animal.getPosition(), animal);
         notifyObservers("Ustawiono animal na " + animal.getPosition());
 
-        mapStatistic.newAnimalUpdate(animal);
+        mapStatistics.newAnimalUpdate(animal);
     }
 
     @Override
@@ -74,6 +80,7 @@ abstract public class BasicRectangularMap implements WorldMap {
         return animalManager.isAnimalAt(position) || grassManager.isGrassAt(position);
     }
 
+    // jest nie mała szansa ze ta metoda jest zbędna bo mozna uzywac managerów zamiennie
     @Override
     public List<WorldElement> objectsAt(Vector2d position) {
         List<WorldElement> elements = new ArrayList<>();
@@ -140,6 +147,7 @@ abstract public class BasicRectangularMap implements WorldMap {
         return boundary;
     }
 
+    @Override
     public Genome getDominantGenome(){
         return animalManager.getDominantGenome();
     }
@@ -163,4 +171,12 @@ abstract public class BasicRectangularMap implements WorldMap {
         animalManager.moveAllAnimals(dailyDeclineValue, this);
     }
 
+    // Gettery do managerów przydatne w sprawdzaniu czy na danej pozycji jest trawa lub zwierzak albo to i to.
+    public GrassManager getGrassManager() {
+        return grassManager;
+    }
+
+    public AnimalManager getAnimalManager() {
+        return animalManager;
+    }
 }

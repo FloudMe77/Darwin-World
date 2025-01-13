@@ -1,7 +1,7 @@
 package agh.ics.oop;
 
 import agh.ics.oop.model.Config;
-import agh.ics.oop.model.MapStatistic;
+import agh.ics.oop.model.MapStatistics;
 import agh.ics.oop.model.maps.EarthMap;
 import agh.ics.oop.model.util.ConsoleMapDisplay;
 import agh.ics.oop.model.util.newUtils.FullRandomGenomeChange;
@@ -11,7 +11,7 @@ public class main {
     public static void main(String[] args) {
 
         var map = new EarthMap(10,10);
-        MapStatistic statistics = map.getMapStatistic();
+        MapStatistics statistics = map.getMapStatistics();
 
         map.addObserver(new ConsoleMapDisplay());
 

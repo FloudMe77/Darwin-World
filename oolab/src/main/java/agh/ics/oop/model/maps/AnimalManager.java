@@ -3,7 +3,7 @@ package agh.ics.oop.model.maps;
 import agh.ics.oop.model.Config;
 import agh.ics.oop.model.MapObjects.AbstractAnimal;
 import agh.ics.oop.model.MapObjects.Animal;
-import agh.ics.oop.model.MapStatistic;
+import agh.ics.oop.model.MapStatistics;
 import agh.ics.oop.model.MapStatisticAction;
 import agh.ics.oop.model.Vector2d;
 import agh.ics.oop.model.util.newUtils.Genome;
@@ -12,11 +12,11 @@ import java.util.*;
 
 public class AnimalManager {
     private final Map<Vector2d, List<AbstractAnimal>> animals = new HashMap<>();
-    private final MapStatistic mapStatistic;
+    private final MapStatistics mapStatistics;
     private final GrassManager grassManager;
 
-    public AnimalManager(MapStatistic mapStatistic, GrassManager grassManager) {
-        this.mapStatistic = mapStatistic;
+    public AnimalManager(MapStatistics mapStatistics, GrassManager grassManager) {
+        this.mapStatistics = mapStatistics;
         this.grassManager = grassManager;
     }
 
@@ -54,7 +54,7 @@ public class AnimalManager {
         if (animal instanceof Animal concreteAnimal) {
             concreteAnimal.reduceEnergy(dailyDeclineValue);
             concreteAnimal.getOlder();
-            mapStatistic.updateStatistic(MapStatisticAction.ENERGY,-dailyDeclineValue);
+            mapStatistics.updateStatistic(MapStatisticAction.ENERGY,-dailyDeclineValue);
         }
     }
 
@@ -80,7 +80,7 @@ public class AnimalManager {
 
                 bestAnimal.increaseEaten();
                 grassManager.removeGrass(position);
-                mapStatistic.feedAnimalUpdate(feedVal);
+                mapStatistics.feedAnimalUpdate(feedVal);
 
                 grassField.addGrassPosition(position);
             }
@@ -113,7 +113,7 @@ public class AnimalManager {
                             config.energyToReproduce());
                     newAnimalList.add(newAnimal);
                     addToAnimals(newAnimal.getPosition(),newAnimal);
-                    mapStatistic.newBornUpdate(newAnimal);
+                    mapStatistics.newBornUpdate(newAnimal);
 
                 }
             }
@@ -143,7 +143,7 @@ public class AnimalManager {
 
             removeFromAnimals(animal.getPosition(),animal);
             // do funkcji
-            mapStatistic.deathAnimalUpdate(animal);
+            mapStatistics.deathAnimalUpdate(animal);
         }
 //        notifyObservers("usunieto zwierzeta");
         return removedAnimalList;

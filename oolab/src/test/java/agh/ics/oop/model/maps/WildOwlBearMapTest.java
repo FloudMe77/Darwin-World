@@ -1,10 +1,9 @@
 package agh.ics.oop.model.maps;
 
-import agh.ics.oop.Simulation;
 import agh.ics.oop.model.Config;
 import agh.ics.oop.model.GenomeDirection;
 import agh.ics.oop.model.MapObjects.Animal;
-import agh.ics.oop.model.MapStatistic;
+import agh.ics.oop.model.MapStatistics;
 import agh.ics.oop.model.Vector2d;
 import agh.ics.oop.model.util.ConsoleMapDisplay;
 import agh.ics.oop.model.util.newUtils.FullRandomGenomeChange;
@@ -21,7 +20,7 @@ class WildOwlBearMapTest {
     @Test
     void moveTest(){
         var map = new WildOwlBearMap(10,10,new Genome(new ArrayList<>(List.of(GenomeDirection.ZERO))));
-        MapStatistic statistics = map.getMapStatistic();
+        MapStatistics statistics = map.getMapStatistics();
 
         map.addObserver(new ConsoleMapDisplay());
 
@@ -50,7 +49,7 @@ class WildOwlBearMapTest {
     @Test
     void eatTest(){
         var map = new WildOwlBearMap(10,10,new Genome(new ArrayList<>(List.of(GenomeDirection.ZERO))));
-        MapStatistic statistics = map.getMapStatistic();
+        MapStatistics statistics = map.getMapStatistics();
         var animal1 = new Animal(new Vector2d(0,2), new Genome(new ArrayList<>(List.of(GenomeDirection.ZERO, GenomeDirection.FOUR))),10);
         var animal2 = new Animal(new Vector2d(0,2), new Genome(new ArrayList<>(List.of(GenomeDirection.ZERO, GenomeDirection.FOUR))),10);
 
@@ -80,7 +79,7 @@ class WildOwlBearMapTest {
             map.feedAnimals(0);
             System.out.println(map);
         }
-        var stats= map.getMapStatistic();
+        var stats= map.getMapStatistics();
         stats.printStatistic();
         assertTrue(map.isOccupied(new Vector2d(0,4)));
         assertEquals(1,map.getElements().size());

@@ -5,8 +5,8 @@ import agh.ics.oop.model.maps.BasicRectangularMap;
 import agh.ics.oop.model.maps.WorldMap;
 import agh.ics.oop.model.util.newUtils.Genome;
 
-public class MapStatistic {
-    private final BasicRectangularMap worldMap;
+public class MapStatistics {
+    private final WorldMap worldMap;
 
     private int totalAnimalAmount = 0;
     private int totalGrasAmount = 0;
@@ -14,26 +14,36 @@ public class MapStatistic {
     private int totalLifeTime = 0;
     private int totalChildrenAmount = 0;
     private int totalDeathAmount = 0;
+    private int totalFreeSpace;
 
 
-    public MapStatistic(BasicRectangularMap worldMap){
+    public MapStatistics(BasicRectangularMap worldMap){
         this.worldMap = worldMap;
+        int minX = worldMap.getCurrentBounds().leftDownCornerMap().getX();
+        int minY = worldMap.getCurrentBounds().leftDownCornerMap().getY();
+        int maxX = worldMap.getCurrentBounds().rightUpperCornerMap().getX();
+        int maxY = worldMap.getCurrentBounds().rightUpperCornerMap().getY();
+        totalFreeSpace = ((maxX - minX) * (maxY - minY));
     }
 
     public Genome getDominantGenomeType() {
         return worldMap.getDominantGenome();
     }
 
-    public float getAverageChildrenAmount() {
-        return (float) totalChildrenAmount / totalAnimalAmount;
+    public double getAverageChildrenAmount() {
+        return (double) totalChildrenAmount / totalAnimalAmount;
     }
 
-    public float getAverageEnergy() {
-        return (float) totalEnergy / totalAnimalAmount;
+    public int getTotalFreeSpace() {
+        return totalFreeSpace - totalGrasAmount - totalAnimalAmount;
     }
 
-    public float getAverageLifeTime() {
-        return (float) totalLifeTime / totalDeathAmount;
+    public double getAverageEnergy() {
+        return (double) totalEnergy / totalAnimalAmount;
+    }
+
+    public double getAverageLifeTime() {
+        return (double) totalLifeTime / totalDeathAmount;
     }
 
     public int getTotalAnimalAmount() {
