@@ -168,7 +168,7 @@ public class SimulationPresenter implements MapChangeListener {
         stopButton.disableProperty().bind(simulation.stoppedProperty());
     }
 
-    public void onStop() {
+    public void simulationStop() {
         try {
             simulation.terminate();
             executor.shutdown();
@@ -176,7 +176,7 @@ public class SimulationPresenter implements MapChangeListener {
                 executor.shutdownNow();
             }
         } catch (InterruptedException e) {
-            throw new RuntimeException(e);
+            Thread.currentThread().interrupt();
         }
     }
 
@@ -203,19 +203,5 @@ public class SimulationPresenter implements MapChangeListener {
         double availableHeight = rootPane.getCenter().getBoundsInParent().getHeight();
         cellWidth = (int) availableWidth / mapWidth;
         cellHeight = (int) availableHeight / mapHeight;
-    }
-
-    public void bindStatistics() {
-        if (mapStatistics == null) {
-            throw new IllegalStateException("mapStatistics is not initialized yet");
-        }
-
-//        animalCountLabel.textProperty().bind(mapStatistics.totalAnimalAmountProperty().asString("Liczba zwierząt: %d"));
-//        grassCountLabel.textProperty().bind(mapStatistics.totalGrassAmountProperty().asString("Liczba traw: %d"));
-//        freeSpaceLabel.textProperty().bind(mapStatistics.totalFreeSpaceProperty().asString("Liczba wolny miejsc: %d"));
-//         dominujący genom nwm TODO
-//        avgEnergyLabel.textProperty().bind(mapStatistics.averageAnimalEnergyProperty().asString("Średni poziom energii: %.2f"));
-//        avgLifespanLabel.textProperty().bind(mapStatistics.averageLifespanProperty().asString("Średnia długość życia: %.2f"));
-//        avgChildrenAmountLabel.textProperty().bind(mapStatistics.averageChildrenAmountProperty().asString("Średnia liczba dzieci: %.2f"));
     }
 }

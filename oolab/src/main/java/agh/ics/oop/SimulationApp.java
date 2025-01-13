@@ -39,7 +39,7 @@ public class SimulationApp extends Application {
         SimulationPresenter presenter = loader.getController();
 
         primaryStage.setOnCloseRequest(event -> {
-            presenter.onStop();
+            presenter.simulationStop();
         });
 
         configureNewStage(primaryStage, viewRoot);

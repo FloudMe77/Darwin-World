@@ -30,16 +30,20 @@ public class MapStatistics {
         return worldMap.getDominantGenome();
     }
 
-    public float getAverageChildrenAmount() {
-        return (float) totalChildrenAmount / totalAnimalAmount;
+    public double getAverageChildrenAmount() {
+        return (double) totalChildrenAmount / totalAnimalAmount;
     }
 
-    public float getAverageEnergy() {
-        return (float) totalEnergy / totalAnimalAmount;
+    public int getTotalFreeSpace() {
+        return totalFreeSpace - totalGrasAmount - totalAnimalAmount;
     }
 
-    public float getAverageLifeTime() {
-        return (float) totalLifeTime / totalDeathAmount;
+    public double getAverageEnergy() {
+        return (double) totalEnergy / totalAnimalAmount;
+    }
+
+    public double getAverageLifeTime() {
+        return (double) totalLifeTime / totalDeathAmount;
     }
 
     public int getTotalAnimalAmount() {
@@ -48,10 +52,6 @@ public class MapStatistics {
 
     public int getTotalGrasAmount() {
         return totalGrasAmount;
-    }
-
-    public int getTotalFreeSpace() {
-        return totalFreeSpace;
     }
 
     public void updateStatistic(MapStatisticAction action, int val){

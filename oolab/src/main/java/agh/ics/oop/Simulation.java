@@ -20,7 +20,7 @@ public class Simulation implements Runnable {
     private final Config config;
     private BooleanProperty stopped = new SimpleBooleanProperty(true);
     private final Object pauseLock = new Object();
-    private boolean terminated = false;
+    private boolean running = true;
 
     // jak narazie dostosowuje do EarthMap
     public Simulation(Config config) {
@@ -58,46 +58,39 @@ public class Simulation implements Runnable {
         setStopped(false);
 
         // tutaj rzecz jasna refactor musi byc
-        for (int i = 0; i < 1000; i++) {
-            synchronized (pauseLock) {
-                while (stopped.get()) {
-                    try {
-                        pauseLock.wait();
-                    } catch (InterruptedException e) {
-                        Thread.currentThread().interrupt();
-                        return;
+        try {
+            for (int i = 0; i < 1000; i++) {
+                while (running) {
+                    synchronized (pauseLock) {
+                        while (stopped.get()) {
+                            pauseLock.wait();
+                        }
+
+                        // usuwanie zdechłych zwierząt
+                        animals.removeAll(worldMap.removeDepthAnimals());
+
+                        // można przemyśleć, żeby tą metodę umieścić w samej mapie
+                        worldMap.moveAllAnimals(config.dailyDeclineValue());
+
+                        // następnie jedzą
+                        worldMap.feedAnimals(config.energyFromGrass());
+
+                        // reprodukcja zwierząt
+                        animals.addAll(worldMap.reproduceAnimals(config));
+
+
+                        // porost traw
+                        for (int j = 0; j < config.everyDayGrassAmount(); j++) {
+                            worldMap.addGrass();
+                        }
+
+                        Thread.sleep(100);
                     }
                 }
-
-                if (terminated) {
-                    break;
-                }
-
-                // usuwanie zdechłych zwierząt
-                System.out.println("runninnng");
-                animals.removeAll(worldMap.removeDepthAnimals());
-
-                // można przemyśleć, żeby tą metodę umieścić w samej mapie
-                worldMap.moveAllAnimals(config.dailyDeclineValue());
-
-                // następnie jedzą
-                worldMap.feedAnimals(config.energyFromGrass());
-
-                // reprodukcja zwierząt
-                animals.addAll(worldMap.reproduceAnimals(config));
-
-
-                // porost traw
-                for (int j = 0; j < config.everyDayGrassAmount(); j++) {
-                    worldMap.addGrass();
-                }
-
-                try {
-                    Thread.sleep(100);
-                } catch (InterruptedException e) {
-                    System.out.println(e.getMessage());
-                }
             }
+
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
         }
     }
 
@@ -115,10 +108,18 @@ public class Simulation implements Runnable {
 
     public void pause() {
         this.setStopped(true);
+        synchronized (pauseLock) {
+            try {
+                pauseLock.wait(); // Wprowadzenie pauzy
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt(); // Reakcja na przerwanie w czasie pauzy
+            }
+        }
     }
 
     public void terminate() {
-        terminated = true;
+        running = false;
+        resume();
     }
 
     public void resume() {
