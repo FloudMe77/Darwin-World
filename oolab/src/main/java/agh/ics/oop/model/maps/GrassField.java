@@ -1,7 +1,7 @@
 package agh.ics.oop.model.maps;
 
 import agh.ics.oop.model.MapObjects.Grass;
-import agh.ics.oop.model.MapStatisticAction;
+
 import agh.ics.oop.model.Vector2d;
 
 import java.util.ArrayList;

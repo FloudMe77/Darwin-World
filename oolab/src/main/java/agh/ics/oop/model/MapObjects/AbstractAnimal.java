@@ -59,6 +59,10 @@ public abstract class AbstractAnimal implements WorldElement {
         return currentDirection;
     }
 
+    public GenomeDirection getCurrentGenome(){
+        return genome.getGenVal(currentIndexOfGen);
+    }
+
     // Do zastanowienia w przyszłości, można albo użyć unicodowych strzałek fajnych albo jakos inaczej przedstawiac zwierzak idk jak w sumie jeszcze
     public String toString() {
         return switch (currentDirection) {

@@ -13,7 +13,6 @@ public class Animal extends AbstractAnimal {
     private int energy;
     private int childrenAmount = 0;
     private int dayOfDeath;
-    private boolean isAlive = true;
     private final List<Animal> kids = new ArrayList<>();
 
     public Animal(Vector2d position, Genome genome, int startEnergy) {
@@ -101,13 +100,7 @@ public class Animal extends AbstractAnimal {
         return energy;
     }
 
-
-    public boolean isAlive() {
-        return isAlive;
-    }
-
     public void die() {
-        isAlive = false;
         dayOfDeath = age;
     }
     public List<Animal> getKids(){
@@ -142,4 +135,18 @@ public class Animal extends AbstractAnimal {
 
         return new Color(red, green, blue, 1.0);
     }
+    public int getDescendantsAmount(){
+        return getDescendants().size();
+    }
+    protected List<Animal> getDescendants(){
+        List<Animal> descendants = new ArrayList<>();
+        for(var child : kids){
+            descendants.add(child);
+            descendants.addAll(child.getDescendants());
+        }
+        return descendants.stream()
+                .distinct()
+                .toList();
+    }
+
 }

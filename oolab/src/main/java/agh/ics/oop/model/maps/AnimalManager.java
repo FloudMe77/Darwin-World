@@ -46,7 +46,6 @@ public class AnimalManager {
         Vector2d oldPosition = animal.getPosition();
         removeFromAnimals(oldPosition, animal);
 
-        // nie można tu wrzucić WorldMap co dostaliśmy?
         animal.move(map);
         addToAnimals(animal.getPosition(), animal);
 
@@ -57,8 +56,6 @@ public class AnimalManager {
     }
 
     public void feedAnimals(int feedVal) {
-        // podzielić na osobne funkcje
-
 
         for (var position : animals.keySet()) {
 
@@ -96,12 +93,11 @@ public class AnimalManager {
                             config.energyToReproduce());
                     newAnimalList.add(newAnimal);
                     addToAnimals(newAnimal.getPosition(),newAnimal);
-                    mapStatistics.newBornUpdate(newAnimal);
+                    mapStatistics.newBornUpdate();
 
                 }
             }
         }
-//        notifyObservers("utworzono nowe zwierzeta");
         return newAnimalList;
     }
 

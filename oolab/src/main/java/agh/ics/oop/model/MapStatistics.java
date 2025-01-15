@@ -68,8 +68,8 @@ public class MapStatistics {
         totalEnergy += animal.getEnergy();
     }
 
-    public void newBornUpdate(Animal animal){
-        newAnimalUpdate(animal);
+    public void newBornUpdate(){
+        totalAnimalAmount += 1;
         totalChildrenAmount += 2;
     }
 
