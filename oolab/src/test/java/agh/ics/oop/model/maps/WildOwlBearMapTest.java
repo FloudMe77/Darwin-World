@@ -44,7 +44,7 @@ class WildOwlBearMapTest {
             map.moveAllAnimals(0);
             System.out.println(map);
         }
-        assertTrue(map.isOccupied(new Vector2d(0,4)));
+        assertTrue(map.isOccupied(new Vector2d(0,3)));
     }
     @Test
     void eatTest(){
@@ -81,7 +81,7 @@ class WildOwlBearMapTest {
         }
         var stats= map.getMapStatistics();
         stats.printStatistic();
-        assertTrue(map.isOccupied(new Vector2d(0,4)));
+        assertTrue(map.isOccupied(new Vector2d(0,3)));
         assertEquals(1,map.getElements().size());
     }
 }

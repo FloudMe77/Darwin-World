@@ -2,6 +2,7 @@ package agh.ics.oop.model.MapObjects;
 
 import agh.ics.oop.model.*;
 import agh.ics.oop.model.util.newUtils.Genome;
+import javafx.scene.paint.Color;
 
 import java.util.Random;
 
@@ -96,4 +97,5 @@ public abstract class AbstractAnimal implements WorldElement {
 
     }
 
+    public abstract Color getColor(int initialAnimalEnergy);
 }

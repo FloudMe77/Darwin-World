@@ -2,10 +2,12 @@ package agh.ics.oop.presenter;
 
 import agh.ics.oop.Simulation;
 import agh.ics.oop.model.*;
+import agh.ics.oop.model.MapObjects.AbstractAnimal;
 import agh.ics.oop.model.MapObjects.Animal;
 import agh.ics.oop.model.maps.WorldMap;
 import agh.ics.oop.model.util.MapChangeListener;
-import agh.ics.oop.view.AnimalElementBox;
+import agh.ics.oop.view.AbstractAnimalElementBox;
+//import agh.ics.oop.view.AnimalElementBox;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -47,6 +49,7 @@ public class SimulationPresenter implements MapChangeListener {
     private Thread simulationThread;
     private ExecutorService executor;
     private int initialAnimalEnergy;
+    private int energyRequireToReproduce;
     private int mapWidth; // Number of columns
     private int mapHeight; // Number of rows
     private int minX;
@@ -108,24 +111,16 @@ public class SimulationPresenter implements MapChangeListener {
                 Vector2d thisPosition = new Vector2d(x, y);
                 Pane cell = new Pane();
                 cell.setPrefSize(cellWidth, cellHeight);
-                // początkowo przed sprawdzeniem czy mamy trawe to malujemy na sraczkowo
-                cell.setStyle("-fx-background-color: #8B4513;");
-                if (worldMap.getGrassManager().isGrassAt(thisPosition)) {
+                cell.setStyle("-fx-background-color: #99d064;");
+                if (worldMap.isGrassAt(thisPosition)) {
                     cell.setStyle("-fx-background-color: #118012; -fx-border-style: none;");
                 }
-
-                if (worldMap.getAnimalManager().isAnimalAt(thisPosition)) {
-                    Optional<Animal> animalOptional = worldMap.getAnimalManager()
-                            .getAnimals(thisPosition)
-                            .stream()
-                            .filter(abstractAnimal -> abstractAnimal instanceof Animal)
-                            .map(AbstractAnimal -> (Animal) AbstractAnimal)
-                            .findFirst();
-                    if (animalOptional.isEmpty()) {
-                        return;
-                    }
-                    Animal animal = animalOptional.get();
-                    AnimalElementBox animalElement = new AnimalElementBox(animal, cellWidth, cellHeight, initialAnimalEnergy);
+                Optional<AbstractAnimal> animalOptional = worldMap.animalAt(thisPosition);
+                if (animalOptional.isPresent()) {
+                    // tymczasowo
+                    AbstractAnimal animal = animalOptional.get();
+                    // można też użyć energyRequireToReproduce, ale nie wiem co lepsze
+                    AbstractAnimalElementBox animalElement = new AbstractAnimalElementBox(animal, cellWidth, cellHeight, initialAnimalEnergy);
                     cell.getChildren().add(animalElement);
                 }
 
@@ -157,6 +152,7 @@ public class SimulationPresenter implements MapChangeListener {
     // nwm czy tu koniecznie trzeba uzywac sim engine, ale moze trzeba do zastanowienia.
     public void simulationStart(Config config) {
         initialAnimalEnergy = config.startEnergy();
+        energyRequireToReproduce = config.energyRequireToReproduce();
         WorldMap map = config.worldMap();
         map.addObserver(this);
         Simulation simulation = new Simulation(config);
@@ -184,7 +180,7 @@ public class SimulationPresenter implements MapChangeListener {
         animalCountLabel.textProperty().set(String.format("Liczba zwierząt: %d", mapStatistics.getTotalAnimalAmount()));
         grassCountLabel.textProperty().set(String.format("Liczba traw: %d", mapStatistics.getTotalGrasAmount()));
         freeSpaceLabel.textProperty().set(String.format("Liczba wolny miejsc: %d", mapStatistics.getTotalFreeSpace()));
-//        dominujący genom nwm TODO
+        dominantGenomeLabel.textProperty().set(String.format("Najpopularniejszy genom: \n %s", mapStatistics.getDominantGenomeType()));
         avgEnergyLabel.textProperty().set(String.format("Średni poziom energii: %.2f", mapStatistics.getAverageEnergy()));
         avgLifespanLabel.textProperty().set(String.format("Średnia długość życia: %.2f",mapStatistics.getAverageLifeTime()));
         avgChildrenAmountLabel.textProperty().set(String.format("Średnia liczba dzieci: %.2f", mapStatistics.getAverageChildrenAmount()));

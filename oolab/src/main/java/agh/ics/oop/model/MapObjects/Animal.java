@@ -3,6 +3,7 @@ package agh.ics.oop.model.MapObjects;
 import agh.ics.oop.model.*;
 import agh.ics.oop.model.util.newUtils.Genome;
 import agh.ics.oop.model.util.newUtils.GenomeChange;
+import javafx.scene.paint.Color;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -119,5 +120,26 @@ public class Animal extends AbstractAnimal {
 
     public void reduceEnergy(int val){
         energy -= val;
+    }
+
+    //
+    public Color getColor(int initialAnimalEnergy) {
+        double fraction = Math.min(energy / (double) initialAnimalEnergy, 1);
+
+        // Kolor biały (dla fraction = 0)
+        double whiteR = 0.7, whiteG = 0.7, whiteB = 0.7;
+
+        // Kolor ciemnobrązowy (dla fraction = 1)
+        double brownR = 101 / 255.0, brownG = 67 / 255.0, brownB = 33 / 255.0;
+
+        // Upewnij się, że fraction mieści się w zakresie [0, 1]
+        fraction = Math.max(0, Math.min(fraction, 1));
+
+        // Wylicz proporcjonalne składowe RGB (interpolacja od białego do ciemnobrązowego)
+        double red = whiteR + fraction * (brownR - whiteR);
+        double green = whiteG + fraction * (brownG - whiteG);
+        double blue = whiteB + fraction * (brownB - whiteB);
+
+        return new Color(red, green, blue, 1.0);
     }
 }

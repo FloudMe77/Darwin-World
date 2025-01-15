@@ -1,11 +1,8 @@
 package agh.ics.oop.model.maps;
 
-import agh.ics.oop.model.MapObjects.AbstractAnimal;
 import agh.ics.oop.model.MapObjects.Grass;
-import agh.ics.oop.model.MapStatisticAction;
 import agh.ics.oop.model.Vector2d;
 
-import java.security.cert.TrustAnchor;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,8 +12,8 @@ public class GrassManager {
     private final Map<Vector2d, Grass> grasses = new HashMap<>();
     private final GrassField grassField;
 
-    public GrassManager(int width, int height) {
-        this.grassField = new GrassField(height, width);
+    public GrassManager(int height,int width) {
+        this.grassField = new GrassField(height,width);
     }
 
     public boolean addGrass() {
@@ -46,5 +43,4 @@ public class GrassManager {
     public List<Grass> getElements() {
         return List.copyOf(grasses.values()); // Zwraca niemodyfikowalną listę traw
     }
-
 }

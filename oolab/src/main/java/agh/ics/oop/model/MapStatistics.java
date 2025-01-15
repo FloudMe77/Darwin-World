@@ -14,7 +14,7 @@ public class MapStatistics {
     private int totalLifeTime = 0;
     private int totalChildrenAmount = 0;
     private int totalDeathAmount = 0;
-    private int totalFreeSpace;
+    private final int totalFreeSpace;
 
 
     public MapStatistics(BasicRectangularMap worldMap){
@@ -23,11 +23,11 @@ public class MapStatistics {
         int minY = worldMap.getCurrentBounds().leftDownCornerMap().getY();
         int maxX = worldMap.getCurrentBounds().rightUpperCornerMap().getX();
         int maxY = worldMap.getCurrentBounds().rightUpperCornerMap().getY();
-        totalFreeSpace = ((maxX - minX) * (maxY - minY));
+        totalFreeSpace = ((maxX - minX + 1) * (maxY - minY + 1));
     }
 
-    public Genome getDominantGenomeType() {
-        return worldMap.getDominantGenome();
+    public String getDominantGenomeType() {
+        return worldMap.getDominantGenome().toString();
     }
 
     public double getAverageChildrenAmount() {
@@ -35,7 +35,7 @@ public class MapStatistics {
     }
 
     public int getTotalFreeSpace() {
-        return totalFreeSpace - totalGrasAmount - totalAnimalAmount;
+        return totalFreeSpace - totalGrasAmount;
     }
 
     public double getAverageEnergy() {
@@ -54,38 +54,36 @@ public class MapStatistics {
         return totalGrasAmount;
     }
 
-    public void updateStatistic(MapStatisticAction action, int val){
-        switch (action){
-            case CHILDREN_AMOUNT -> totalChildrenAmount += val;
-            case ENERGY -> totalEnergy += val;
-            case LIFETIME -> totalLifeTime += val;
-            case ANIMAL_AMOUNT -> totalAnimalAmount += val;
-            case GRASS_AMOUNT -> totalGrasAmount += val;
-            case DEATHS_AMOUNT -> totalDeathAmount += val;
-        }
+    public void grassUpdate(int val){
+        totalGrasAmount += val;
     }
 
+    public void energyUpdate(int val){
+        totalEnergy += val;
+    }
+
+
     public void newAnimalUpdate(Animal animal){
-        updateStatistic(MapStatisticAction.ANIMAL_AMOUNT,1);
-        updateStatistic(MapStatisticAction.ENERGY,animal.getEnergy());
+        totalAnimalAmount += 1;
+        totalEnergy += animal.getEnergy();
     }
 
     public void newBornUpdate(Animal animal){
         newAnimalUpdate(animal);
-        updateStatistic(MapStatisticAction.CHILDREN_AMOUNT, 1);
+        totalChildrenAmount += 2;
     }
 
     public void deathAnimalUpdate(Animal animal){
-        updateStatistic(MapStatisticAction.ANIMAL_AMOUNT,-1);
-        updateStatistic(MapStatisticAction.LIFETIME, animal.getAge());
-        updateStatistic(MapStatisticAction.ENERGY, -animal.getEnergy());
-        updateStatistic(MapStatisticAction.CHILDREN_AMOUNT, -animal.getChildrenAmount());
-        updateStatistic(MapStatisticAction.DEATHS_AMOUNT, 1);
+        totalAnimalAmount -= 1;
+        totalLifeTime += animal.getAge();
+        totalEnergy-=animal.getEnergy();
+        totalChildrenAmount-=animal.getChildrenAmount();
+        totalDeathAmount+=1;
     }
 
     public void feedAnimalUpdate(int feedVal){
-        updateStatistic(MapStatisticAction.ENERGY,feedVal);
-        updateStatistic(MapStatisticAction.GRASS_AMOUNT,-1);
+        totalEnergy+=feedVal;
+        totalGrasAmount-=1;
     }
 
     // only for debug
