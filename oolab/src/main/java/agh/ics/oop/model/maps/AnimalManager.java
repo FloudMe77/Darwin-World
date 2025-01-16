@@ -85,7 +85,7 @@ public class AnimalManager {
                 var animal2 = animals.get(2 * i + 1);
                 // jezeli drugi może się rozmnożyć
                 if(animal2.getEnergy() >= config.energyRequireToReproduce()){
-                    // można się zastanowić nad rzuceniem tu configu
+
                     var newAnimal = animal1.reproduce(animal2,
                             config.genomeChange(),
                             config.minimalMutationAmount(),
@@ -94,7 +94,6 @@ public class AnimalManager {
                     newAnimalList.add(newAnimal);
                     addToAnimals(newAnimal.getPosition(),newAnimal);
                     mapStatistics.newBornUpdate();
-
                 }
             }
         }
@@ -162,12 +161,14 @@ public class AnimalManager {
             throw new RuntimeException("brak elementów w liście"); //tymczasowe, żeby tylko zabezpieczyć
         }
     }
-    public Optional<Animal> getStrongestAnimal(Vector2d position) {
+
+    // tymczasowo, żeby nie rzucało błędu
+    public synchronized Optional<Animal> getStrongestAnimal(Vector2d position) {
         return animals.get(position).stream()
                 .max(Comparator
-                        .comparingInt(Animal::getEnergy) // Najpierw po energii
-                        .thenComparingInt(Animal::getAge) // Następnie po wieku
-                        .thenComparingInt(Animal::getChildrenAmount) // Na końcu po liczbie dzieci
+                        .comparingInt(Animal::getEnergy)
+                        .thenComparingInt(Animal::getAge)
+                        .thenComparingInt(Animal::getChildrenAmount)
                 );
     }
 

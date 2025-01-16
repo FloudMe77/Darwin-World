@@ -43,7 +43,6 @@ public class Animal extends AbstractAnimal {
         Random random = new Random();
         int otherEnergy = other.getEnergy();
         int genomeLen = getGenome().getGenLength();
-
         // Deklaracja zmiennych przed if/else
         Animal betterAnimal;
         Animal worseAnimal;
@@ -62,10 +61,10 @@ public class Animal extends AbstractAnimal {
         var newGenList = new ArrayList<GenomeDirection>();
 
         // Obliczenie indeksu podziału
-        int divideIndex = (int) Math.ceil(
+        int divideIndex = (int) Math.floor(
                 genomeLen * (betterAnimal.getEnergy() / (double) (betterAnimal.getEnergy() + worseAnimal.getEnergy()))
         );
-//        System.out.println(divideIndex);
+
         // Dodawanie genów w zależności od dominującej strony
         if (dominantSide == 0) {
             // Dominująca strona po lewej

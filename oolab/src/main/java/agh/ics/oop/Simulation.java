@@ -51,37 +51,38 @@ public class Simulation implements Runnable {
 
         // tutaj rzecz jasna refactor musi byc
         try {
-            for (int i = 0; i < 1000; i++) {
-                while (running) {
-                    synchronized (pauseLock) {
-                        while (stopped.get()) {
-                            pauseLock.wait();
-                        }
 
-                        // usuwanie zdechłych zwierząt
-                        worldMap.removeDepthAnimals();
-
-                        // można przemyśleć, żeby tą metodę umieścić w samej mapie
-                        worldMap.moveAllAnimals(config.dailyDeclineValue());
-
-                        // następnie jedzą
-                        worldMap.feedAnimals(config.energyFromGrass());
-
-                        // reprodukcja zwierząt
-                        worldMap.reproduceAnimals(config);
-
-
-                        // porost traw
-                        for (int j = 0; j < config.everyDayGrassAmount(); j++) {
-                            worldMap.addGrass();
-                        }
-
-                        Thread.sleep(100);
+            while (running) {
+                synchronized (pauseLock) {
+                    while (stopped.get()) {
+                        pauseLock.wait();
                     }
+
+                    // usuwanie zdechłych zwierząt
+                    worldMap.removeDepthAnimals();
+
+                    // można przemyśleć, żeby tą metodę umieścić w samej mapie
+                    worldMap.moveAllAnimals(config.dailyDeclineValue());
+
+                    // następnie jedzą
+                    worldMap.feedAnimals(config.energyFromGrass());
+
+                    // reprodukcja zwierząt
+                    worldMap.reproduceAnimals(config);
+
+
+                    // porost traw
+                    for (int j = 0; j < config.everyDayGrassAmount(); j++) {
+                        worldMap.addGrass();
+                    }
+
+                    Thread.sleep(100);
                 }
             }
 
+
         } catch (InterruptedException e) {
+            System.out.println("cos");
             Thread.currentThread().interrupt();
         }
     }

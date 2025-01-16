@@ -162,6 +162,7 @@ abstract public class BasicRectangularMap implements WorldMap {
 
     @Override
     public void feedAnimals(int feedVal) {
+        notifyObservers("nakarmiono animale");
         animalManager.feedAnimals(feedVal);
     }
 
@@ -177,6 +178,7 @@ abstract public class BasicRectangularMap implements WorldMap {
 
     public void moveAllAnimals(int dailyDeclineValue) {
         animalManager.moveAllAnimals(dailyDeclineValue, this);
+        notifyObservers("poruszono zwierzeta");
     }
 
     // Gettery do managerów przydatne w sprawdzaniu czy na danej pozycji jest trawa lub zwierzak albo to i to.
