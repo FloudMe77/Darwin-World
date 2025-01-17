@@ -24,7 +24,7 @@ public class OwlBear extends AbstractAnimal {
         };
     }
 
-    public Color getColor(int initialAnimalEnergy){
+    public Color getColor(){
         return Color.RED;
     }
 }

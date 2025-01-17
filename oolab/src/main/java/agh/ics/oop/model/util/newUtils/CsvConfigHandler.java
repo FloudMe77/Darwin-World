@@ -1,5 +1,9 @@
 package agh.ics.oop.model.util.newUtils;
 
+import agh.ics.oop.model.Config;
+import agh.ics.oop.model.util.GenomeType;
+import agh.ics.oop.model.util.MapType;
+
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -8,7 +12,7 @@ import java.util.Optional;
 public class CsvConfigHandler {
     private static final String DIRECTORY_PATH = System.getProperty("user.home") + "/savedConfigurations";
     private static final String HEADER = "height,width,startGrassAmount,energyFromGrass,everyDayGrassAmount,startAnimalAmount,"
-            + "startEnergy,energyRequireToReproduce,energyToReproduce,dailyDeclineValue,minimalMutationAmount,"
+            + "startEnergy,energyRequireToReproduce,offspringEnergyCost,dailyDeclineValue,minimalMutationAmount,"
             + "maximalMutationAmount,genomeChange,genomeLength,worldMap";
     static {
         try {
@@ -18,7 +22,7 @@ public class CsvConfigHandler {
         }
     }
 
-    public static void saveConfig(CsvConfigValues config, String configName) throws IOException {
+    public static void saveConfig(Config config, String configName) throws IOException {
         File configFile = new File(DIRECTORY_PATH, configName + ".csv");
 
         try (FileWriter writer = new FileWriter(configFile)) {
@@ -27,7 +31,7 @@ public class CsvConfigHandler {
         }
     }
 
-    public static Optional<CsvConfigValues> loadConfig(String configName) throws IOException {
+    public static Optional<Config> loadConfig(String configName) throws IOException {
         File configFile = new File(DIRECTORY_PATH, configName + ".csv");
 
         try (BufferedReader reader = new BufferedReader(new FileReader(configFile))) {
@@ -47,13 +51,19 @@ public class CsvConfigHandler {
                 int dailyDeclineValue = Integer.parseInt(parts[9]);
                 int minimalMutationAmount = Integer.parseInt(parts[10]);
                 int maximalMutationAmount = Integer.parseInt(parts[11]);
-                String genomeChangeValue = parts[12];
+                GenomeType genomeType = GenomeType.fromDisplayName(parts[12]).orElseThrow(
+                        () -> new IllegalArgumentException("Nie znaleziono takiego genomu")
+                );
                 int genomeLength = Integer.parseInt(parts[13]);
-                String worldMapValue = parts[14];
-                return Optional.of(new CsvConfigValues(height, width, startGrassAmount, energyFromGrass, everyDayGrassAmount,
+                MapType mapType = MapType.fromDisplayName(parts[14]).orElseThrow(
+                        () -> new IllegalArgumentException("Nie znaleziono takiej mapy")
+
+                );
+
+                return Optional.of(new Config(height, width, startGrassAmount, energyFromGrass, everyDayGrassAmount,
                         startAnimalAmount, startEnergy, energyRequireToReproduce, energyToReproduce,
-                        dailyDeclineValue, minimalMutationAmount, maximalMutationAmount, genomeChangeValue,
-                        genomeLength, worldMapValue));
+                        dailyDeclineValue, minimalMutationAmount, maximalMutationAmount, genomeType,
+                        genomeLength, mapType));
             }
         }
 

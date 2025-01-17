@@ -261,7 +261,7 @@
 //                            config.genomeChange(),
 //                            config.minimalMutationAmount(),
 //                            config.maximalMutationAmount(),
-//                            config.energyToReproduce());
+//                            config.offspringEnergyCost());
 //                    newAnimalList.add(newAnimal);
 //                    addToAnimals(newAnimal.getPosition(),newAnimal);
 //

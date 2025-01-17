@@ -1,22 +1,29 @@
 package agh.ics.oop.model;
 
-import agh.ics.oop.model.maps.WorldMap;
-import agh.ics.oop.model.util.newUtils.GenomeChange;
+import agh.ics.oop.model.util.GenomeType;
+import agh.ics.oop.model.util.MapType;
 
 public record Config(
-        int high,
+        int height,
         int width,
         int startGrassAmount,
         int energyFromGrass,
         int everyDayGrassAmount,
         int startAnimalAmount,
         int startEnergy,
-        int energyRequireToReproduce,
-        int energyToReproduce,
+        int energyRequiredToReproduce,
+        int offspringEnergyCost,
         int dailyDeclineValue,
-        int minimalMutationAmount,
-        int maximalMutationAmount,
-        GenomeChange genomeChange,
+        int minMutationCount,
+        int maxMutationCount,
+        GenomeType genomeType,
         int genomeLength,
-        WorldMap worldMap
-) {}
+        MapType mapType
+) {
+    public String toCsvString() {
+        return String.format("%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%s,%d,%s",
+                height, width, startGrassAmount, energyFromGrass, everyDayGrassAmount, startAnimalAmount, startEnergy,
+                energyRequiredToReproduce, offspringEnergyCost, dailyDeclineValue, minMutationCount,
+                maxMutationCount, genomeType.getDisplayName(), genomeLength, mapType.getDisplayName());
+    }
+}

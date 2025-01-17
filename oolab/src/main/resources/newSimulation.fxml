@@ -12,10 +12,6 @@
             fx:id="rootPane"
             minHeight="750.0" minWidth="1050.0"
             fx:controller="agh.ics.oop.presenter.SimulationPresenter">
-    <top>
-<!--        <Label fx:id="moveNotificationLabel" text="Opis ruchu" style="-fx-font-size: 15px;" wrapText="true"/>-->
-    </top>
-
     <left>
         <VBox spacing="20.0" alignment="TOP_LEFT" style="-fx-padding: 10;">
             <VBox spacing="5.0">
@@ -30,7 +26,6 @@
                 <Label fx:id="avgChildrenAmountLabel" text="Średnia liczba dzieci: 0"/>
             </VBox>
             <VBox spacing="5.0">
-<!--                        <Label style="-fx-font-weight: bold;">Statystyki animala</Label>-->
                 <Label text="Statystyki ze zwierzęcia" style="-fx-font-size: 14px; -fx-font-weight: bold;"/>
                 <Label fx:id="genomeLabel" text="Genom zwierzaka: Nie wybrano"/>
                 <Label fx:id="directionLabel" text="Aktywny gen: Nie wybrano "/>
@@ -52,9 +47,6 @@
         <HBox spacing="10" alignment="CENTER" style="-fx-padding: 10;">
             <Button text="Wznów" fx:id="resumeButton" onAction="#handleResumeSimulation"/>
             <Button text="Zatrzymaj" fx:id="stopButton" onAction="#handlePauseSimulation"/>
-            <!--            <Button text="Oznacz zwierzaka" onAction="#handleTrackAnimal" />-->
-            <!--            <Button text="Pokaż dominujące genotypy" onAction="#handleShowDominantGenotypes" />-->
-            <!--            <Button text="Pokaż preferowane pola" onAction="#handleShowPreferredFields" />-->
         </HBox>
     </bottom>
 </BorderPane>

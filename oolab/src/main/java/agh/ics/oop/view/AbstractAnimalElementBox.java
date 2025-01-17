@@ -8,7 +8,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 
 public class AbstractAnimalElementBox extends VBox {
-    public AbstractAnimalElementBox(AbstractAnimal animal, int cellWidth, int cellHeight, int initialAnimalEnergy) {
+    public AbstractAnimalElementBox(AbstractAnimal animal, int cellWidth, int cellHeight) {
         this.setPrefSize(cellWidth, cellHeight);
         this.setAlignment(javafx.geometry.Pos.CENTER);
         this.setStyle("-fx-background-color:  rgba(144, 238, 144, 0.2);");
@@ -16,7 +16,7 @@ public class AbstractAnimalElementBox extends VBox {
 
         Circle circle = new Circle();
         circle.setRadius(Math.min(cellWidth/2, cellHeight/2));
-        circle.setFill(animal.getColor(initialAnimalEnergy));
+        circle.setFill(animal.getColor());
         this.getChildren().addAll(circle);
         // tymczasowo
 //        if(animal instanceof Animal thisAnimal) {

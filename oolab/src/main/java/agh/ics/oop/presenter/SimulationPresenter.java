@@ -7,7 +7,6 @@ import agh.ics.oop.model.MapObjects.Animal;
 import agh.ics.oop.model.maps.WorldMap;
 import agh.ics.oop.model.util.MapChangeListener;
 import agh.ics.oop.view.AbstractAnimalElementBox;
-//import agh.ics.oop.view.AnimalElementBox;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -64,12 +63,12 @@ public class SimulationPresenter implements MapChangeListener {
     private MapStatistics mapStatistics;
 //    private Thread simulationThread;
     private ExecutorService executor;
-    private int initialAnimalEnergy;
     private int mapWidth; // Number of columns
     private int mapHeight; // Number of rows
+    private Config config;
 
-    private Optional<Animal> truckAnimal = Optional.empty();
-    private boolean isStoped = false;
+    private Optional<Animal> trackedAnimal = Optional.empty();
+    private boolean isStopped = false;
 
     @FXML
     private BorderPane rootPane;
@@ -85,9 +84,6 @@ public class SimulationPresenter implements MapChangeListener {
     @FXML
     private void initialize() {
         resumeButton.disableProperty().bind(stopButton.disableProperty().not());
-//        System.out.println(mapStatistics.totalAnimalAmountProperty());
-//        System.out.println("WTF???");
-//        animalCountLabel.textProperty().bind(mapStatistics.totalAnimalAmountProperty().asString("L zwirząt: %d"));
     }
 
     private void updateMapSize() {
@@ -104,12 +100,7 @@ public class SimulationPresenter implements MapChangeListener {
 
     @Override
     public void mapChanged(WorldMap worldMap, String message, int id) {
-        this.worldMap = worldMap;
-
-        Platform.runLater(() -> {
-//            moveNotificationLabel.setText(message + " na mapie nr. " + id);
-            drawGrid();
-        });
+        Platform.runLater(this::drawGrid);
     }
 
     @FXML
@@ -130,18 +121,19 @@ public class SimulationPresenter implements MapChangeListener {
                 if (worldMap.isGrassAt(thisPosition)) {
                     cell.setStyle("-fx-background-color: #118012; -fx-border-style: none;");
                 }
+
                 Optional<AbstractAnimal> animalOpt = worldMap.animalAt(thisPosition);
 
                 animalOpt.ifPresent(abstractAnimal -> {
                     cell.setOnMouseClicked((MouseEvent event) -> {
                         // nie wiem jak to inaczej zrobić
-                        if(isStoped && abstractAnimal instanceof Animal currentAnimal) {
-                            truckAnimal = Optional.of(currentAnimal);
+                        if(isStopped && abstractAnimal instanceof Animal currentAnimal) {
+                            trackedAnimal = Optional.of(currentAnimal);
                             updateStatistics();
                         }
                     });
 
-                    AbstractAnimalElementBox animalElement = new AbstractAnimalElementBox(abstractAnimal, cellWidth, cellHeight, initialAnimalEnergy);
+                    AbstractAnimalElementBox animalElement = new AbstractAnimalElementBox(abstractAnimal, cellWidth, cellHeight);
                     cell.getChildren().add(animalElement);
                 });
 
@@ -170,16 +162,11 @@ public class SimulationPresenter implements MapChangeListener {
 //        System.out.println(worldMap);
     }
 
-
-    // nwm czy tu koniecznie trzeba uzywac sim engine, ale moze trzeba do zastanowienia.
     public void simulationStart(Config config) {
-        initialAnimalEnergy = config.startEnergy();
-        WorldMap map = config.worldMap();
-        map.addObserver(this);
-        Simulation simulation = new Simulation(config);
-        this.simulation = simulation;
-        this.mapStatistics = map.getMapStatistics();
-//        SimulationEngine simulationEngine = new SimulationEngine(List.of(simulation));
+        simulation = new Simulation(config);
+        worldMap = simulation.getWorldMap();
+        worldMap.addObserver(this);
+        mapStatistics = worldMap.getMapStatistics();
         executor = Executors.newSingleThreadExecutor();
         executor.submit(simulation);
         stopButton.disableProperty().bind(simulation.stoppedProperty());
@@ -206,8 +193,8 @@ public class SimulationPresenter implements MapChangeListener {
         avgLifespanLabel.textProperty().set(String.format("Średnia długość życia: %.2f",mapStatistics.getAverageLifeTime()));
         avgChildrenAmountLabel.textProperty().set(String.format("Średnia liczba dzieci: %.2f", mapStatistics.getAverageChildrenAmount()));
 
-        if(truckAnimal.isPresent()){
-            var animal = truckAnimal.get();
+        if(trackedAnimal.isPresent()){
+            var animal = trackedAnimal.get();
             genomeLabel.textProperty().set(String.format("Genom zwierzaka:\n %s", animal.getGenome()));
             directionLabel.textProperty().set(String.format("Aktywny genom: %s", animal.getCurrentGenome()));
             energyLabel.textProperty().set(String.format("Energii: %d", animal.getEnergy()));
@@ -222,13 +209,13 @@ public class SimulationPresenter implements MapChangeListener {
     }
 
     public void handlePauseSimulation(ActionEvent actionEvent) {
-        isStoped = true;
+        isStopped = true;
         System.out.println("stoped");
         this.simulation.setStopped(true);
     }
 
     public void handleResumeSimulation(ActionEvent actionEvent) {
-        isStoped = false;
+        isStopped = false;
         simulation.resume();
     }
 

@@ -13,11 +13,13 @@ public class Animal extends AbstractAnimal {
     private int energy;
     private int childrenAmount = 0;
     private int dayOfDeath;
+    private final int startEnergy;
     private final List<Animal> kids = new ArrayList<>();
 
     public Animal(Vector2d position, Genome genome, int startEnergy) {
         super(position, genome);
         this.energy = startEnergy;
+        this.startEnergy = startEnergy;
     }
 
     public Animal reproduce(Animal other, GenomeChange genomeChange, int minMutationAmount, int maxMutationAmount, int energyToReproduce) {
@@ -115,8 +117,8 @@ public class Animal extends AbstractAnimal {
     }
 
     //
-    public Color getColor(int initialAnimalEnergy) {
-        double fraction = Math.min(energy / (double) initialAnimalEnergy, 1);
+    public Color getColor() {
+        double fraction = Math.min(energy / (double) startEnergy, 1);
 
         // Kolor biały (dla fraction = 0)
         double whiteR = 0.7, whiteG = 0.7, whiteB = 0.7;

@@ -5,6 +5,8 @@ import agh.ics.oop.model.Config;
 import agh.ics.oop.model.maps.EarthMap;
 import agh.ics.oop.model.maps.WildOwlBearMap;
 import agh.ics.oop.model.maps.WorldMap;
+import agh.ics.oop.model.util.GenomeType;
+import agh.ics.oop.model.util.MapType;
 import agh.ics.oop.model.util.newUtils.*;
 import agh.ics.oop.view.ConfigValidatorHelper;
 import agh.ics.oop.view.ControlHelper;
@@ -42,31 +44,23 @@ public class ConfigPresenter {
 
     @FXML
     public void initialize() {
-        // tu może warto zrobić enuma?
-        genomeChangeBox.getItems().addAll("Pełna losowość", "Podmianka");
-        genomeChangeBox.setValue("Pełna losowość");
-        worldMapBox.getItems().addAll("Kula ziemska", "Dziki sowoniedźwiedź");
-        worldMapBox.setValue("Kula ziemska");
+        genomeChangeBox.getItems().addAll(
+                GenomeType.FULL_RANDOM_GENOME_CHANGE.getDisplayName(),
+                GenomeType.REPLACEMENT_GENOME_CHANGE.getDisplayName());
+        worldMapBox.getItems().addAll(
+                MapType.EARTH_MAP.getDisplayName(),
+                MapType.OWLBEAR_MAP.getDisplayName());
 
-        heightSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(25, 100, 25));
-        widthSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(25, 100, 25));
-        startGrassSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 1000, 20));
-        energyFromGrassSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 100, 25));
-        dailyGrassSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 100, 30));
-        startAnimalsSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 1000, 10));
-        startEnergySpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 1000, 50));
-        energyToReproduceSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 1000, 20));
-        energyForOffspringSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 1000, 10));
-        dailyDeclineSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 100, 1));
-        minMutationsSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 100, 1));
-        maxMutationsSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 100, 3));
-        genomeLengthSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 100, 8));
+        genomeChangeBox.setValue(GenomeType.FULL_RANDOM_GENOME_CHANGE.getDisplayName());
+        worldMapBox.setValue(MapType.EARTH_MAP.getDisplayName());
+
+        setSpinnerValueFactories();
     }
 
     @FXML
     private void handleSaveConfig() {
-        Optional<CsvConfigValues> csvConfigValues = createCsvConfigValues();
-        if (csvConfigValues.isEmpty()) {
+        Optional<Config> configOptional = createConfig();
+        if (configOptional.isEmpty()) {
             return;
         }
 
@@ -74,7 +68,7 @@ public class ConfigPresenter {
         if (configName.isPresent()) {
             String fileName = configName.get().trim();
             try {
-                CsvConfigHandler.saveConfig(csvConfigValues.get(), fileName);
+                CsvConfigHandler.saveConfig(configOptional.get(), fileName);
                 ControlHelper.showSuccessAlert(fileName);
             } catch (IOException e) {
                 ControlHelper.showAlert("Nie udało się zapisać konfiguracji.");
@@ -89,33 +83,12 @@ public class ConfigPresenter {
 
     @FXML
     private void runSimulation(ActionEvent actionEvent) {
-        Optional<CsvConfigValues> csvConfigValuesOptional = createCsvConfigValues();
-        if (csvConfigValuesOptional.isEmpty()) {
+        Optional<Config> configOptional = createConfig();
+        if (configOptional.isEmpty()) {
             return;
         }
 
-        CsvConfigValues csvConfigValues = csvConfigValuesOptional.get();
-
-        GenomeChange genomeChange = csvConfigValues.genomeChange().equals("Pełna losowość") ? new FullRandomGenomeChange() : new ReplacmentGenomeChange();
-        WorldMap worldMap = csvConfigValues.worldMap().equals("Kula ziemska") ? new EarthMap(csvConfigValues.height(), csvConfigValues.width()) : new WildOwlBearMap(csvConfigValues.height(), csvConfigValues.width());
-
-        Config config = new Config(
-            csvConfigValues.height(),
-            csvConfigValues.width(),
-            csvConfigValues.startGrassAmount(),
-            csvConfigValues.energyFromGrass(),
-            csvConfigValues.everyDayGrassAmount(),
-            csvConfigValues.startAnimalAmount(),
-            csvConfigValues.startEnergy(),
-            csvConfigValues.energyRequireToReproduce(),
-            csvConfigValues.energyToReproduce(),
-            csvConfigValues.dailyDeclineValue(),
-            csvConfigValues.minimalMutationAmount(),
-            csvConfigValues.maximalMutationAmount(),
-            genomeChange,
-            csvConfigValues.genomeLength(),
-            worldMap
-        );
+        Config config = configOptional.get();
 
         SimulationApp simulationApp = new SimulationApp();
         try {
@@ -139,10 +112,10 @@ public class ConfigPresenter {
             Optional<String> selectedConfig = ControlHelper.showConfigSelectionDialog(files);
 
             if (selectedConfig.isPresent()) {
-                Optional<CsvConfigValues> csvConfigValues = CsvConfigHandler.loadConfig(selectedConfig.get());
+                Optional<Config> configOptional = CsvConfigHandler.loadConfig(selectedConfig.get());
 
-                if (csvConfigValues.isPresent()) {
-                    loadConfigToFields(csvConfigValues.get());
+                if (configOptional.isPresent()) {
+                    loadConfigToFields(configOptional.get());
                 } else {
                     ControlHelper.showAlert("Nie można odczytać tej konfiguracji");
                 }
@@ -152,25 +125,7 @@ public class ConfigPresenter {
         }
     }
 
-    private void loadConfigToFields(CsvConfigValues config) {
-        heightSpinner.getValueFactory().setValue(config.height());
-        widthSpinner.getValueFactory().setValue(config.width());
-        startGrassSpinner.getValueFactory().setValue(config.startGrassAmount());
-        energyFromGrassSpinner.getValueFactory().setValue(config.energyFromGrass());
-        dailyGrassSpinner.getValueFactory().setValue(config.everyDayGrassAmount());
-        startAnimalsSpinner.getValueFactory().setValue(config.startAnimalAmount());
-        startEnergySpinner.getValueFactory().setValue(config.startEnergy());
-        energyToReproduceSpinner.getValueFactory().setValue(config.energyToReproduce());
-        energyForOffspringSpinner.getValueFactory().setValue(config.energyRequireToReproduce());
-        dailyDeclineSpinner.getValueFactory().setValue(config.dailyDeclineValue());
-        minMutationsSpinner.getValueFactory().setValue(config.minimalMutationAmount());
-        maxMutationsSpinner.getValueFactory().setValue(config.maximalMutationAmount());
-        genomeLengthSpinner.getValueFactory().setValue(config.genomeLength());
-        genomeChangeBox.setValue(config.genomeChange());
-        worldMapBox.setValue(config.worldMap());
-    }
-
-    private Optional<CsvConfigValues> createCsvConfigValues() {
+    private Optional<Config> createConfig() {
         try {
             int height = heightSpinner.getValue();
             int width = widthSpinner.getValue();
@@ -188,19 +143,64 @@ public class ConfigPresenter {
             String genomeChangeValue = genomeChangeBox.getValue();
             String worldMapValue = worldMapBox.getValue();
 
-            CsvConfigValues csvConfigValues = new CsvConfigValues(height, width, startGrass, energyFromGrass, dailyGrass, startAnimals, startEnergy,
-                    energyToReproduce, energyForOffspring, dailyDecline, minMutations, maxMutations, genomeChangeValue, genomeLength, worldMapValue);
-            ValidationResult validationResult = ConfigValidatorHelper.validate(csvConfigValues);
+            GenomeType genomeType = GenomeType.fromDisplayName(genomeChangeValue).orElseThrow(
+                    () -> new IllegalArgumentException("Nie znaleziono takiego genomu")
+            );
 
+            MapType mapType = MapType.fromDisplayName(worldMapValue).orElseThrow(
+                    () -> new IllegalArgumentException("Nie znaleziono takiej mapy")
+            );
+
+            Config config = new Config(width, height, startGrass, energyFromGrass, dailyGrass, startAnimals,
+                    startEnergy, energyToReproduce, energyForOffspring, dailyDecline, minMutations, maxMutations,
+                    genomeType, genomeLength, mapType);
+
+            ValidationResult validationResult = ConfigValidatorHelper.validate(config);
+            // Walidacja configu
             if (!validationResult.isValid()) {
                 ControlHelper.showAlert(validationResult.message());
             } else {
-                return Optional.of(csvConfigValues);
+                return Optional.of(config);
             }
         } catch (NumberFormatException e) {
             ControlHelper.showAlert("Niepoprawne dane wejściowe");
         }
 
         return Optional.empty();
+    }
+
+
+    private void setSpinnerValueFactories() {
+        heightSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(25, 100, 25));
+        widthSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(25, 100, 25));
+        startGrassSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 1000, 20));
+        energyFromGrassSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 100, 25));
+        dailyGrassSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 100, 30));
+        startAnimalsSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 1000, 10));
+        startEnergySpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 1000, 50));
+        energyToReproduceSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 1000, 20));
+        energyForOffspringSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 1000, 10));
+        dailyDeclineSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 100, 1));
+        minMutationsSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 100, 1));
+        maxMutationsSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 100, 3));
+        genomeLengthSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 100, 8));
+    }
+
+    private void loadConfigToFields(Config config) {
+        heightSpinner.getValueFactory().setValue(config.height());
+        widthSpinner.getValueFactory().setValue(config.width());
+        startGrassSpinner.getValueFactory().setValue(config.startGrassAmount());
+        energyFromGrassSpinner.getValueFactory().setValue(config.energyFromGrass());
+        dailyGrassSpinner.getValueFactory().setValue(config.everyDayGrassAmount());
+        startAnimalsSpinner.getValueFactory().setValue(config.startAnimalAmount());
+        startEnergySpinner.getValueFactory().setValue(config.startEnergy());
+        energyToReproduceSpinner.getValueFactory().setValue(config.energyRequiredToReproduce());
+        energyForOffspringSpinner.getValueFactory().setValue(config.offspringEnergyCost());
+        dailyDeclineSpinner.getValueFactory().setValue(config.dailyDeclineValue());
+        minMutationsSpinner.getValueFactory().setValue(config.minMutationCount());
+        maxMutationsSpinner.getValueFactory().setValue(config.maxMutationCount());
+        genomeLengthSpinner.getValueFactory().setValue(config.genomeLength());
+        genomeChangeBox.setValue(config.genomeType().getDisplayName());
+        worldMapBox.setValue(config.mapType().getDisplayName());
     }
 }

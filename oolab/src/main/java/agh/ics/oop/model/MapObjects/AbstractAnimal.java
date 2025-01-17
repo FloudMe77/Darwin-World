@@ -101,5 +101,5 @@ public abstract class AbstractAnimal implements WorldElement {
 
     }
 
-    public abstract Color getColor(int initialAnimalEnergy);
+    public abstract Color getColor();
 }

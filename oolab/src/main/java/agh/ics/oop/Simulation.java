@@ -2,10 +2,12 @@ package agh.ics.oop;
 
 import agh.ics.oop.model.Config;
 import agh.ics.oop.model.MapObjects.Animal;
+import agh.ics.oop.model.MapStatistics;
 import agh.ics.oop.model.Vector2d;
 
 import agh.ics.oop.model.IncorrectPositionException;
 import agh.ics.oop.model.maps.WorldMap;
+import agh.ics.oop.model.util.ConsoleMapDisplay;
 import agh.ics.oop.model.util.RandomPositionGenerator;
 import agh.ics.oop.model.util.newUtils.Genome;
 import javafx.beans.property.BooleanProperty;
@@ -21,12 +23,12 @@ public class Simulation implements Runnable {
     private final Object pauseLock = new Object();
     private boolean running = true;
 
-    // jak narazie dostosowuje do EarthMap
     public Simulation(Config config) {
-        worldMap = config.worldMap();
+        // Dodawanie mapy
         this.config = config;
+        worldMap = config.mapType().createMap(config.width(), config.height());
         // dodawanie zwierząt
-        for (Vector2d position : new RandomPositionGenerator(new Vector2d(0, 0), new Vector2d(config.width(), config.high()), config.startAnimalAmount())) {
+        for (Vector2d position : new RandomPositionGenerator(new Vector2d(0, 0), new Vector2d(config.width(), config.height()), config.startAnimalAmount())) {
             Animal animal = new Animal(position, new Genome(config.genomeLength()), config.startEnergy());
             try {
                 worldMap.place(animal);
@@ -43,6 +45,8 @@ public class Simulation implements Runnable {
     public List<Animal> getAnimals() {
         return worldMap.getAnimals();
     }
+    public WorldMap getWorldMap() { return worldMap; }
+
 
     public void run() {
         // duży for tylko na potrzeby testów
@@ -51,7 +55,6 @@ public class Simulation implements Runnable {
 
         // tutaj rzecz jasna refactor musi byc
         try {
-
             while (running) {
                 synchronized (pauseLock) {
                     while (stopped.get()) {

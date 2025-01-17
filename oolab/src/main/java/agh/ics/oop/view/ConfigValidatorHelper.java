@@ -1,10 +1,10 @@
 package agh.ics.oop.view;
 
-import agh.ics.oop.model.util.newUtils.CsvConfigValues;
+import agh.ics.oop.model.Config;
 
 // tu coś nie do końca dziala, trzeba potestować dalej
 public class ConfigValidatorHelper {
-    public static ValidationResult validate(CsvConfigValues config) {
+    public static ValidationResult validate(Config config) {
         if (config.height() < 25 || config.height() > 100) {
             return new ValidationResult(false, "Wysokość mapy musi być w zakresie 25-100");
         }
@@ -33,32 +33,29 @@ public class ConfigValidatorHelper {
             return new ValidationResult(false, "Początkowa energia zwierząt nie może być ujemna");
         }
 
-        if (config.energyRequireToReproduce() < 0) {
+        if (config.energyRequiredToReproduce() < 0) {
             return new ValidationResult(false, "Energia wymagana do rozmnażania nie może być ujemna");
         }
 
-        if (config.energyToReproduce() < 0) {
+        if (config.offspringEnergyCost() < 0) {
             return new ValidationResult(false, "Energia potrzebna do rozmnażania nie może być ujemna");
+        }
+
+        if (config.offspringEnergyCost() > config.energyRequiredToReproduce()) {
+            return new ValidationResult(false, "Energia potrzebna do rozmnażania nie może być większa niż energia wymagana do rozmnażania");
         }
 
         if (config.dailyDeclineValue() < 0) {
             return new ValidationResult(false, "Dzienne zużycie energii nie może być ujemne");
         }
 
-        if (config.minimalMutationAmount() < 0 || config.maximalMutationAmount() < config.minimalMutationAmount()) {
+        if (config.minMutationCount() < 0 || config.maxMutationCount() < config.minMutationCount()) {
             return new ValidationResult(false, "Liczba mutacji musi być w prawidłowym zakresie");
         }
 
-        if (!config.genomeChange().equals("Pełna losowość") && !config.genomeChange().equals("Podmianka")) {
-            return new ValidationResult(false, "Zmiana genomu musi być 'Pełna losowość' lub 'Podmianka'");
-        }
 
         if (config.genomeLength() < 0) {
             return new ValidationResult(false, "Długość genomu nie może być ujemna");
-        }
-
-        if (!config.worldMap().equals("Kula ziemska") && !config.worldMap().equals("Dziki sowoniedźwiedź")) {
-            return new ValidationResult(false, "Typ mapy musi być 'Kula ziemska' lub 'Dziki sowoniedźwiedź'");
         }
 
         return new ValidationResult(true, "");

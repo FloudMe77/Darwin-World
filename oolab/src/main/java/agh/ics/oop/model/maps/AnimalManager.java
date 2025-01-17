@@ -1,7 +1,6 @@
 package agh.ics.oop.model.maps;
 
 import agh.ics.oop.model.Config;
-import agh.ics.oop.model.MapObjects.AbstractAnimal;
 import agh.ics.oop.model.MapObjects.Animal;
 import agh.ics.oop.model.MapStatistics;
 import agh.ics.oop.model.Vector2d;
@@ -84,13 +83,13 @@ public class AnimalManager {
                 var animal1 = animals.get(2 * i);
                 var animal2 = animals.get(2 * i + 1);
                 // jezeli drugi może się rozmnożyć
-                if(animal2.getEnergy() >= config.energyRequireToReproduce()){
+                if(animal2.getEnergy() >= config.energyRequiredToReproduce()){
 
                     var newAnimal = animal1.reproduce(animal2,
-                            config.genomeChange(),
-                            config.minimalMutationAmount(),
-                            config.maximalMutationAmount(),
-                            config.energyToReproduce());
+                            config.genomeType().getGenomeChange(),
+                            config.minMutationCount(),
+                            config.maxMutationCount(),
+                            config.offspringEnergyCost());
                     newAnimalList.add(newAnimal);
                     addToAnimals(newAnimal.getPosition(),newAnimal);
                     mapStatistics.newBornUpdate();
