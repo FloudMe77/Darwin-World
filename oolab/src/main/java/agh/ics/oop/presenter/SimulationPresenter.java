@@ -4,8 +4,10 @@ import agh.ics.oop.Simulation;
 import agh.ics.oop.model.*;
 import agh.ics.oop.model.MapObjects.AbstractAnimal;
 import agh.ics.oop.model.MapObjects.Animal;
+import agh.ics.oop.model.maps.OwlBearMap;
 import agh.ics.oop.model.maps.WorldMap;
 import agh.ics.oop.model.util.MapChangeListener;
+import agh.ics.oop.model.util.MapType;
 import agh.ics.oop.view.AbstractAnimalElementBox;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -122,11 +124,25 @@ public class SimulationPresenter implements MapChangeListener {
                     cell.setStyle("-fx-background-color: #118012; -fx-border-style: none;");
                 }
 
+                if (config.mapType() == MapType.OWLBEAR_MAP) {
+                    WorldMap owlBearMap = ((OwlBearMap) worldMap).getOwlBearMap();
+                    Vector2d owlBearMapLowerLeft = owlBearMap.getCurrentBounds().leftDownCornerMap();
+                    Vector2d owlBearMapUpperRight = owlBearMap.getCurrentBounds().rightUpperCornerMap();
+
+                    if (thisPosition.follows(owlBearMapLowerLeft) && thisPosition.precedes(owlBearMapUpperRight)) {
+                        Pane owlBearLayer = new Pane();
+                        owlBearLayer.setStyle("-fx-background-color: rgba(255,0,0,0.5);");
+                        owlBearLayer.setPrefSize(cellWidth, cellHeight);
+                        cell.getChildren().add(owlBearLayer);
+                    }
+                }
+
                 Optional<AbstractAnimal> animalOpt = worldMap.animalAt(thisPosition);
 
                 animalOpt.ifPresent(abstractAnimal -> {
                     cell.setOnMouseClicked((MouseEvent event) -> {
                         // nie wiem jak to inaczej zrobić
+
                         if(isStopped && abstractAnimal instanceof Animal currentAnimal) {
                             trackedAnimal = Optional.of(currentAnimal);
                             updateStatistics();
@@ -163,6 +179,7 @@ public class SimulationPresenter implements MapChangeListener {
     }
 
     public void simulationStart(Config config) {
+        this.config = config;
         simulation = new Simulation(config);
         worldMap = simulation.getWorldMap();
         worldMap.addObserver(this);

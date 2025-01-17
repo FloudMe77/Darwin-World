@@ -2,9 +2,6 @@ package agh.ics.oop.presenter;
 
 import agh.ics.oop.SimulationApp;
 import agh.ics.oop.model.Config;
-import agh.ics.oop.model.maps.EarthMap;
-import agh.ics.oop.model.maps.WildOwlBearMap;
-import agh.ics.oop.model.maps.WorldMap;
 import agh.ics.oop.model.util.GenomeType;
 import agh.ics.oop.model.util.MapType;
 import agh.ics.oop.model.util.newUtils.*;
@@ -20,8 +17,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Optional;
 
-
-// Używanie configvalidatorhelpera mozliwe ze jest zbędne po zmianie na spinnery ale idk potem zobacze
 public class ConfigPresenter {
     @FXML
     private Button loadConfigButton;

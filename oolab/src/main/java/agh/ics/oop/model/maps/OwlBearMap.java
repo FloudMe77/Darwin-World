@@ -11,19 +11,24 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-public class WildOwlBearMap extends EarthMap {
+public class OwlBearMap extends EarthMap {
     private final OwlBear owlBear; // add final
     private final WorldMap owlBearMap;
 
-    public WildOwlBearMap(int height, int width, Genome genome) {
+    public OwlBearMap(int height, int width, Genome genome) {
         super(height, width);
         int bearSideLength = (int) Math.floor(Math.sqrt(height * width * 0.2));
         System.out.println(bearSideLength);
         owlBearMap = new RectangularMap(bearSideLength, bearSideLength);
         owlBear = new OwlBear(new Vector2d((int) bearSideLength/2, (int) bearSideLength/2), genome);
     }
-    public WildOwlBearMap(int height, int width) {
+
+    public OwlBearMap(int height, int width) {
         this(height,width,new Genome(100));
+    }
+
+    public WorldMap getOwlBearMap() {
+        return owlBearMap;
     }
 
     @Override

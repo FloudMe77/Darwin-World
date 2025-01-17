@@ -15,11 +15,11 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class WildOwlBearMapTest {
+class OwlBearMapTest {
 
     @Test
     void moveTest(){
-        var map = new WildOwlBearMap(10,10,new Genome(new ArrayList<>(List.of(GenomeDirection.ZERO))));
+        var map = new OwlBearMap(10,10,new Genome(new ArrayList<>(List.of(GenomeDirection.ZERO))));
         MapStatistics statistics = map.getMapStatistics();
 
         map.addObserver(new ConsoleMapDisplay());
@@ -48,7 +48,7 @@ class WildOwlBearMapTest {
     }
     @Test
     void eatTest(){
-        var map = new WildOwlBearMap(10,10,new Genome(new ArrayList<>(List.of(GenomeDirection.ZERO))));
+        var map = new OwlBearMap(10,10,new Genome(new ArrayList<>(List.of(GenomeDirection.ZERO))));
         MapStatistics statistics = map.getMapStatistics();
         var animal1 = new Animal(new Vector2d(0,2), new Genome(new ArrayList<>(List.of(GenomeDirection.ZERO, GenomeDirection.FOUR))),10);
         var animal2 = new Animal(new Vector2d(0,2), new Genome(new ArrayList<>(List.of(GenomeDirection.ZERO, GenomeDirection.FOUR))),10);

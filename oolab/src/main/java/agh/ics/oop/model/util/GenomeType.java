@@ -1,14 +1,10 @@
 package agh.ics.oop.model.util;
 
-import agh.ics.oop.model.maps.EarthMap;
-import agh.ics.oop.model.maps.WildOwlBearMap;
-import agh.ics.oop.model.maps.WorldMap;
 import agh.ics.oop.model.util.newUtils.FullRandomGenomeChange;
 import agh.ics.oop.model.util.newUtils.GenomeChange;
 import agh.ics.oop.model.util.newUtils.ReplacmentGenomeChange;
 
 import java.util.Optional;
-import java.util.function.BiFunction;
 
 public enum GenomeType {
     FULL_RANDOM_GENOME_CHANGE("Pełna losowość", new FullRandomGenomeChange()),
