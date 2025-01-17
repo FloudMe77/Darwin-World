@@ -27,7 +27,6 @@ class AnimalTest {
         assertEquals(10,animal.getEnergy());
         assertEquals(0,animal.getChildrenAmount());
         assertEquals(new ArrayList<>(),animal.getKids());
-        assertTrue(animal.isAlive());
     }
 
 //    @Test
@@ -98,7 +97,6 @@ class AnimalTest {
                 map);
 
         //then
-        assertTrue(animal1.isAlive());
 
         //when
         try {
@@ -131,8 +129,8 @@ class AnimalTest {
         assertEquals(80, animal2.getEnergy());
         assertEquals(40, child.getEnergy());
         System.out.println(child.getGenome());
-        assertTrue(Objects.equals(child.getGenome().getGenList(), List.of(GenomeDirection.FIVE, GenomeDirection.FIVE, GenomeDirection.FIVE, GenomeDirection.SIX))
-                || Objects.equals(child.getGenome().getGenList(), List.of(GenomeDirection.SIX, GenomeDirection.FIVE, GenomeDirection.FIVE, GenomeDirection.FIVE)));
+        assertTrue(Objects.equals(child.getGenome().getGenList(), List.of(GenomeDirection.FIVE, GenomeDirection.FIVE, GenomeDirection.SIX, GenomeDirection.SIX))
+                || Objects.equals(child.getGenome().getGenList(), List.of(GenomeDirection.SIX, GenomeDirection.SIX, GenomeDirection.FIVE, GenomeDirection.FIVE)));
         assertEquals(1, animal1.getChildrenAmount());
         assertEquals(1, animal2.getChildrenAmount());
 
@@ -150,11 +148,9 @@ class AnimalTest {
 
         //then
         System.out.println(child.getEnergy());
-        assertFalse(child.isAlive());
         assertEquals(6, animal1.getAge());
         assertEquals(5, animal2.getAge());
         assertEquals(5, child.getDayOfDeath());
-        assertTrue(animal1.isAlive());
         assertEquals(30, animal2.getEnergy());
 
 

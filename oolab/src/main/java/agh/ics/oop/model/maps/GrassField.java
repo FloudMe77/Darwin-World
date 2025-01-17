@@ -1,7 +1,7 @@
 package agh.ics.oop.model.maps;
 
 import agh.ics.oop.model.MapObjects.Grass;
-import agh.ics.oop.model.MapStatisticAction;
+
 import agh.ics.oop.model.Vector2d;
 
 import java.util.ArrayList;
@@ -16,7 +16,7 @@ public class GrassField {
     private final Vector2d lowerLeftEquator;
     private final Vector2d upperRightEquator;
 
-    public GrassField(int height, int width){
+    public GrassField(int height,int width){
         Vector2d lowerLeftBelowEquator = new Vector2d(0, 0);
         Vector2d upperRightBelowEquator = new Vector2d(width, (int) ((1.0/3) * height));
 

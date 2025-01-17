@@ -2,6 +2,7 @@ package agh.ics.oop.model.MapObjects;
 
 import agh.ics.oop.model.Vector2d;
 import agh.ics.oop.model.util.newUtils.Genome;
+import javafx.scene.paint.Color;
 
 public class OwlBear extends AbstractAnimal {
 
@@ -21,5 +22,9 @@ public class OwlBear extends AbstractAnimal {
             case SOUTHEAST -> "*v>*";
             case SOUTHWEST -> "*<v*";
         };
+    }
+
+    public Color getColor(int initialAnimalEnergy){
+        return Color.RED;
     }
 }

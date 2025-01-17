@@ -2,6 +2,7 @@ package agh.ics.oop.model.MapObjects;
 
 import agh.ics.oop.model.*;
 import agh.ics.oop.model.util.newUtils.Genome;
+import javafx.scene.paint.Color;
 
 import java.util.Random;
 
@@ -58,6 +59,10 @@ public abstract class AbstractAnimal implements WorldElement {
         return currentDirection;
     }
 
+    public GenomeDirection getCurrentGenome(){
+        return genome.getGenVal(currentIndexOfGen);
+    }
+
     // Do zastanowienia w przyszłości, można albo użyć unicodowych strzałek fajnych albo jakos inaczej przedstawiac zwierzak idk jak w sumie jeszcze
     public String toString() {
         return switch (currentDirection) {
@@ -96,4 +101,5 @@ public abstract class AbstractAnimal implements WorldElement {
 
     }
 
+    public abstract Color getColor(int initialAnimalEnergy);
 }

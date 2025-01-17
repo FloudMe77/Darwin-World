@@ -9,8 +9,9 @@ import agh.ics.oop.model.util.newUtils.Genome;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
-public class WildOwlBearMap extends BasicRectangularMap {
+public class WildOwlBearMap extends EarthMap {
     private final OwlBear owlBear; // add final
     private final WorldMap owlBearMap;
 
@@ -19,11 +20,10 @@ public class WildOwlBearMap extends BasicRectangularMap {
         int bearSideLength = (int) Math.floor(Math.sqrt(height * width * 0.2));
         System.out.println(bearSideLength);
         owlBearMap = new RectangularMap(bearSideLength, bearSideLength);
-        owlBear = new OwlBear(new Vector2d(0, 0), genome);
+        owlBear = new OwlBear(new Vector2d((int) bearSideLength/2, (int) bearSideLength/2), genome);
     }
     public WildOwlBearMap(int height, int width) {
-        // póki co hard-coded 5 ale pewnie potem w symulacji bedzie to przekazywane
-        this(height,width,new Genome(5));
+        this(height,width,new Genome(100));
     }
 
     @Override
@@ -48,16 +48,24 @@ public class WildOwlBearMap extends BasicRectangularMap {
     }
 
     @Override
+    public Optional<AbstractAnimal> animalAt(Vector2d position) {
+        if (owlBear.isAt(position)) {
+            return Optional.of(owlBear);
+        } else {
+            return super.animalAt(position);
+        }
+    }
+
+    @Override
     public void feedAnimals(int feedVal){
-        List<AbstractAnimal> animalsAtPosition = animalManager.getAnimals(owlBear.getPosition());
+        List<Animal> animalsAtPosition = animalManager.getAnimals(owlBear.getPosition());
         if (animalsAtPosition != null) {
             for (var animal : new ArrayList<>(animalsAtPosition)) {
                 // można by to pominąc, jakby animals to po prostu tablica animali
-                if (animal instanceof Animal concreatAnimal) {
-                    concreatAnimal.die();
-                    animalManager.removeFromAnimals(animal.getPosition(), animal);
-                    mapStatistics.deathAnimalUpdate(concreatAnimal);
-                }
+                animal.die();
+                animalManager.removeFromAnimals(animal.getPosition(), animal);
+                mapStatistics.deathAnimalUpdate(animal);
+
             }
         }
         super.feedAnimals(feedVal);

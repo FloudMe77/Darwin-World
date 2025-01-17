@@ -3,6 +3,7 @@ package agh.ics.oop.model.maps;
 import agh.ics.oop.model.*;
 import agh.ics.oop.model.MapObjects.AbstractAnimal;
 import agh.ics.oop.model.MapObjects.Animal;
+import agh.ics.oop.model.MapObjects.Grass;
 import agh.ics.oop.model.util.Boundary;
 import agh.ics.oop.model.util.MapChangeListener;
 import agh.ics.oop.model.util.MapVisualizer;
@@ -17,21 +18,19 @@ abstract public class BasicRectangularMap implements WorldMap {
     private final Boundary boundary;
     private final int mapId;
     protected final MapStatistics mapStatistics;
-    protected final GrassField grassField;
+
     protected final AnimalManager animalManager;
     protected final GrassManager grassManager;
 
     private static int counterOfId = 1;
 
     public BasicRectangularMap(int height, int width) {
-
         mapId = counterOfId++;
         var lowerLeft = new Vector2d(0, 0);
-        var upperRight = new Vector2d(width , height );
+        var upperRight = new Vector2d(width - 1, height - 1);
         boundary = new Boundary(lowerLeft, upperRight);
-        grassField = new GrassField(height, width);
 
-        this.grassManager = new GrassManager(width, height);
+        this.grassManager = new GrassManager( height-1,width -1);
         mapStatistics = new MapStatistics(this);
         this.animalManager = new AnimalManager(mapStatistics, grassManager);
     }
@@ -56,9 +55,9 @@ abstract public class BasicRectangularMap implements WorldMap {
         observers.remove(observer);
     }
 
-    private void notifyMapStatistic(MapStatisticAction mapStatisticAction, int val){
-        mapStatistics.updateStatistic(mapStatisticAction,val);
-    }
+//    private void notifyMapStatistic(MapStatisticAction mapStatisticAction, int val){
+//        mapStatistics.updateStatistic(mapStatisticAction,val);
+//    }
 
     @Override
     public void place(Animal animal) {
@@ -71,7 +70,7 @@ abstract public class BasicRectangularMap implements WorldMap {
     @Override
     public void addGrass() {
         if(grassManager.addGrass()){
-            notifyMapStatistic(MapStatisticAction.GRASS_AMOUNT,1);
+            mapStatistics.grassUpdate(1);
         }
     }
 
@@ -94,8 +93,17 @@ abstract public class BasicRectangularMap implements WorldMap {
         return elements;
     }
 
+    public Optional<AbstractAnimal> animalAt(Vector2d position) {
+        return animalManager.isAnimalAt(position)
+                ? animalManager.getStrongestAnimal(position).map(animal -> (AbstractAnimal) animal)
+                : Optional.empty();
+    }
+
+    public boolean isGrassAt(Vector2d position){
+        return grassManager.isGrassAt(position);
+    }
     @Override
-    public void move(AbstractAnimal animal, int dailyDeclineValue) {
+    public void move(Animal animal, int dailyDeclineValue) {
 //        var oldPosition = animal.getPosition();
         animalManager.move(animal,dailyDeclineValue,this);
 
@@ -154,7 +162,8 @@ abstract public class BasicRectangularMap implements WorldMap {
 
     @Override
     public void feedAnimals(int feedVal) {
-        animalManager.feedAnimals(feedVal,grassField);
+        notifyObservers("nakarmiono animale");
+        animalManager.feedAnimals(feedVal);
     }
 
     public List<Animal> reproduceAnimals(Config config){
@@ -162,13 +171,14 @@ abstract public class BasicRectangularMap implements WorldMap {
         return animalManager.reproduceAnimals(config);
     }
 
-    public List<Animal> removeDepthAnimals(){
+    public void removeDepthAnimals(){
         notifyObservers("usunieto zwierzeta");
-        return animalManager.removeDeadAnimals();
+        animalManager.removeDeadAnimals();
     }
 
     public void moveAllAnimals(int dailyDeclineValue) {
         animalManager.moveAllAnimals(dailyDeclineValue, this);
+        notifyObservers("poruszono zwierzeta");
     }
 
     // Gettery do managerów przydatne w sprawdzaniu czy na danej pozycji jest trawa lub zwierzak albo to i to.
@@ -178,5 +188,8 @@ abstract public class BasicRectangularMap implements WorldMap {
 
     public AnimalManager getAnimalManager() {
         return animalManager;
+    }
+    public List<Animal> getAnimals(){
+        return animalManager.getElements();
     }
 }

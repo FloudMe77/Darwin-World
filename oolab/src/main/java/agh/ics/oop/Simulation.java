@@ -15,7 +15,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Simulation implements Runnable {
-    private final List<Animal> animals;
     private final WorldMap worldMap;
     private final Config config;
     private BooleanProperty stopped = new SimpleBooleanProperty(true);
@@ -25,23 +24,16 @@ public class Simulation implements Runnable {
     // jak narazie dostosowuje do EarthMap
     public Simulation(Config config) {
         worldMap = config.worldMap();
-        animals = new ArrayList<>();
         this.config = config;
         // dodawanie zwierząt
         for (Vector2d position : new RandomPositionGenerator(new Vector2d(0, 0), new Vector2d(config.width(), config.high()), config.startAnimalAmount())) {
             Animal animal = new Animal(position, new Genome(config.genomeLength()), config.startEnergy());
             try {
                 worldMap.place(animal);
-                animals.add(animal);
             } catch (IncorrectPositionException e) {
                 System.out.println("Uwaga: " + e.getMessage());
             }
         }
-
-        // dodawanie trawy
-        // mamy tylko jeden wariant generowania trawy więc nie będę się rozdrabniał na pojedyncze klasy
-        // uznaje, że równik to pas o szerokości 1/5 mapy na środku
-        // pewnie lepiej by było wsadzić metodę do wordlmap
 
         for (int i = 0; i < config.startGrassAmount(); i++) {
             worldMap.addGrass();
@@ -49,7 +41,7 @@ public class Simulation implements Runnable {
     }
 
     public List<Animal> getAnimals() {
-        return List.copyOf(animals);
+        return worldMap.getAnimals();
     }
 
     public void run() {
@@ -59,37 +51,38 @@ public class Simulation implements Runnable {
 
         // tutaj rzecz jasna refactor musi byc
         try {
-            for (int i = 0; i < 1000; i++) {
-                while (running) {
-                    synchronized (pauseLock) {
-                        while (stopped.get()) {
-                            pauseLock.wait();
-                        }
 
-                        // usuwanie zdechłych zwierząt
-                        animals.removeAll(worldMap.removeDepthAnimals());
-
-                        // można przemyśleć, żeby tą metodę umieścić w samej mapie
-                        worldMap.moveAllAnimals(config.dailyDeclineValue());
-
-                        // następnie jedzą
-                        worldMap.feedAnimals(config.energyFromGrass());
-
-                        // reprodukcja zwierząt
-                        animals.addAll(worldMap.reproduceAnimals(config));
-
-
-                        // porost traw
-                        for (int j = 0; j < config.everyDayGrassAmount(); j++) {
-                            worldMap.addGrass();
-                        }
-
-                        Thread.sleep(100);
+            while (running) {
+                synchronized (pauseLock) {
+                    while (stopped.get()) {
+                        pauseLock.wait();
                     }
+
+                    // usuwanie zdechłych zwierząt
+                    worldMap.removeDepthAnimals();
+
+                    // można przemyśleć, żeby tą metodę umieścić w samej mapie
+                    worldMap.moveAllAnimals(config.dailyDeclineValue());
+
+                    // następnie jedzą
+                    worldMap.feedAnimals(config.energyFromGrass());
+
+                    // reprodukcja zwierząt
+                    worldMap.reproduceAnimals(config);
+
+
+                    // porost traw
+                    for (int j = 0; j < config.everyDayGrassAmount(); j++) {
+                        worldMap.addGrass();
+                    }
+
+                    Thread.sleep(100);
                 }
             }
 
+
         } catch (InterruptedException e) {
+            System.out.println("cos");
             Thread.currentThread().interrupt();
         }
     }

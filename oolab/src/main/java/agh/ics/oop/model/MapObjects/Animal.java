@@ -3,6 +3,7 @@ package agh.ics.oop.model.MapObjects;
 import agh.ics.oop.model.*;
 import agh.ics.oop.model.util.newUtils.Genome;
 import agh.ics.oop.model.util.newUtils.GenomeChange;
+import javafx.scene.paint.Color;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,7 +13,6 @@ public class Animal extends AbstractAnimal {
     private int energy;
     private int childrenAmount = 0;
     private int dayOfDeath;
-    private boolean isAlive = true;
     private final List<Animal> kids = new ArrayList<>();
 
     public Animal(Vector2d position, Genome genome, int startEnergy) {
@@ -43,7 +43,6 @@ public class Animal extends AbstractAnimal {
         Random random = new Random();
         int otherEnergy = other.getEnergy();
         int genomeLen = getGenome().getGenLength();
-
         // Deklaracja zmiennych przed if/else
         Animal betterAnimal;
         Animal worseAnimal;
@@ -62,10 +61,10 @@ public class Animal extends AbstractAnimal {
         var newGenList = new ArrayList<GenomeDirection>();
 
         // Obliczenie indeksu podziału
-        int divideIndex = (int) Math.ceil(
+        int divideIndex = (int) Math.floor(
                 genomeLen * (betterAnimal.getEnergy() / (double) (betterAnimal.getEnergy() + worseAnimal.getEnergy()))
         );
-//        System.out.println(divideIndex);
+
         // Dodawanie genów w zależności od dominującej strony
         if (dominantSide == 0) {
             // Dominująca strona po lewej
@@ -100,13 +99,7 @@ public class Animal extends AbstractAnimal {
         return energy;
     }
 
-
-    public boolean isAlive() {
-        return isAlive;
-    }
-
     public void die() {
-        isAlive = false;
         dayOfDeath = age;
     }
     public List<Animal> getKids(){
@@ -120,4 +113,39 @@ public class Animal extends AbstractAnimal {
     public void reduceEnergy(int val){
         energy -= val;
     }
+
+    //
+    public Color getColor(int initialAnimalEnergy) {
+        double fraction = Math.min(energy / (double) initialAnimalEnergy, 1);
+
+        // Kolor biały (dla fraction = 0)
+        double whiteR = 0.7, whiteG = 0.7, whiteB = 0.7;
+
+        // Kolor ciemnobrązowy (dla fraction = 1)
+        double brownR = 101 / 255.0, brownG = 67 / 255.0, brownB = 33 / 255.0;
+
+        // Upewnij się, że fraction mieści się w zakresie [0, 1]
+        fraction = Math.max(0, Math.min(fraction, 1));
+
+        // Wylicz proporcjonalne składowe RGB (interpolacja od białego do ciemnobrązowego)
+        double red = whiteR + fraction * (brownR - whiteR);
+        double green = whiteG + fraction * (brownG - whiteG);
+        double blue = whiteB + fraction * (brownB - whiteB);
+
+        return new Color(red, green, blue, 1.0);
+    }
+    public int getDescendantsAmount(){
+        return getDescendants().size();
+    }
+    protected List<Animal> getDescendants(){
+        List<Animal> descendants = new ArrayList<>();
+        for(var child : kids){
+            descendants.add(child);
+            descendants.addAll(child.getDescendants());
+        }
+        return descendants.stream()
+                .distinct()
+                .toList();
+    }
+
 }
