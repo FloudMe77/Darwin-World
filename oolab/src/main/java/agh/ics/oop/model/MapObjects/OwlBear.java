@@ -23,8 +23,4 @@ public class OwlBear extends AbstractAnimal {
             case SOUTHWEST -> "*<v*";
         };
     }
-
-    public Color getColor(){
-        return Color.RED;
-    }
 }

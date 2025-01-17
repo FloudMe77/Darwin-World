@@ -31,6 +31,14 @@ public class OwlBearMap extends EarthMap {
         return owlBearMap;
     }
 
+    public Vector2d getOwlBearPosition() {
+        return owlBear.getPosition();
+    }
+
+    public OwlBear getOwlBear() {
+        return owlBear;
+    }
+
     @Override
     public boolean isOccupied(Vector2d position) {
         return owlBear.isAt(position) || super.isOccupied(position);
@@ -50,15 +58,6 @@ public class OwlBearMap extends EarthMap {
         elements.add(owlBear);
 
         return Collections.unmodifiableList(elements);
-    }
-
-    @Override
-    public Optional<AbstractAnimal> animalAt(Vector2d position) {
-        if (owlBear.isAt(position)) {
-            return Optional.of(owlBear);
-        } else {
-            return super.animalAt(position);
-        }
     }
 
     @Override

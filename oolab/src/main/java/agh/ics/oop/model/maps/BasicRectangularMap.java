@@ -93,9 +93,9 @@ abstract public class BasicRectangularMap implements WorldMap {
         return elements;
     }
 
-    public Optional<AbstractAnimal> animalAt(Vector2d position) {
+    public Optional<Animal> animalAt(Vector2d position) {
         return animalManager.isAnimalAt(position)
-                ? animalManager.getStrongestAnimal(position).map(animal -> (AbstractAnimal) animal)
+                ? animalManager.getStrongestAnimal(position)
                 : Optional.empty();
     }
 

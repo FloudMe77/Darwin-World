@@ -116,26 +116,6 @@ public class Animal extends AbstractAnimal {
         energy -= val;
     }
 
-    //
-    public Color getColor() {
-        double fraction = Math.min(energy / (double) startEnergy, 1);
-
-        // Kolor biały (dla fraction = 0)
-        double whiteR = 0.7, whiteG = 0.7, whiteB = 0.7;
-
-        // Kolor ciemnobrązowy (dla fraction = 1)
-        double brownR = 101 / 255.0, brownG = 67 / 255.0, brownB = 33 / 255.0;
-
-        // Upewnij się, że fraction mieści się w zakresie [0, 1]
-        fraction = Math.max(0, Math.min(fraction, 1));
-
-        // Wylicz proporcjonalne składowe RGB (interpolacja od białego do ciemnobrązowego)
-        double red = whiteR + fraction * (brownR - whiteR);
-        double green = whiteG + fraction * (brownG - whiteG);
-        double blue = whiteB + fraction * (brownB - whiteB);
-
-        return new Color(red, green, blue, 1.0);
-    }
     public int getDescendantsAmount(){
         return getDescendants().size();
     }

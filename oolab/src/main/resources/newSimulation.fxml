@@ -27,14 +27,14 @@
             </VBox>
             <VBox spacing="5.0">
                 <Label text="Statystyki ze zwierzęcia" style="-fx-font-size: 14px; -fx-font-weight: bold;"/>
-                <Label fx:id="genomeLabel" text="Genom zwierzaka: Nie wybrano"/>
+                <Label fx:id="animalGenome" text="Genom zwierzaka: Nie wybrano"/>
                 <Label fx:id="directionLabel" text="Aktywny gen: Nie wybrano "/>
                 <Label fx:id="energyLabel" text="Energia: Nie wybrano"/>
                 <Label fx:id="grassEatenLabel" text="Zjedzona trawa: Nie wybrano"/>
                 <Label fx:id="childrenLabel" text="Liczba dzieci: Nie wybrano"/>
                 <Label fx:id="descendantsLabel" text="Liczba potomstwa: Nie wybrano"/>
-                <Label fx:id="dayLiveLabel" text="Długość życia: Nie wybrano"/>
-                <Label fx:id="dayDeathLabel" text="Dzień śmierci: Nie wybrano"/>
+                <Label fx:id="daysLived" text="Długość życia: Nie wybrano"/>
+                <Label fx:id="dayOfDeath" text="Dzień śmierci: Nie wybrano"/>
             </VBox>
         </VBox>
     </left>

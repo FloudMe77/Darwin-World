@@ -164,7 +164,7 @@ public class AnimalManager {
     // tymczasowo, żeby nie rzucało błędu
     public synchronized Optional<Animal> getStrongestAnimal(Vector2d position) {
         return animals.get(position).stream()
-                .max(Comparator
+                .   max(Comparator
                         .comparingInt(Animal::getEnergy)
                         .thenComparingInt(Animal::getAge)
                         .thenComparingInt(Animal::getChildrenAmount)

@@ -80,7 +80,7 @@ public interface WorldMap extends MoveValidator {
     Genome getDominantGenome();
     MapStatistics getMapStatistics();
 
-    public Optional<AbstractAnimal> animalAt(Vector2d position);
+    public Optional<Animal> animalAt(Vector2d position);
 
     public boolean isGrassAt(Vector2d position);
 
