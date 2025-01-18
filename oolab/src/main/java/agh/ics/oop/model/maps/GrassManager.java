@@ -2,6 +2,7 @@ package agh.ics.oop.model.maps;
 
 import agh.ics.oop.model.MapObjects.Grass;
 import agh.ics.oop.model.Vector2d;
+import agh.ics.oop.model.util.Boundary;
 
 import java.util.HashMap;
 import java.util.List;
@@ -40,7 +41,12 @@ public class GrassManager {
         grasses.remove(position);
         grassField.addGrassPosition(position);
     }
+
     public List<Grass> getElements() {
         return List.copyOf(grasses.values()); // Zwraca niemodyfikowalną listę traw
+    }
+
+    public Boundary getEquatorBoundary() {
+        return grassField.getEquatorBoundary();
     }
 }

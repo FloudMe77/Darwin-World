@@ -4,6 +4,7 @@ import agh.ics.oop.model.GenomeDirection;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class Genome {
     private final List<GenomeDirection> genList;
@@ -45,5 +46,12 @@ public class Genome {
     @Override
     public int hashCode() {
         return genList.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        Genome genome = (Genome) o;
+        return genLength == genome.genLength && Objects.equals(genList, genome.genList);
     }
 }

@@ -26,8 +26,8 @@ public class MapStatistics {
         totalFreeSpace = ((maxX - minX + 1) * (maxY - minY + 1));
     }
 
-    public String getDominantGenomeType() {
-        return worldMap.getDominantGenome().toString();
+    public Genome getDominantGenome() {
+        return worldMap.getDominantGenome();
     }
 
     public double getAverageChildrenAmount() {
@@ -91,7 +91,7 @@ public class MapStatistics {
         System.out.println();
         System.out.println(getTotalAnimalAmount());
         System.out.println(getTotalGrasAmount());
-        System.out.println(getDominantGenomeType());
+        System.out.println(getDominantGenome());
         System.out.println(getAverageEnergy());
         System.out.println(getAverageChildrenAmount());
         System.out.println(getAverageLifeTime());

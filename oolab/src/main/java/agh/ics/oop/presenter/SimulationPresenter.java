@@ -38,6 +38,10 @@ public class SimulationPresenter implements MapChangeListener {
     @FXML
     public Label grassEatenLabel;
     @FXML
+    public Button highlightPreferredGrassButton;
+    @FXML
+    public Button highlightGenomeButton;
+    @FXML
     private Label animalCountLabel;
     @FXML
     private Label grassCountLabel;
@@ -81,6 +85,8 @@ public class SimulationPresenter implements MapChangeListener {
     @FXML
     private void initialize() {
         resumeButton.disableProperty().bind(stopButton.disableProperty().not());
+        highlightPreferredGrassButton.disableProperty().bind(stopButton.disableProperty().not());
+        highlightGenomeButton.disableProperty().bind(stopButton.disableProperty().not());
         statisticsLabels = new StatisticsLabels(animalCountLabel, grassCountLabel, freeSpaceLabel, dominantGenomeLabel,
                 avgEnergyLabel, avgLifespanLabel, avgChildrenAmountLabel, animalGenome, directionLabel, energyLabel,
                 grassEatenLabel, childrenLabel, descendantsLabel, daysLived, dayOfDeath);
@@ -129,5 +135,25 @@ public class SimulationPresenter implements MapChangeListener {
     public void handleResumeSimulation(ActionEvent actionEvent) {
         isStopped = false;
         simulation.resume();
+    }
+
+    public void handleHighlightGenome(ActionEvent actionEvent) {
+        if (gridDrawer.isHighlightDominantGenomeAnimals()) {
+            gridDrawer.setHighlightDominantGenomeAnimals(false);
+            Platform.runLater(() -> highlightGenomeButton.setText("Wyświetl zwierzęta z najpopularniejszym genotypem"));
+        } else {
+            gridDrawer.setHighlightDominantGenomeAnimals(true);
+            Platform.runLater(() -> highlightGenomeButton.setText("Ukryj zwierzęta z najpopularniejszym genotypem"));
+        }
+    }
+
+    public void highlightPreferredGrassCells(ActionEvent actionEvent) {
+        if (gridDrawer.isHighlightPreferredGrassArea()) {
+            gridDrawer.setHighlightPreferredGrassArea(false);
+            Platform.runLater(() -> highlightPreferredGrassButton.setText("Wyświetl preferowane przez rośliny pola"));
+        } else {
+            gridDrawer.setHighlightPreferredGrassArea(true);
+            Platform.runLater(() -> highlightPreferredGrassButton.setText("Ukryj preferowane przez rośliny pola"));
+        }
     }
 }

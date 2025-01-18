@@ -181,15 +181,12 @@ abstract public class BasicRectangularMap implements WorldMap {
         notifyObservers("poruszono zwierzeta");
     }
 
-    // Gettery do managerów przydatne w sprawdzaniu czy na danej pozycji jest trawa lub zwierzak albo to i to.
-    public GrassManager getGrassManager() {
-        return grassManager;
-    }
-
-    public AnimalManager getAnimalManager() {
-        return animalManager;
-    }
     public List<Animal> getAnimals(){
         return animalManager.getElements();
+    }
+
+    @Override
+    public Boundary getEquatorBoundary() {
+        return grassManager.getEquatorBoundary();
     }
 }

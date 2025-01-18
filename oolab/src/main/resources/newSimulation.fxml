@@ -44,9 +44,15 @@
     </center>
 
     <bottom>
-        <HBox spacing="10" alignment="CENTER" style="-fx-padding: 10;">
-            <Button text="Wznów" fx:id="resumeButton" onAction="#handleResumeSimulation"/>
-            <Button text="Zatrzymaj" fx:id="stopButton" onAction="#handlePauseSimulation"/>
-        </HBox>
+        <VBox spacing="10" alignment="CENTER" style="-fx-padding: 10;">
+            <HBox spacing="10" alignment="CENTER">
+                <Button text="Wznów" fx:id="resumeButton" onAction="#handleResumeSimulation"/>
+                <Button text="Zatrzymaj" fx:id="stopButton" onAction="#handlePauseSimulation"/>
+            </HBox>
+            <HBox spacing="10" alignment="CENTER">
+                <Button text="Wyświetl zwierzęta z najpopularniejszym genotypem" fx:id="highlightGenomeButton" onAction="#handleHighlightGenome"/>
+                <Button text="Wyświetl preferowane przez rośliny pola" fx:id="highlightPreferredGrassButton" onAction="#highlightPreferredGrassCells" />
+            </HBox>
+        </VBox>
     </bottom>
 </BorderPane>

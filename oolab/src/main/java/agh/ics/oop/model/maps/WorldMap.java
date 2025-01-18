@@ -73,10 +73,6 @@ public interface WorldMap extends MoveValidator {
 
     void removeObserver(MapChangeListener observer);
 
-    GrassManager getGrassManager();
-
-    AnimalManager getAnimalManager();
-
     Genome getDominantGenome();
     MapStatistics getMapStatistics();
 
@@ -85,4 +81,6 @@ public interface WorldMap extends MoveValidator {
     public boolean isGrassAt(Vector2d position);
 
     public List<Animal> getAnimals();
+
+    Boundary getEquatorBoundary();
 }

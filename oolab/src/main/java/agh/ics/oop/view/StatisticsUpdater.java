@@ -16,7 +16,7 @@ public class StatisticsUpdater {
         statisticsLabels.animalCount().textProperty().set(String.format("Liczba zwierząt: %d", mapStatistics.getTotalAnimalAmount()));
         statisticsLabels.grassCount().textProperty().set(String.format("Liczba traw: %d", mapStatistics.getTotalGrasAmount()));
         statisticsLabels.freeSpace().textProperty().set(String.format("Liczba wolny miejsc: %d", mapStatistics.getTotalFreeSpace()));
-        statisticsLabels.dominantGenome().textProperty().set(String.format("Najpopularniejszy genom: \n %s", mapStatistics.getDominantGenomeType()));
+        statisticsLabels.dominantGenome().textProperty().set(String.format("Najpopularniejszy genom: \n %s", mapStatistics.getDominantGenome()));
         statisticsLabels.avgEnergy().textProperty().set(String.format("Średni poziom energii: %.2f", mapStatistics.getAverageEnergy()));
         statisticsLabels.avgLifespan().textProperty().set(String.format("Średnia długość życia: %.2f",mapStatistics.getAverageLifeTime()));
         statisticsLabels.avgChildrenCount().textProperty().set(String.format("Średnia liczba dzieci: %.2f", mapStatistics.getAverageChildrenAmount()));
