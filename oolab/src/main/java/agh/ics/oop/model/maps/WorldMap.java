@@ -1,15 +1,11 @@
 package agh.ics.oop.model.maps;
 
 import agh.ics.oop.model.*;
-import agh.ics.oop.model.MapObjects.AbstractAnimal;
-import agh.ics.oop.model.MapObjects.Animal;
-import agh.ics.oop.model.MapObjects.Grass;
+import agh.ics.oop.model.mapObjects.Animal;
 import agh.ics.oop.model.util.Boundary;
 import agh.ics.oop.model.util.MapChangeListener;
-import agh.ics.oop.model.util.newUtils.Genome;
-import agh.ics.oop.model.util.newUtils.GenomeChange;
+import agh.ics.oop.model.util.Genome;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -73,16 +69,14 @@ public interface WorldMap extends MoveValidator {
 
     void removeObserver(MapChangeListener observer);
 
-    GrassManager getGrassManager();
-
-    AnimalManager getAnimalManager();
-
     Genome getDominantGenome();
     MapStatistics getMapStatistics();
 
-    public Optional<AbstractAnimal> animalAt(Vector2d position);
+    public Optional<Animal> animalAt(Vector2d position);
 
     public boolean isGrassAt(Vector2d position);
 
     public List<Animal> getAnimals();
+
+    Boundary getEquatorBoundary();
 }

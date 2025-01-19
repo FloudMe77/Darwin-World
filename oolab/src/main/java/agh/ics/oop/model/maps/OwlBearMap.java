@@ -1,29 +1,40 @@
 package agh.ics.oop.model.maps;
 
 import agh.ics.oop.model.*;
-import agh.ics.oop.model.MapObjects.AbstractAnimal;
-import agh.ics.oop.model.MapObjects.Animal;
-import agh.ics.oop.model.MapObjects.OwlBear;
-import agh.ics.oop.model.util.newUtils.Genome;
+import agh.ics.oop.model.mapObjects.Animal;
+import agh.ics.oop.model.mapObjects.OwlBear;
+import agh.ics.oop.model.util.Genome;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 
-public class WildOwlBearMap extends EarthMap {
+public class OwlBearMap extends EarthMap {
     private final OwlBear owlBear; // add final
     private final WorldMap owlBearMap;
 
-    public WildOwlBearMap(int height, int width, Genome genome) {
+    public OwlBearMap(int height, int width, Genome genome) {
         super(height, width);
         int bearSideLength = (int) Math.floor(Math.sqrt(height * width * 0.2));
         System.out.println(bearSideLength);
         owlBearMap = new RectangularMap(bearSideLength, bearSideLength);
         owlBear = new OwlBear(new Vector2d((int) bearSideLength/2, (int) bearSideLength/2), genome);
     }
-    public WildOwlBearMap(int height, int width) {
+
+    public OwlBearMap(int height, int width) {
         this(height,width,new Genome(100));
+    }
+
+    public WorldMap getOwlBearMap() {
+        return owlBearMap;
+    }
+
+    public Vector2d getOwlBearPosition() {
+        return owlBear.getPosition();
+    }
+
+    public OwlBear getOwlBear() {
+        return owlBear;
     }
 
     @Override
@@ -45,15 +56,6 @@ public class WildOwlBearMap extends EarthMap {
         elements.add(owlBear);
 
         return Collections.unmodifiableList(elements);
-    }
-
-    @Override
-    public Optional<AbstractAnimal> animalAt(Vector2d position) {
-        if (owlBear.isAt(position)) {
-            return Optional.of(owlBear);
-        } else {
-            return super.animalAt(position);
-        }
     }
 
     @Override

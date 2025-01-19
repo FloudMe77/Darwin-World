@@ -2,20 +2,22 @@ package agh.ics.oop.presenter;
 
 import agh.ics.oop.Simulation;
 import agh.ics.oop.model.*;
-import agh.ics.oop.model.MapObjects.AbstractAnimal;
-import agh.ics.oop.model.MapObjects.Animal;
+import agh.ics.oop.model.mapObjects.Animal;
 import agh.ics.oop.model.maps.WorldMap;
 import agh.ics.oop.model.util.MapChangeListener;
-import agh.ics.oop.view.AbstractAnimalElementBox;
-//import agh.ics.oop.view.AnimalElementBox;
+import agh.ics.oop.model.util.StatisticsSaveHandler;
+import agh.ics.oop.view.GridDrawer;
+import agh.ics.oop.view.util.StatisticsLabels;
+import agh.ics.oop.view.StatisticsUpdater;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -23,7 +25,7 @@ import java.util.concurrent.TimeUnit;
 
 public class SimulationPresenter implements MapChangeListener {
     @FXML
-    public Label genomeLabel;
+    public Label animalGenome;
     @FXML
     public Label directionLabel;
     @FXML
@@ -33,11 +35,15 @@ public class SimulationPresenter implements MapChangeListener {
     @FXML
     public Label descendantsLabel;
     @FXML
-    public Label dayLiveLabel;
+    public Label daysLived;
     @FXML
-    public Label dayDeathLabel;
+    public Label dayOfDeath;
     @FXML
     public Label grassEatenLabel;
+    @FXML
+    public Button highlightPreferredGrassButton;
+    @FXML
+    public Button highlightGenomeButton;
     @FXML
     private Label animalCountLabel;
     @FXML
@@ -57,19 +63,15 @@ public class SimulationPresenter implements MapChangeListener {
     @FXML
     private Button stopButton;
 
-    private int cellWidth;
-    private int cellHeight;
-
     private WorldMap worldMap;
     private MapStatistics mapStatistics;
-//    private Thread simulationThread;
     private ExecutorService executor;
-    private int initialAnimalEnergy;
-    private int mapWidth; // Number of columns
-    private int mapHeight; // Number of rows
+    GridDrawer gridDrawer;
+    private Config config;
 
-    private Optional<Animal> truckAnimal = Optional.empty();
-    private boolean isStoped = false;
+    private Optional<Animal> trackedAnimal = Optional.empty();
+    private boolean isStopped = false;
+    private String simulationName;
 
     @FXML
     private BorderPane rootPane;
@@ -81,107 +83,41 @@ public class SimulationPresenter implements MapChangeListener {
     private Label moveNotificationLabel;
 
     private Simulation simulation;
+    private StatisticsLabels statisticsLabels;
 
     @FXML
     private void initialize() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH-mm-ss");
+        simulationName = LocalDateTime.now().format(formatter);
         resumeButton.disableProperty().bind(stopButton.disableProperty().not());
-//        System.out.println(mapStatistics.totalAnimalAmountProperty());
-//        System.out.println("WTF???");
-//        animalCountLabel.textProperty().bind(mapStatistics.totalAnimalAmountProperty().asString("L zwirząt: %d"));
-    }
-
-    private void updateMapSize() {
-        var bounds = worldMap.getCurrentBounds();
-        int minX = bounds.leftDownCornerMap().getX();
-        int minY = bounds.leftDownCornerMap().getY();
-        int maxX = bounds.rightUpperCornerMap().getX();
-        int maxY = bounds.rightUpperCornerMap().getY();
-        int numberOfCellsInAColumn = maxX - minX + 1;
-        int numberOfCellsInARow = maxY - minY + 1;
-        mapWidth = numberOfCellsInAColumn;
-        mapHeight = numberOfCellsInARow;
+        highlightPreferredGrassButton.disableProperty().bind(stopButton.disableProperty().not());
+        highlightGenomeButton.disableProperty().bind(stopButton.disableProperty().not());
+        statisticsLabels = new StatisticsLabels(animalCountLabel, grassCountLabel, freeSpaceLabel, dominantGenomeLabel,
+                avgEnergyLabel, avgLifespanLabel, avgChildrenAmountLabel, animalGenome, directionLabel, energyLabel,
+                grassEatenLabel, childrenLabel, descendantsLabel, daysLived, dayOfDeath);
     }
 
     @Override
     public void mapChanged(WorldMap worldMap, String message, int id) {
-        this.worldMap = worldMap;
-
         Platform.runLater(() -> {
-//            moveNotificationLabel.setText(message + " na mapie nr. " + id);
-            drawGrid();
+            gridDrawer.draw();
+            if (config.saveStatsToCsv()) {
+                StatisticsSaveHandler.addStatistics(mapStatistics, simulationName);
+            }
         });
     }
 
-    @FXML
-    private void clearGrid() {
-        mapGrid.getChildren().retainAll(mapGrid.getChildren().getFirst());
-        mapGrid.getColumnConstraints().clear();
-        mapGrid.getRowConstraints().clear();
-    }
-
-    private void drawWorldElementsOnGrid() {
-        for (int y = 0; y < mapHeight; y++) {
-            for (int x = 0; x < mapWidth; x++) {
-                Vector2d thisPosition = new Vector2d(x, y);
-                Pane cell = new Pane();
-                cell.setPrefSize(cellWidth, cellHeight);
-                cell.setStyle("-fx-background-color: #99d064;");
-
-                if (worldMap.isGrassAt(thisPosition)) {
-                    cell.setStyle("-fx-background-color: #118012; -fx-border-style: none;");
-                }
-                Optional<AbstractAnimal> animalOpt = worldMap.animalAt(thisPosition);
-
-                animalOpt.ifPresent(abstractAnimal -> {
-                    cell.setOnMouseClicked((MouseEvent event) -> {
-                        // nie wiem jak to inaczej zrobić
-                        if(isStoped && abstractAnimal instanceof Animal currentAnimal) {
-                            truckAnimal = Optional.of(currentAnimal);
-                            updateStatistics();
-                        }
-                    });
-
-                    AbstractAnimalElementBox animalElement = new AbstractAnimalElementBox(abstractAnimal, cellWidth, cellHeight, initialAnimalEnergy);
-                    cell.getChildren().add(animalElement);
-                });
-
-                mapGrid.add(cell, x, y);
-            }
-        }
-    }
-
-    private void setGridWidthAndHeight() {
-        for (int x = 0; x < mapWidth; x++) {
-            mapGrid.getColumnConstraints().add(new ColumnConstraints(cellWidth));
-        }
-
-        for (int y = 0; y < mapHeight; y++) {
-            mapGrid.getRowConstraints().add(new RowConstraints(cellHeight));
-        }
-    }
-
-    private void drawGrid() {
-        clearGrid();
-        updateMapSize();
-        calculateCellSizes();
-        setGridWidthAndHeight();
-        drawWorldElementsOnGrid();
-        updateStatistics();
-//        System.out.println(worldMap);
-    }
-
-
-    // nwm czy tu koniecznie trzeba uzywac sim engine, ale moze trzeba do zastanowienia.
     public void simulationStart(Config config) {
-        initialAnimalEnergy = config.startEnergy();
-        WorldMap map = config.worldMap();
-        map.addObserver(this);
-        Simulation simulation = new Simulation(config);
-        this.simulation = simulation;
-        this.mapStatistics = map.getMapStatistics();
-//        SimulationEngine simulationEngine = new SimulationEngine(List.of(simulation));
+        this.config = config;
+        simulation = new Simulation(config);
+        worldMap = simulation.getWorldMap();
+        worldMap.addObserver(this);
+        mapStatistics = worldMap.getMapStatistics();
         executor = Executors.newSingleThreadExecutor();
         executor.submit(simulation);
+        StatisticsUpdater statisticsUpdater = new StatisticsUpdater(mapStatistics, statisticsLabels);
+
+        gridDrawer = new GridDrawer(rootPane, mapGrid, worldMap, config, this::simulationRunningStatus, statisticsUpdater);
         stopButton.disableProperty().bind(simulation.stoppedProperty());
     }
 
@@ -197,45 +133,37 @@ public class SimulationPresenter implements MapChangeListener {
         }
     }
 
-    private void updateStatistics() {
-        animalCountLabel.textProperty().set(String.format("Liczba zwierząt: %d", mapStatistics.getTotalAnimalAmount()));
-        grassCountLabel.textProperty().set(String.format("Liczba traw: %d", mapStatistics.getTotalGrasAmount()));
-        freeSpaceLabel.textProperty().set(String.format("Liczba wolny miejsc: %d", mapStatistics.getTotalFreeSpace()));
-        dominantGenomeLabel.textProperty().set(String.format("Najpopularniejszy genom: \n %s", mapStatistics.getDominantGenomeType()));
-        avgEnergyLabel.textProperty().set(String.format("Średni poziom energii: %.2f", mapStatistics.getAverageEnergy()));
-        avgLifespanLabel.textProperty().set(String.format("Średnia długość życia: %.2f",mapStatistics.getAverageLifeTime()));
-        avgChildrenAmountLabel.textProperty().set(String.format("Średnia liczba dzieci: %.2f", mapStatistics.getAverageChildrenAmount()));
-
-        if(truckAnimal.isPresent()){
-            var animal = truckAnimal.get();
-            genomeLabel.textProperty().set(String.format("Genom zwierzaka:\n %s", animal.getGenome()));
-            directionLabel.textProperty().set(String.format("Aktywny genom: %s", animal.getCurrentGenome()));
-            energyLabel.textProperty().set(String.format("Energii: %d", animal.getEnergy()));
-            grassEatenLabel.textProperty().set(String.format("Zjedzona trawa: %d", animal.getEaten()));
-            childrenLabel.textProperty().set(String.format("Liczba dzieci: %d", animal.getChildrenAmount()));
-            // tmp
-            descendantsLabel.textProperty().set(String.format("Liczba potomstwa: %d", animal.getDescendantsAmount()));
-
-            dayLiveLabel.textProperty().set(String.format("Długość życia: %d",animal.getAge()));
-            dayDeathLabel.textProperty().set(String.format("Dzień śmierci: %d", animal.getDayOfDeath()));
-        }
+    public boolean simulationRunningStatus() {
+        return isStopped;
     }
 
     public void handlePauseSimulation(ActionEvent actionEvent) {
-        isStoped = true;
-        System.out.println("stoped");
+        isStopped = true;
         this.simulation.setStopped(true);
     }
 
     public void handleResumeSimulation(ActionEvent actionEvent) {
-        isStoped = false;
+        isStopped = false;
         simulation.resume();
     }
 
-    private void calculateCellSizes() {
-        double availableWidth = rootPane.getCenter().getBoundsInParent().getWidth();
-        double availableHeight = rootPane.getCenter().getBoundsInParent().getHeight();
-        cellWidth = (int) availableWidth / mapWidth;
-        cellHeight = (int) availableHeight / mapHeight;
+    public void handleHighlightGenome(ActionEvent actionEvent) {
+        if (gridDrawer.isHighlightDominantGenomeAnimals()) {
+            gridDrawer.setHighlightDominantGenomeAnimals(false);
+            Platform.runLater(() -> highlightGenomeButton.setText("Wyświetl zwierzęta z najpopularniejszym genotypem"));
+        } else {
+            gridDrawer.setHighlightDominantGenomeAnimals(true);
+            Platform.runLater(() -> highlightGenomeButton.setText("Ukryj zwierzęta z najpopularniejszym genotypem"));
+        }
+    }
+
+    public void highlightPreferredGrassCells(ActionEvent actionEvent) {
+        if (gridDrawer.isHighlightPreferredGrassArea()) {
+            gridDrawer.setHighlightPreferredGrassArea(false);
+            Platform.runLater(() -> highlightPreferredGrassButton.setText("Wyświetl preferowane przez rośliny pola"));
+        } else {
+            gridDrawer.setHighlightPreferredGrassArea(true);
+            Platform.runLater(() -> highlightPreferredGrassButton.setText("Ukryj preferowane przez rośliny pola"));
+        }
     }
 }

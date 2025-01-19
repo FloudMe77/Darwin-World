@@ -1,9 +1,9 @@
 package agh.ics.oop.model;
 
-import agh.ics.oop.model.MapObjects.Animal;
+import agh.ics.oop.model.mapObjects.Animal;
 import agh.ics.oop.model.maps.BasicRectangularMap;
 import agh.ics.oop.model.maps.WorldMap;
-import agh.ics.oop.model.util.newUtils.Genome;
+import agh.ics.oop.model.util.Genome;
 
 public class MapStatistics {
     private final WorldMap worldMap;
@@ -26,8 +26,8 @@ public class MapStatistics {
         totalFreeSpace = ((maxX - minX + 1) * (maxY - minY + 1));
     }
 
-    public String getDominantGenomeType() {
-        return worldMap.getDominantGenome().toString();
+    public Genome getDominantGenome() {
+        return worldMap.getDominantGenome();
     }
 
     public double getAverageChildrenAmount() {
@@ -84,16 +84,5 @@ public class MapStatistics {
     public void feedAnimalUpdate(int feedVal){
         totalEnergy+=feedVal;
         totalGrasAmount-=1;
-    }
-
-    // only for debug
-    public void printStatistic(){
-        System.out.println();
-        System.out.println(getTotalAnimalAmount());
-        System.out.println(getTotalGrasAmount());
-        System.out.println(getDominantGenomeType());
-        System.out.println(getAverageEnergy());
-        System.out.println(getAverageChildrenAmount());
-        System.out.println(getAverageLifeTime());
     }
 }

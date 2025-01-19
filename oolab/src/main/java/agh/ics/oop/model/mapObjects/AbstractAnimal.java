@@ -1,8 +1,7 @@
-package agh.ics.oop.model.MapObjects;
+package agh.ics.oop.model.mapObjects;
 
 import agh.ics.oop.model.*;
-import agh.ics.oop.model.util.newUtils.Genome;
-import javafx.scene.paint.Color;
+import agh.ics.oop.model.util.Genome;
 
 import java.util.Random;
 
@@ -18,8 +17,8 @@ public abstract class AbstractAnimal implements WorldElement {
     public AbstractAnimal(Vector2d position, Genome genome) {
         this.currentPosition = position;
         this.genome = genome;
-        Random random = new Random();
         // losowy kierunek początkowy
+        Random random = new Random();
 
         currentIndexOfGen = random.nextInt(0,genome.getGenLength());
         GenomeDirection genomeDirection = genome.getGenVal(currentIndexOfGen);
@@ -100,6 +99,4 @@ public abstract class AbstractAnimal implements WorldElement {
         currentDirection = currentDirection.getDirection(genomeDirection);
 
     }
-
-    public abstract Color getColor(int initialAnimalEnergy);
 }

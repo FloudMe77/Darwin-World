@@ -7,8 +7,8 @@
 //import agh.ics.oop.model.util.Boundary;
 //import agh.ics.oop.model.util.MapChangeListener;
 //import agh.ics.oop.model.util.MapVisualizer;
-//import agh.ics.oop.model.util.newUtils.Genome;
-//import agh.ics.oop.model.util.newUtils.GenomeChange;
+//import agh.ics.oop.model.util.Genome;
+//import agh.ics.oop.model.util.GenomeChange;
 //
 //import javax.swing.*;
 //import javax.swing.text.Position;
@@ -261,7 +261,7 @@
 //                            config.genomeChange(),
 //                            config.minimalMutationAmount(),
 //                            config.maximalMutationAmount(),
-//                            config.energyToReproduce());
+//                            config.offspringEnergyCost());
 //                    newAnimalList.add(newAnimal);
 //                    addToAnimals(newAnimal.getPosition(),newAnimal);
 //

@@ -1,8 +1,7 @@
 package agh.ics.oop.model.maps;
 
-import agh.ics.oop.model.MapObjects.Grass;
-
 import agh.ics.oop.model.Vector2d;
+import agh.ics.oop.model.util.Boundary;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -75,5 +74,9 @@ public class GrassField {
         else{
             beyondEquator.add(position);
         }
+    }
+
+    public Boundary getEquatorBoundary() {
+        return new Boundary(lowerLeftEquator, upperRightEquator);
     }
 }

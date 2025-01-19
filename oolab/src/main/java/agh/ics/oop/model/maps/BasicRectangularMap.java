@@ -1,13 +1,11 @@
 package agh.ics.oop.model.maps;
 
 import agh.ics.oop.model.*;
-import agh.ics.oop.model.MapObjects.AbstractAnimal;
-import agh.ics.oop.model.MapObjects.Animal;
-import agh.ics.oop.model.MapObjects.Grass;
+import agh.ics.oop.model.mapObjects.Animal;
 import agh.ics.oop.model.util.Boundary;
 import agh.ics.oop.model.util.MapChangeListener;
 import agh.ics.oop.model.util.MapVisualizer;
-import agh.ics.oop.model.util.newUtils.Genome;
+import agh.ics.oop.model.util.Genome;
 
 import java.util.*;
 import java.util.stream.Stream;
@@ -93,9 +91,9 @@ abstract public class BasicRectangularMap implements WorldMap {
         return elements;
     }
 
-    public Optional<AbstractAnimal> animalAt(Vector2d position) {
+    public Optional<Animal> animalAt(Vector2d position) {
         return animalManager.isAnimalAt(position)
-                ? animalManager.getStrongestAnimal(position).map(animal -> (AbstractAnimal) animal)
+                ? animalManager.getStrongestAnimal(position)
                 : Optional.empty();
     }
 
@@ -181,15 +179,12 @@ abstract public class BasicRectangularMap implements WorldMap {
         notifyObservers("poruszono zwierzeta");
     }
 
-    // Gettery do managerów przydatne w sprawdzaniu czy na danej pozycji jest trawa lub zwierzak albo to i to.
-    public GrassManager getGrassManager() {
-        return grassManager;
-    }
-
-    public AnimalManager getAnimalManager() {
-        return animalManager;
-    }
     public List<Animal> getAnimals(){
         return animalManager.getElements();
+    }
+
+    @Override
+    public Boundary getEquatorBoundary() {
+        return grassManager.getEquatorBoundary();
     }
 }

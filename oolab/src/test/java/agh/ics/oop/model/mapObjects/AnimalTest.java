@@ -1,14 +1,13 @@
-package agh.ics.oop.model.MapObjects;
+package agh.ics.oop.model.mapObjects;
 
 import agh.ics.oop.model.Config;
 import agh.ics.oop.model.GenomeDirection;
 import agh.ics.oop.model.IncorrectPositionException;
 import agh.ics.oop.model.Vector2d;
-import agh.ics.oop.model.maps.BasicRectangularMap;
 import agh.ics.oop.model.maps.EarthMap;
 import agh.ics.oop.model.maps.WorldMap;
-import agh.ics.oop.model.util.newUtils.FullRandomGenomeChange;
-import agh.ics.oop.model.util.newUtils.Genome;
+import agh.ics.oop.model.util.FullRandomGenomeChange;
+import agh.ics.oop.model.util.Genome;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;

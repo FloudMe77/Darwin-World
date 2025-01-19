@@ -2,12 +2,12 @@ package agh.ics.oop.model.maps;
 
 import agh.ics.oop.model.Config;
 import agh.ics.oop.model.GenomeDirection;
-import agh.ics.oop.model.MapObjects.Animal;
+import agh.ics.oop.model.mapObjects.Animal;
 import agh.ics.oop.model.MapStatistics;
 import agh.ics.oop.model.Vector2d;
 import agh.ics.oop.model.util.ConsoleMapDisplay;
-import agh.ics.oop.model.util.newUtils.FullRandomGenomeChange;
-import agh.ics.oop.model.util.newUtils.Genome;
+import agh.ics.oop.model.util.FullRandomGenomeChange;
+import agh.ics.oop.model.util.Genome;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -15,11 +15,11 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class WildOwlBearMapTest {
+class OwlBearMapTest {
 
     @Test
     void moveTest(){
-        var map = new WildOwlBearMap(10,10,new Genome(new ArrayList<>(List.of(GenomeDirection.ZERO))));
+        var map = new OwlBearMap(10,10,new Genome(new ArrayList<>(List.of(GenomeDirection.ZERO))));
         MapStatistics statistics = map.getMapStatistics();
 
         map.addObserver(new ConsoleMapDisplay());
@@ -48,7 +48,7 @@ class WildOwlBearMapTest {
     }
     @Test
     void eatTest(){
-        var map = new WildOwlBearMap(10,10,new Genome(new ArrayList<>(List.of(GenomeDirection.ZERO))));
+        var map = new OwlBearMap(10,10,new Genome(new ArrayList<>(List.of(GenomeDirection.ZERO))));
         MapStatistics statistics = map.getMapStatistics();
         var animal1 = new Animal(new Vector2d(0,2), new Genome(new ArrayList<>(List.of(GenomeDirection.ZERO, GenomeDirection.FOUR))),10);
         var animal2 = new Animal(new Vector2d(0,2), new Genome(new ArrayList<>(List.of(GenomeDirection.ZERO, GenomeDirection.FOUR))),10);
