@@ -1,0 +1,291 @@
+[33mcommit 66315a7c491fbdffac31ec2c84f96a80b77ea84c[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mpawel-front-concurrence-fix[m[33m)[m
+Author: Magmusacy <xpfk.098@gmail.com>
+Date:   Sun Jan 19 18:52:13 2025 +0100
+
+    Oczysciłem troche hierarchie plików (WIP)
+
+[33mcommit 6954caa15411b31a387d556de9167fc28da6fdcf[m
+Author: Magmusacy <xpfk.098@gmail.com>
+Date:   Sun Jan 19 15:49:13 2025 +0100
+
+    Dodalem zapisywanie statystyk do csv
+
+[33mcommit 5ddfba699c41b09910388589dd68fa6b21a2ec88[m[33m ([m[1;32mpawel[m[33m)[m
+Author: Magmusacy <xpfk.098@gmail.com>
+Date:   Sat Jan 18 17:05:01 2025 +0100
+
+    Synchronizacja wątku UI oraz symulacji w AnimalManagerze
+
+[33mcommit 1ec6106034b085a8c059a684a7d247cb920d24e0[m
+Author: Magmusacy <xpfk.098@gmail.com>
+Date:   Sat Jan 18 14:24:05 2025 +0100
+
+    Dodałem buttony do wyświetlania zwierząt z najpopularniejszym genotypem i pól preferowanych przez trawę
+
+[33mcommit 9cdf71d307ebc4241dd609779c939a476dead58b[m[33m ([m[1;32mpawel-front-dopieszczanie[m[33m)[m
+Author: Magmusacy <xpfk.098@gmail.com>
+Date:   Sat Jan 18 00:24:23 2025 +0100
+
+    Dekompozycja SimulationPresenter na mniejsze klasy i zmiana logiki rysowania zwierząt oraz OwlBeara
+
+[33mcommit 41289e30fcd27004cf11ffd08d07ecd55a97fb12[m
+Author: Magmusacy <xpfk.098@gmail.com>
+Date:   Fri Jan 17 19:10:29 2025 +0100
+
+    Zmiana nazwy z WildOwlBearMap na OwlBearMap i dodanie czerwonego prostokąta na mapie jako obszar OwlBeara
+
+[33mcommit 63e1aec58de5f516afd4dde147096cd47f190c35[m
+Author: Magmusacy <xpfk.098@gmail.com>
+Date:   Fri Jan 17 18:24:11 2025 +0100
+
+    Usuniecie oddzielnego configu do zapisywania konfiguracji i modyfikacja obecnego globalnego configu
+
+[33mcommit 36c4a4a1e8cbc5fa253f6301fd519457f6f5e341[m[33m ([m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m, [m[1;32mmain[m[33m)[m
+Merge: 30f348f e353b11
+Author: Magmusacy <xpfk.098@gmail.com>
+Date:   Fri Jan 17 15:47:38 2025 +0100
+
+    Merge pull request #6 from FloudMe77/darek-front
+    
+    Ukończenie frontu
+
+[33mcommit e353b1178cbe11a169eb7c4e69ef5bb23dfdee08[m[33m ([m[1;31morigin/darek-front[m[33m)[m
+Author: FloudMe77 <marecik.dariusz@gmail.com>
+Date:   Thu Jan 16 14:07:03 2025 +0100
+
+    bug fix
+
+[33mcommit 444cdfc03a21c79baef7ba32fab518815f44d2c8[m
+Author: FloudMe77 <marecik.dariusz@gmail.com>
+Date:   Wed Jan 15 14:14:37 2025 +0100
+
+    Dodanie statystyk dla zwierzaka i skończenie frontu
+
+[33mcommit cd1e6d2b531b13bf46944a29e297311b60fb4d15[m
+Author: FloudMe77 <marecik.dariusz@gmail.com>
+Date:   Wed Jan 15 02:24:36 2025 +0100
+
+    usunięcie bugów na backendzie, dodanie kolorowych animali oraz owlbear
+
+[33mcommit 30f348ff9a04ec45ad1f04ab6319fca191e8b8bf[m
+Merge: 547c588 98025e4
+Author: FloudMe77 <marecik.dariusz@gmail.com>
+Date:   Mon Jan 13 15:10:07 2025 +0100
+
+    Merge pull request #5 from FloudMe77/pawel-front-optymalizacja
+    
+    Dodanie wyświetlania mapy (WIP)
+
+[33mcommit 98025e4303ee189326ec0dc8f770763df1816171[m[33m ([m[1;31morigin/pawel-front-optymalizacja[m[33m, [m[1;32mpawel-front-optymalizacja[m[33m)[m
+Author: Magmusacy <xpfk.098@gmail.com>
+Date:   Mon Jan 13 10:03:46 2025 +0100
+
+    Poprawiłem błąd przez który symulacja nie kończyłała się po zakończeniu wątku
+
+[33mcommit 9917e5c11e5061cbd643a126faffc54f973823e0[m
+Author: Magmusacy <xpfk.098@gmail.com>
+Date:   Sun Jan 12 22:47:04 2025 +0100
+
+    Find a temporary solution to optimization
+
+[33mcommit f1598d0cae095a47dfa87f9e537c1b1e8459b041[m[33m ([m[1;32mpawel-front[m[33m)[m
+Author: Magmusacy <xpfk.098@gmail.com>
+Date:   Sun Jan 12 21:02:14 2025 +0100
+
+    Zrobiłem dzialajaca wersje statystyk z platfProperty ale jest ona mega niezooptymalizowana
+
+[33mcommit 7689d69479990c02c169c039be4636f2d6136cbd[m
+Author: Magmusacy <xpfk.098@gmail.com>
+Date:   Sun Jan 12 16:14:02 2025 +0100
+
+    Dalsze rozwijanie wyświetlania mapy + zamiana text fieldów na spinnery w widoku konfigu
+
+[33mcommit 0586c6cafc99c977bf121155c4f2d208110ff442[m
+Author: Magmusacy <xpfk.098@gmail.com>
+Date:   Sat Jan 11 16:36:59 2025 +0100
+
+    Dodanie podstawowego wyświetlania mapy
+
+[33mcommit 8caa2da1fc8356b38b4e811bee2d89216d85423a[m
+Author: Magmusacy <xpfk.098@gmail.com>
+Date:   Sat Jan 11 12:17:45 2025 +0100
+
+    Dodanie okna konfiguracji wraz z mozliwoscia zapisu/wczytania zapisanych konfiguracji
+
+[33mcommit 547c5885a4b4008576a397d579010eda758e2998[m
+Merge: 9be26b9 49fe4ec
+Author: Magmusacy <xpfk.098@gmail.com>
+Date:   Fri Jan 10 18:09:45 2025 +0100
+
+    Merge pull request #4 from FloudMe77/darek-refactor
+    
+    Darek refactor
+
+[33mcommit 49fe4ec52dedbcdd7d3ec5e55b0e924c58705a1d[m[33m ([m[1;31morigin/darek-refactor[m[33m)[m
+Author: FloudMe77 <marecik.dariusz@gmail.com>
+Date:   Fri Jan 10 01:18:30 2025 +0100
+
+    małe zmiany
+
+[33mcommit daf9e831d597503b14e7692dc6e3f40dcbd3044f[m
+Author: FloudMe77 <marecik.dariusz@gmail.com>
+Date:   Fri Jan 10 01:05:07 2025 +0100
+
+    propozycja WildOwlBearMap
+
+[33mcommit 82bb1aad497b6eca527c5d0de9423a4612949321[m
+Author: FloudMe77 <marecik.dariusz@gmail.com>
+Date:   Fri Jan 10 00:08:28 2025 +0100
+
+    Rozbicie mapy na klasy poboczne
+
+[33mcommit 6abb96ddd6999823c32317e48b6a788ce593bced[m
+Author: FloudMe77 <marecik.dariusz@gmail.com>
+Date:   Thu Jan 9 23:43:17 2025 +0100
+
+    bofore refactor
+
+[33mcommit 9be26b99e3657e5f419b4f48283956a5b6ab00b8[m
+Merge: f5f80c2 d07e39b
+Author: Magmusacy <xpfk.098@gmail.com>
+Date:   Tue Jan 7 15:46:04 2025 +0100
+
+    Merge pull request #3 from FloudMe77/darek-statystyki
+    
+    Darek statystyki
+
+[33mcommit d07e39b1a6acb38f89b623f06a3389f4dbf282db[m[33m ([m[1;31morigin/darek-statystyki[m[33m)[m
+Author: FloudMe77 <marecik.dariusz@gmail.com>
+Date:   Tue Jan 7 10:20:53 2025 +0100
+
+    add AnimalTest
+
+[33mcommit 93476ce05fcd441ab3e31af28314ba140b5c8801[m
+Author: FloudMe77 <marecik.dariusz@gmail.com>
+Date:   Tue Jan 7 00:15:03 2025 +0100
+
+    działająca wersja
+
+[33mcommit 04c6c354e2bea60a69f633209be3d6c8f94e992a[m
+Author: FloudMe77 <marecik.dariusz@gmail.com>
+Date:   Sat Jan 4 01:52:40 2025 +0100
+
+    Small changes
+
+[33mcommit d9d0376f508ac3b37c645ff628e4d2c494306aa9[m
+Author: FloudMe77 <marecik.dariusz@gmail.com>
+Date:   Sat Jan 4 00:40:20 2025 +0100
+
+    Grass generation fixes
+
+[33mcommit 6aa946c8648617f8c815317f3caba87fb64b99bb[m
+Author: FloudMe77 <marecik.dariusz@gmail.com>
+Date:   Sat Jan 4 00:16:48 2025 +0100
+
+    add Simulation and operation required to start
+
+[33mcommit 16bc37caf9202ff36bd9b8930413fad538b5757b[m
+Author: FloudMe77 <marecik.dariusz@gmail.com>
+Date:   Fri Jan 3 22:33:19 2025 +0100
+
+    add some tests
+
+[33mcommit 60a3e94a5d72a9aa34f28707c7228ecf8da77f72[m
+Author: FloudMe77 <marecik.dariusz@gmail.com>
+Date:   Fri Jan 3 21:06:27 2025 +0100
+
+    add MapStatistics
+
+[33mcommit f5f80c2c5f13d4874bef93a5c143fbea52ef8dab[m
+Merge: 051b818 65cf7d3
+Author: FloudMe77 <marecik.dariusz@gmail.com>
+Date:   Fri Jan 3 09:36:24 2025 +0100
+
+    Merge pull request #1 from FloudMe77/pawel-mapy
+    
+    Pawel mapy
+
+[33mcommit 65cf7d386849e69cc40a000689542ae11e3e4bf2[m[33m ([m[1;31morigin/pawel-mapy[m[33m, [m[1;32mpawel-mapy[m[33m)[m
+Author: Magmusacy <xpfk.098@gmail.com>
+Date:   Fri Jan 3 00:41:10 2025 +0100
+
+    Add tests for EarthMap
+
+[33mcommit 29c8b9c2e13e64b4ca03f79ce566ee0dc369c7d3[m
+Author: Magmusacy <xpfk.098@gmail.com>
+Date:   Fri Jan 3 00:05:26 2025 +0100
+
+    Comment out for later
+
+[33mcommit 793cbed852d582dda0b5541268960b3833aaf41f[m
+Author: Magmusacy <xpfk.098@gmail.com>
+Date:   Fri Jan 3 00:01:18 2025 +0100
+
+    Change Genome genList to use GenomeDirection enum instead of ints
+
+[33mcommit 74b02148897fec278ee3fe388bf5abd9d1d2dfd4[m
+Author: Magmusacy <xpfk.098@gmail.com>
+Date:   Thu Jan 2 23:40:04 2025 +0100
+
+    Integrate different maps with new version of mapObjects
+
+[33mcommit 8bba8d3996b65a54d8f293f847ed2e6d744156c6[m
+Merge: b97bd48 f2595e8
+Author: Magmusacy <xpfk.098@gmail.com>
+Date:   Thu Jan 2 23:18:26 2025 +0100
+
+    Merge branch 'darek-mapElement' of github.com:FloudMe75/Darwin-World into pawel-mapy
+
+[33mcommit b97bd48a1cc39634193f1ce8541e69ad09e11b7e[m
+Author: Magmusacy <xpfk.098@gmail.com>
+Date:   Wed Jan 1 22:29:11 2025 +0100
+
+    Add validator for WildOwlBear
+
+[33mcommit 63bd3333135035996f7cfac15d42f6e0a71f9aeb[m
+Author: Magmusacy <xpfk.098@gmail.com>
+Date:   Wed Jan 1 21:00:58 2025 +0100
+
+    Add new maps / modify Animal movement rules and delete obsolete files
+
+[33mcommit 77f9127c1d79aafda6688828cb6b971cd9d4d485[m
+Author: Magmusacy <xpfk.098@gmail.com>
+Date:   Wed Jan 1 20:56:37 2025 +0100
+
+    Add / modify tests
+
+[33mcommit f2595e8c2c3554be7aabfb3b46920a2cad42da75[m[33m ([m[1;31morigin/darek-mapElement[m[33m)[m
+Author: FloudMe77 <marecik.dariusz@gmail.com>
+Date:   Wed Jan 1 19:16:15 2025 +0100
+
+    Add AbstractAnimal and OwlBear
+
+[33mcommit 995d413a5a1cc8f080129e5d7cab2a3b37bcb7b5[m
+Author: Magmusacy <xpfk.098@gmail.com>
+Date:   Wed Jan 1 17:35:55 2025 +0100
+
+    Add another 4 map directions and a method that converts unitVector to MapDirection
+
+[33mcommit 051b818643fcb6e85e74ad0f69a94eaa3e4abd60[m
+Author: FloudMe77 <marecik.dariusz@gmail.com>
+Date:   Mon Dec 30 17:39:05 2024 +0100
+
+    dodanie mojego rozwiązania labów
+
+[33mcommit 5ab7da9e28841e47540118f51a17cdcf3b3a95bd[m
+Author: FloudMe77 <marecik.dariusz@gmail.com>
+Date:   Mon Dec 30 17:38:11 2024 +0100
+
+    add .gitignore
+
+[33mcommit 917f94445ecfbcd9d4421113c81d78137bd87136[m
+Author: Magmusacy <xpfk.098@gmail.com>
+Date:   Mon Dec 9 16:20:36 2024 +0100
+
+    Update README
+
+[33mcommit 36048bcb8c4261524fafbc5bc6d5851f9ec337ed[m
+Author: FloudMe77 <marecik.dariusz@gmail.com>
+Date:   Mon Dec 9 15:21:08 2024 +0100
+
+    Initial commit

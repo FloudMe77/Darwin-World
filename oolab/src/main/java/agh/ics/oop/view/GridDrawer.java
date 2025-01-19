@@ -1,19 +1,19 @@
 package agh.ics.oop.view;
 
 import agh.ics.oop.model.Config;
-import agh.ics.oop.model.mapObjects.Animal;
 import agh.ics.oop.model.Vector2d;
+import agh.ics.oop.model.MapObjects.Animal;
 import agh.ics.oop.model.maps.OwlBearMap;
 import agh.ics.oop.model.maps.WorldMap;
 import agh.ics.oop.model.util.Boundary;
-import agh.ics.oop.model.util.MapType;
 import agh.ics.oop.model.util.Genome;
+import agh.ics.oop.model.util.MapType;
 import agh.ics.oop.view.util.AnimalElementBox;
 import agh.ics.oop.view.util.OwlBearElementBox;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 
-import java.util.Optional;
+import java.util.*;
 import java.util.function.Supplier;
 
 public class GridDrawer {
@@ -22,10 +22,13 @@ public class GridDrawer {
     private final BorderPane rootPane;
     private final Config config;
     private final Supplier<Boolean> simulationRunningStatus;
-    private int mapWidth, mapHeight, cellWidth, cellHeight;
+    private double mapWidth, mapHeight, cellWidth, cellHeight;
     private Optional<Animal> trackedAnimal = Optional.empty();
     private final StatisticsUpdater statisticsUpdater;
     private boolean highlightPreferredGrassArea = false, highlightDominantGenomeAnimals = false;
+
+    private final Map<Vector2d, Pane> gridCells = new HashMap<>(); //  Cache cellów
+    private final Set<Vector2d> highlightedGrassCells = new HashSet<>();
 
     public GridDrawer(BorderPane rootPane, GridPane mapGrid, WorldMap map,
                       Config config, Supplier<Boolean> simulationRunningStatus,
@@ -37,24 +40,62 @@ public class GridDrawer {
         this.simulationRunningStatus = simulationRunningStatus;
         this.statisticsUpdater = statisticsUpdater;
         initializeMapSize();
+        calculateCellSizes();
+        initializeGrid();
+    }
+
+    private void initializeGrid() {
+        for (int x = 0; x < mapWidth; x++) {
+            mapGrid.getColumnConstraints().add(new ColumnConstraints(cellWidth));
+        }
+        for (int y = 0; y < mapHeight; y++) {
+            mapGrid.getRowConstraints().add(new RowConstraints(cellHeight));
+        }
+
+        for (int x = 0; x < mapWidth; x++) {
+            for (int y = 0; y < mapHeight; y++) {
+                Vector2d position = new Vector2d(x, y);
+                Pane cell = new Pane();
+                cell.setPrefSize(cellWidth, cellHeight);
+                cell.setStyle("-fx-background-color: #99d064;");
+                cell.setOnMouseClicked((MouseEvent event) -> {
+                    if (simulationRunningStatus.get()) {
+                        Optional<Animal> animalOpt = map.animalAt(position);
+                        if (animalOpt.isPresent()) {
+                            trackedAnimal = animalOpt;
+                            statisticsUpdater.updateAnimalStatistics(animalOpt.get());
+                        }
+                    }
+                });
+
+                mapGrid.add(cell, x, y);
+                gridCells.put(position, cell);
+            }
+        }
     }
 
     public void draw() {
         clearGrid();
-        calculateCellSizes();
-        setGridCells();
         drawWorldElementsOnGrid();
         statisticsUpdater.updateMapStatistics();
         if (trackedAnimal.isPresent()) {
             statisticsUpdater.updateAnimalStatistics(trackedAnimal.get());
         }
         handleHighlights();
-
+        calculateCellSizes();
+        for (int x = 0; x < mapWidth; x++) {
+            mapGrid.getColumnConstraints().add(new ColumnConstraints(cellWidth));
+        }
+        for (int y = 0; y < mapHeight; y++) {
+            mapGrid.getRowConstraints().add(new RowConstraints(cellHeight));
+        }
     }
 
     private void handleHighlights() {
-        if (highlightPreferredGrassArea) {
+        if (highlightPreferredGrassArea && highlightedGrassCells.isEmpty()) {
             highlightPreferredGrassCells(map.getEquatorBoundary());
+        } else {
+            highlightedGrassCells.clear();
         }
         if (highlightDominantGenomeAnimals) {
             highlightDominantGenomeAnimals();
@@ -67,11 +108,17 @@ public class GridDrawer {
 
         for (int x = lowerLeft.getX(); x <= upperRight.getX(); x++) {
             for (int y = lowerLeft.getY(); y <= upperRight.getY(); y++) {
-                Pane preferredCell = new Pane();
-                preferredCell.setStyle("-fx-background-color: rgba(255,183,0,0.25);");
-                preferredCell.setMouseTransparent(true);
-                preferredCell.setPrefSize(cellWidth, cellHeight);
-                mapGrid.add(preferredCell, x, y);
+                Vector2d thisPosition = new Vector2d(x, y);
+                Pane cell = gridCells.get(thisPosition);
+
+                if (!highlightedGrassCells.contains(thisPosition)) {
+                    Pane highlightLayer = new Pane();
+                    highlightLayer.setStyle("-fx-background-color: rgba(255,183,0,0.25);");
+                    highlightLayer.setMouseTransparent(true);
+                    highlightLayer.setPrefSize(cellWidth, cellHeight);
+                    highlightedGrassCells.add(thisPosition);
+                    cell.getChildren().add(highlightLayer);
+                }
             }
         }
     }
@@ -80,14 +127,14 @@ public class GridDrawer {
         Genome dominantGenome = map.getMapStatistics().getDominantGenome();
         for (Animal animal : map.getAnimals()) {
             if (animal.getGenome().equals(dominantGenome)) {
-                int x = animal.getPosition().getX();
-                int y = animal.getPosition().getY();
+                Vector2d thisPosition = animal.getPosition();
+                Pane cell = gridCells.get(thisPosition);
 
                 Pane preferredCell = new Pane();
                 preferredCell.setStyle("-fx-background-color: rgba(255,0,0,0.25);");
                 preferredCell.setMouseTransparent(true);
                 preferredCell.setPrefSize(cellWidth, cellHeight);
-                mapGrid.add(preferredCell, x, y);
+                cell.getChildren().add(preferredCell);
             }
         }
     }
@@ -103,7 +150,6 @@ public class GridDrawer {
     }
 
     private void clearGrid() {
-        mapGrid.getChildren().retainAll(mapGrid.getChildren().getFirst());
         mapGrid.getColumnConstraints().clear();
         mapGrid.getRowConstraints().clear();
     }
@@ -111,8 +157,8 @@ public class GridDrawer {
     private void calculateCellSizes() {
         double availableWidth = rootPane.getCenter().getBoundsInParent().getWidth();
         double availableHeight = rootPane.getCenter().getBoundsInParent().getHeight();
-        cellWidth = (int) availableWidth / mapWidth;
-        cellHeight = (int) availableHeight / mapHeight;
+        cellWidth = Math.round((availableWidth / mapWidth) * 10) / 10.0;
+        cellHeight = Math.round((availableHeight / mapHeight) * 10) / 10.0;
     }
 
     private void setGridCells() {
@@ -126,37 +172,23 @@ public class GridDrawer {
     }
 
     private void drawWorldElementsOnGrid() {
-        for (int y = 0; y < mapHeight; y++) {
-            for (int x = 0; x < mapWidth; x++) {
-                Vector2d thisPosition = new Vector2d(x, y);
-                Pane cell = new Pane();
-                cell.setPrefSize(cellWidth, cellHeight);
-                cell.setStyle("-fx-background-color: #99d064;");
+        for (Vector2d thisPosition : gridCells.keySet()) {
+            Pane cell = gridCells.get(thisPosition);
+            Optional<Animal> animalOpt = map.animalAt(thisPosition);
 
-                if (map.isGrassAt(thisPosition)) {
-                    cell.setStyle("-fx-background-color: #118012; -fx-border-style: none;");
-                }
+            String backgroundStyle = map.isGrassAt(thisPosition) ?
+                    "-fx-background-color: #118012;" :
+                    "-fx-background-color: #99d064;";
+            cell.setStyle(backgroundStyle);
+            cell.getChildren().clear();
 
-                Optional<Animal> animalOpt = map.animalAt(thisPosition);
+            animalOpt.ifPresent(animal -> {
+                AnimalElementBox AnimalBox = new AnimalElementBox(animal, cellWidth, cellHeight, config.startEnergy());
+                cell.getChildren().add(AnimalBox);
+            });
 
-                animalOpt.ifPresent(animal -> {
-                    cell.setOnMouseClicked((MouseEvent event) -> {
-
-                        if (simulationRunningStatus.get()) {
-                            trackedAnimal = Optional.of(animal);
-                            statisticsUpdater.updateAnimalStatistics(animal);
-                        }
-                    });
-
-                    AnimalElementBox AnimalBox = new AnimalElementBox(animal, cellWidth, cellHeight, config.startEnergy());
-                    cell.getChildren().add(AnimalBox);
-                });
-
-                if (config.mapType() == MapType.OWLBEAR_MAP) {
-                    drawOwlBearMap(thisPosition, cell);
-                }
-
-                mapGrid.add(cell, x, y);
+            if (config.mapType() == MapType.OWLBEAR_MAP) {
+                drawOwlBearMap(thisPosition, cell);
             }
         }
     }

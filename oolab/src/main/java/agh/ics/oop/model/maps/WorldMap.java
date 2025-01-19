@@ -1,7 +1,7 @@
 package agh.ics.oop.model.maps;
 
 import agh.ics.oop.model.*;
-import agh.ics.oop.model.mapObjects.Animal;
+import agh.ics.oop.model.MapObjects.Animal;
 import agh.ics.oop.model.util.Boundary;
 import agh.ics.oop.model.util.MapChangeListener;
 import agh.ics.oop.model.util.Genome;

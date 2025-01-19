@@ -1,4 +1,4 @@
-package agh.ics.oop.model.mapObjects;
+package agh.ics.oop.model.MapObjects;
 
 import agh.ics.oop.model.*;
 import agh.ics.oop.model.util.Genome;

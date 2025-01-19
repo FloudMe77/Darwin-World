@@ -1,6 +1,6 @@
 package agh.ics.oop.model;
 
-import agh.ics.oop.model.mapObjects.Animal;
+import agh.ics.oop.model.MapObjects.Animal;
 import agh.ics.oop.model.maps.BasicRectangularMap;
 import agh.ics.oop.model.maps.WorldMap;
 import agh.ics.oop.model.util.Genome;
