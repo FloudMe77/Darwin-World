@@ -10,10 +10,10 @@ import java.nio.file.Paths;
 import java.util.Optional;
 
 public class CsvConfigHandler {
-    private static final String DIRECTORY_PATH = System.getProperty("user.home") + "/savedConfigurations";
+    public static final String DIRECTORY_PATH = Paths.get(System.getProperty("user.dir"), "src", "main", "resources", "configs").toString();;
     private static final String HEADER = "height,width,startGrassAmount,energyFromGrass,everyDayGrassAmount,startAnimalAmount,"
             + "startEnergy,energyRequireToReproduce,offspringEnergyCost,dailyDeclineValue,minimalMutationAmount,"
-            + "maximalMutationAmount,genomeChange,genomeLength,worldMap";
+            + "maximalMutationAmount,genomeChange,genomeLength,worldMap,saveStatsToCsv";
     static {
         try {
             Files.createDirectories(Paths.get(DIRECTORY_PATH));
@@ -59,11 +59,13 @@ public class CsvConfigHandler {
                         () -> new IllegalArgumentException("Nie znaleziono takiej mapy")
 
                 );
+                boolean saveStatsToCsv = Boolean.parseBoolean(parts[15]);
+
 
                 return Optional.of(new Config(height, width, startGrassAmount, energyFromGrass, everyDayGrassAmount,
                         startAnimalAmount, startEnergy, energyRequireToReproduce, energyToReproduce,
                         dailyDeclineValue, minimalMutationAmount, maximalMutationAmount, genomeType,
-                        genomeLength, mapType));
+                        genomeLength, mapType, saveStatsToCsv));
             }
         }
 

@@ -31,7 +31,8 @@ public class main {
                 2,
                 GenomeType.FULL_RANDOM_GENOME_CHANGE,
                 5,
-                MapType.EARTH_MAP);
+                MapType.EARTH_MAP,
+                false);
         Simulation simulation = new Simulation(config);
         simulation.run();
 

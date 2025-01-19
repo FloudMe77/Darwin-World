@@ -18,12 +18,13 @@ public record Config(
         int maxMutationCount,
         GenomeType genomeType,
         int genomeLength,
-        MapType mapType
+        MapType mapType,
+        Boolean saveStatsToCsv
 ) {
     public String toCsvString() {
-        return String.format("%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%s,%d,%s",
+        return String.format("%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%s,%d,%s,%b",
                 height, width, startGrassAmount, energyFromGrass, everyDayGrassAmount, startAnimalAmount, startEnergy,
                 energyRequiredToReproduce, offspringEnergyCost, dailyDeclineValue, minMutationCount,
-                maxMutationCount, genomeType.getDisplayName(), genomeLength, mapType.getDisplayName());
+                maxMutationCount, genomeType.getDisplayName(), genomeLength, mapType.getDisplayName(), saveStatsToCsv);
     }
 }

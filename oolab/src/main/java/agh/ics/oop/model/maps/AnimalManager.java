@@ -7,12 +7,13 @@ import agh.ics.oop.model.Vector2d;
 import agh.ics.oop.model.util.newUtils.Genome;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public class AnimalManager {
     // Możliwe, że da sie lepiej niż copyonwritearraylist ale nie mam pomysłu a to skutecznie
     // eliminuje problem, że wątek UI iteruje po liście gdy wątek symulacji tą liste modyfikuje
-    private final Map<Vector2d, CopyOnWriteArrayList<Animal>> animals = new HashMap<>();
+    private final Map<Vector2d, CopyOnWriteArrayList<Animal>> animals = new ConcurrentHashMap<>();
     private final MapStatistics mapStatistics;
     private final GrassManager grassManager;
 

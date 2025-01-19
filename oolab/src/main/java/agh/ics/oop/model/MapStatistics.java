@@ -85,15 +85,4 @@ public class MapStatistics {
         totalEnergy+=feedVal;
         totalGrasAmount-=1;
     }
-
-    // only for debug
-    public void printStatistic(){
-        System.out.println();
-        System.out.println(getTotalAnimalAmount());
-        System.out.println(getTotalGrasAmount());
-        System.out.println(getDominantGenome());
-        System.out.println(getAverageEnergy());
-        System.out.println(getAverageChildrenAmount());
-        System.out.println(getAverageLifeTime());
-    }
 }

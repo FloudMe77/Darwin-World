@@ -5,6 +5,7 @@ import agh.ics.oop.model.*;
 import agh.ics.oop.model.MapObjects.Animal;
 import agh.ics.oop.model.maps.WorldMap;
 import agh.ics.oop.model.util.MapChangeListener;
+import agh.ics.oop.model.util.newUtils.StatisticsSaveHandler;
 import agh.ics.oop.view.GridDrawer;
 import agh.ics.oop.view.StatisticsLabels;
 import agh.ics.oop.view.StatisticsUpdater;
@@ -15,6 +16,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.*;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -68,7 +71,7 @@ public class SimulationPresenter implements MapChangeListener {
 
     private Optional<Animal> trackedAnimal = Optional.empty();
     private boolean isStopped = false;
-    private StatisticsUpdater statisticsUpdater;
+    private String simulationName;
 
     @FXML
     private BorderPane rootPane;
@@ -84,6 +87,8 @@ public class SimulationPresenter implements MapChangeListener {
 
     @FXML
     private void initialize() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH-mm-ss");
+        simulationName = LocalDateTime.now().format(formatter);
         resumeButton.disableProperty().bind(stopButton.disableProperty().not());
         highlightPreferredGrassButton.disableProperty().bind(stopButton.disableProperty().not());
         highlightGenomeButton.disableProperty().bind(stopButton.disableProperty().not());
@@ -94,7 +99,12 @@ public class SimulationPresenter implements MapChangeListener {
 
     @Override
     public void mapChanged(WorldMap worldMap, String message, int id) {
-        Platform.runLater(() -> gridDrawer.draw());
+        Platform.runLater(() -> {
+            gridDrawer.draw();
+            if (config.saveStatsToCsv()) {
+                StatisticsSaveHandler.addStatistics(mapStatistics, simulationName);
+            }
+        });
     }
 
     public void simulationStart(Config config) {
@@ -105,7 +115,7 @@ public class SimulationPresenter implements MapChangeListener {
         mapStatistics = worldMap.getMapStatistics();
         executor = Executors.newSingleThreadExecutor();
         executor.submit(simulation);
-        statisticsUpdater = new StatisticsUpdater(mapStatistics, statisticsLabels);
+        StatisticsUpdater statisticsUpdater = new StatisticsUpdater(mapStatistics, statisticsLabels);
 
         gridDrawer = new GridDrawer(rootPane, mapGrid, worldMap, config, this::simulationRunningStatus, statisticsUpdater);
         stopButton.disableProperty().bind(simulation.stoppedProperty());

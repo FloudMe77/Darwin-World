@@ -60,7 +60,7 @@
                 <Button text="Uruchom symulację" fx:id="runSimulationButton" onAction="#runSimulation" />
                 <Button text="Wczytaj Konfigurację" fx:id="loadConfigButton" onAction="#handleLoadConfig" />
                 <Button text="Zapisz Konfigurację" fx:id="saveConfigButton" onAction="#handleSaveConfig" />
-                <CheckBox text="Zapisuj statystyki do CSV" fx:id="saveStatsCheckBox" />
+                <CheckBox text="Zapisuj statystyki do CSV" fx:id="saveStatsCheckBox"/>
             </HBox>
         </VBox>
     </bottom>

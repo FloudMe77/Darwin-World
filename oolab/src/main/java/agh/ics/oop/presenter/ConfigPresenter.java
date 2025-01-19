@@ -97,7 +97,7 @@ public class ConfigPresenter {
     @FXML
     private void handleLoadConfig(ActionEvent actionEvent) {
         try {
-            File directory = new File(System.getProperty("user.home") + "/savedConfigurations");
+            File directory = new File(CsvConfigHandler.DIRECTORY_PATH);
             File[] files = directory.listFiles((dir, name) -> name.endsWith(".csv"));
             if (files == null || files.length == 0) {
                 ControlHelper.showAlert("Nie znaleziono zapisanych konfiguracji.");
@@ -115,7 +115,7 @@ public class ConfigPresenter {
                     ControlHelper.showAlert("Nie można odczytać tej konfiguracji");
                 }
             }
-        } catch (IOException e) { // ale w sumei w jakich przypadkach tak bedzie?
+        } catch (IOException e) {
             ControlHelper.showAlert("Nie można otworzyć tego pliku");
         }
     }
@@ -137,6 +137,8 @@ public class ConfigPresenter {
             int genomeLength = genomeLengthSpinner.getValue();
             String genomeChangeValue = genomeChangeBox.getValue();
             String worldMapValue = worldMapBox.getValue();
+            boolean saveStatsToCsv = saveStatsCheckBox.isSelected();
+
 
             GenomeType genomeType = GenomeType.fromDisplayName(genomeChangeValue).orElseThrow(
                     () -> new IllegalArgumentException("Nie znaleziono takiego genomu")
@@ -146,9 +148,9 @@ public class ConfigPresenter {
                     () -> new IllegalArgumentException("Nie znaleziono takiej mapy")
             );
 
-            Config config = new Config(width, height, startGrass, energyFromGrass, dailyGrass, startAnimals,
+            Config config = new Config(height, width, startGrass, energyFromGrass, dailyGrass, startAnimals,
                     startEnergy, energyToReproduce, energyForOffspring, dailyDecline, minMutations, maxMutations,
-                    genomeType, genomeLength, mapType);
+                    genomeType, genomeLength, mapType, saveStatsToCsv);
 
             ValidationResult validationResult = ConfigValidatorHelper.validate(config);
             // Walidacja configu
@@ -197,5 +199,6 @@ public class ConfigPresenter {
         genomeLengthSpinner.getValueFactory().setValue(config.genomeLength());
         genomeChangeBox.setValue(config.genomeType().getDisplayName());
         worldMapBox.setValue(config.mapType().getDisplayName());
+        saveStatsCheckBox.setSelected(config.saveStatsToCsv());
     }
 }
