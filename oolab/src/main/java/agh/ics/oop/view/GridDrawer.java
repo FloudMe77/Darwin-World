@@ -1,13 +1,15 @@
 package agh.ics.oop.view;
 
 import agh.ics.oop.model.Config;
-import agh.ics.oop.model.MapObjects.Animal;
+import agh.ics.oop.model.mapObjects.Animal;
 import agh.ics.oop.model.Vector2d;
 import agh.ics.oop.model.maps.OwlBearMap;
 import agh.ics.oop.model.maps.WorldMap;
 import agh.ics.oop.model.util.Boundary;
 import agh.ics.oop.model.util.MapType;
-import agh.ics.oop.model.util.newUtils.Genome;
+import agh.ics.oop.model.util.Genome;
+import agh.ics.oop.view.util.AnimalElementBox;
+import agh.ics.oop.view.util.OwlBearElementBox;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 

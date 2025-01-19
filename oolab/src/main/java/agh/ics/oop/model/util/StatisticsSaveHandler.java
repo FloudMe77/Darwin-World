@@ -1,4 +1,4 @@
-package agh.ics.oop.model.util.newUtils;
+package agh.ics.oop.model.util;
 
 import agh.ics.oop.model.MapStatistics;
 

@@ -1,4 +1,4 @@
-package agh.ics.oop.view;
+package agh.ics.oop.view.util;
 
 import javafx.scene.control.Label;
 

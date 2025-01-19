@@ -2,12 +2,12 @@ package agh.ics.oop.model.maps;
 
 import agh.ics.oop.model.Config;
 import agh.ics.oop.model.GenomeDirection;
-import agh.ics.oop.model.MapObjects.Animal;
+import agh.ics.oop.model.mapObjects.Animal;
 import agh.ics.oop.model.MapStatistics;
 import agh.ics.oop.model.Vector2d;
 import agh.ics.oop.model.util.ConsoleMapDisplay;
-import agh.ics.oop.model.util.newUtils.FullRandomGenomeChange;
-import agh.ics.oop.model.util.newUtils.Genome;
+import agh.ics.oop.model.util.FullRandomGenomeChange;
+import agh.ics.oop.model.util.Genome;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;

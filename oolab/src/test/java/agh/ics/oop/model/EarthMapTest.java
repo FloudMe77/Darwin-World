@@ -1,9 +1,9 @@
 package agh.ics.oop.model;
 
-import agh.ics.oop.model.MapObjects.Animal;
+import agh.ics.oop.model.mapObjects.Animal;
 import agh.ics.oop.model.maps.EarthMap;
 import agh.ics.oop.model.maps.WorldMap;
-import agh.ics.oop.model.util.newUtils.Genome;
+import agh.ics.oop.model.util.Genome;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;

@@ -1,9 +1,5 @@
 package agh.ics.oop.model.util;
 
-import agh.ics.oop.model.util.newUtils.FullRandomGenomeChange;
-import agh.ics.oop.model.util.newUtils.GenomeChange;
-import agh.ics.oop.model.util.newUtils.ReplacmentGenomeChange;
-
 import java.util.Optional;
 
 public enum GenomeType {

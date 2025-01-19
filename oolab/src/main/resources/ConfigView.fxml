@@ -31,7 +31,7 @@
             <Label text="Energia wymagana do rozmnażania:" GridPane.rowIndex="7" GridPane.columnIndex="0" />
             <Spinner fx:id="energyToReproduceSpinner" GridPane.rowIndex="7" GridPane.columnIndex="1" />
 
-            <Label text="Energia przekazywana potomstwu:" GridPane.rowIndex="8" GridPane.columnIndex="0" />
+            <Label text="Energia potrzebna do rozmnażania:" GridPane.rowIndex="8" GridPane.columnIndex="0" />
             <Spinner fx:id="energyForOffspringSpinner" GridPane.rowIndex="8" GridPane.columnIndex="1" />
 
             <Label text="Dzienne zużycie energii:" GridPane.rowIndex="9" GridPane.columnIndex="0" />

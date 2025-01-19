@@ -1,15 +1,13 @@
 package agh.ics.oop.model.maps;
 
 import agh.ics.oop.model.*;
-import agh.ics.oop.model.MapObjects.AbstractAnimal;
-import agh.ics.oop.model.MapObjects.Animal;
-import agh.ics.oop.model.MapObjects.OwlBear;
-import agh.ics.oop.model.util.newUtils.Genome;
+import agh.ics.oop.model.mapObjects.Animal;
+import agh.ics.oop.model.mapObjects.OwlBear;
+import agh.ics.oop.model.util.Genome;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 
 public class OwlBearMap extends EarthMap {
     private final OwlBear owlBear; // add final

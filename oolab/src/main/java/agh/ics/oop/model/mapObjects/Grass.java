@@ -1,4 +1,4 @@
-package agh.ics.oop.model.MapObjects;
+package agh.ics.oop.model.mapObjects;
 
 import agh.ics.oop.model.Vector2d;
 import agh.ics.oop.model.WorldElement;

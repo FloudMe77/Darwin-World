@@ -1,9 +1,5 @@
 package agh.ics.oop.model;
 
-import agh.ics.oop.model.MapObjects.AbstractAnimal;
-import agh.ics.oop.model.MapObjects.Animal;
-import agh.ics.oop.model.maps.WorldMap;
-
 public interface MoveValidator {
 
     /**

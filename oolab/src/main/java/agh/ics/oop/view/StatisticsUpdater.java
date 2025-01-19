@@ -1,7 +1,8 @@
 package agh.ics.oop.view;
 
-import agh.ics.oop.model.MapObjects.Animal;
+import agh.ics.oop.model.mapObjects.Animal;
 import agh.ics.oop.model.MapStatistics;
+import agh.ics.oop.view.util.StatisticsLabels;
 
 public class StatisticsUpdater {
     private final MapStatistics mapStatistics;

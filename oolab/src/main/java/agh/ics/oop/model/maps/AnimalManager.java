@@ -1,10 +1,10 @@
 package agh.ics.oop.model.maps;
 
 import agh.ics.oop.model.Config;
-import agh.ics.oop.model.MapObjects.Animal;
+import agh.ics.oop.model.mapObjects.Animal;
 import agh.ics.oop.model.MapStatistics;
 import agh.ics.oop.model.Vector2d;
-import agh.ics.oop.model.util.newUtils.Genome;
+import agh.ics.oop.model.util.Genome;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;

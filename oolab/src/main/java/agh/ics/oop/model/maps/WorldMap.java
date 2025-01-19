@@ -1,15 +1,11 @@
 package agh.ics.oop.model.maps;
 
 import agh.ics.oop.model.*;
-import agh.ics.oop.model.MapObjects.AbstractAnimal;
-import agh.ics.oop.model.MapObjects.Animal;
-import agh.ics.oop.model.MapObjects.Grass;
+import agh.ics.oop.model.mapObjects.Animal;
 import agh.ics.oop.model.util.Boundary;
 import agh.ics.oop.model.util.MapChangeListener;
-import agh.ics.oop.model.util.newUtils.Genome;
-import agh.ics.oop.model.util.newUtils.GenomeChange;
+import agh.ics.oop.model.util.Genome;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 

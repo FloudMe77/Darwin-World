@@ -1,7 +1,6 @@
-package agh.ics.oop.model.util.newUtils;
+package agh.ics.oop.model.util;
 
 import agh.ics.oop.model.GenomeDirection;
-import agh.ics.oop.model.Vector2d;
 
 import java.util.ArrayList;
 import java.util.Collections;

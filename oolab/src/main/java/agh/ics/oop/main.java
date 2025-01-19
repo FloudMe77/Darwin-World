@@ -1,12 +1,8 @@
 package agh.ics.oop;
 
 import agh.ics.oop.model.Config;
-import agh.ics.oop.model.MapStatistics;
-import agh.ics.oop.model.maps.EarthMap;
-import agh.ics.oop.model.util.ConsoleMapDisplay;
 import agh.ics.oop.model.util.GenomeType;
 import agh.ics.oop.model.util.MapType;
-import agh.ics.oop.model.util.newUtils.FullRandomGenomeChange;
 
 // do testowania
 public class main {

@@ -2,12 +2,12 @@ package agh.ics.oop.presenter;
 
 import agh.ics.oop.Simulation;
 import agh.ics.oop.model.*;
-import agh.ics.oop.model.MapObjects.Animal;
+import agh.ics.oop.model.mapObjects.Animal;
 import agh.ics.oop.model.maps.WorldMap;
 import agh.ics.oop.model.util.MapChangeListener;
-import agh.ics.oop.model.util.newUtils.StatisticsSaveHandler;
+import agh.ics.oop.model.util.StatisticsSaveHandler;
 import agh.ics.oop.view.GridDrawer;
-import agh.ics.oop.view.StatisticsLabels;
+import agh.ics.oop.view.util.StatisticsLabels;
 import agh.ics.oop.view.StatisticsUpdater;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;

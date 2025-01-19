@@ -1,8 +1,7 @@
-package agh.ics.oop.model.MapObjects;
+package agh.ics.oop.model.mapObjects;
 
 import agh.ics.oop.model.*;
-import agh.ics.oop.model.util.newUtils.Genome;
-import javafx.scene.paint.Color;
+import agh.ics.oop.model.util.Genome;
 
 import java.util.Random;
 

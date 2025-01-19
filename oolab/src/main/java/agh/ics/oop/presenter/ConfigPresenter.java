@@ -2,12 +2,12 @@ package agh.ics.oop.presenter;
 
 import agh.ics.oop.SimulationApp;
 import agh.ics.oop.model.Config;
+import agh.ics.oop.model.util.CsvConfigHandler;
 import agh.ics.oop.model.util.GenomeType;
 import agh.ics.oop.model.util.MapType;
-import agh.ics.oop.model.util.newUtils.*;
-import agh.ics.oop.view.ConfigValidatorHelper;
-import agh.ics.oop.view.ControlHelper;
-import agh.ics.oop.view.ValidationResult;
+import agh.ics.oop.view.util.ConfigValidatorHelper;
+import agh.ics.oop.view.util.ControlHelper;
+import agh.ics.oop.view.util.ValidationResult;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;

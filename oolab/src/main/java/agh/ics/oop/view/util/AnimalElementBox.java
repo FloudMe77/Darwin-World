@@ -1,6 +1,6 @@
-package agh.ics.oop.view;
+package agh.ics.oop.view.util;
 
-import agh.ics.oop.model.MapObjects.Animal;
+import agh.ics.oop.model.mapObjects.Animal;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
