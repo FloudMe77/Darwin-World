@@ -8,8 +8,6 @@ import java.util.Random;
 public abstract class AbstractAnimal implements WorldElement {
     protected MapDirection currentDirection = MapDirection.NORTH;
     protected Vector2d currentPosition;
-    protected int age = 0;
-    protected int eaten = 0;
     protected final Genome genome;
     protected int currentIndexOfGen;
 
@@ -34,25 +32,11 @@ public abstract class AbstractAnimal implements WorldElement {
         return genome;
     }
 
-    public int getAge() {
-        return age;
-    }
-
-    public void getOlder() {
-        age += 1;
-    }
 
     public Vector2d getPosition() {
         return currentPosition;
     }
 
-    public int getEaten() {
-        return eaten;
-    }
-
-    public void increaseEaten(){
-        eaten+=1;
-    }
 
     public MapDirection getCurrentDirection() {
         return currentDirection;
@@ -97,6 +81,7 @@ public abstract class AbstractAnimal implements WorldElement {
         currentIndexOfGen = (currentIndexOfGen + 1) % (genome.getGenLength());
         GenomeDirection genomeDirection = genome.getGenVal(currentIndexOfGen);
         currentDirection = currentDirection.getDirection(genomeDirection);
+
 
     }
 }

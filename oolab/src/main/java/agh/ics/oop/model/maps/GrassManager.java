@@ -23,6 +23,9 @@ public class GrassManager {
         if(newPositionOpt.isPresent()){
             var newPosition = newPositionOpt.get();
             var grass = new Grass(newPosition);
+            if(grasses.containsKey(newPosition)){
+                throw new RuntimeException("duplikaty w słowniku");
+            }
             grasses.put(newPosition,grass);
             return true;
         }

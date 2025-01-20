@@ -19,10 +19,10 @@ public class MapStatistics {
 
     public MapStatistics(BasicRectangularMap worldMap){
         this.worldMap = worldMap;
-        int minX = worldMap.getCurrentBounds().leftDownCornerMap().getX();
-        int minY = worldMap.getCurrentBounds().leftDownCornerMap().getY();
-        int maxX = worldMap.getCurrentBounds().rightUpperCornerMap().getX();
-        int maxY = worldMap.getCurrentBounds().rightUpperCornerMap().getY();
+        int minX = worldMap.getCurrentBounds().leftDownCornerMap().x();
+        int minY = worldMap.getCurrentBounds().leftDownCornerMap().y();
+        int maxX = worldMap.getCurrentBounds().rightUpperCornerMap().x();
+        int maxY = worldMap.getCurrentBounds().rightUpperCornerMap().y();
         totalFreeSpace = ((maxX - minX + 1) * (maxY - minY + 1));
     }
 
