@@ -1,10 +1,10 @@
 package agh.ics.oop.presenter;
 
 import agh.ics.oop.SimulationApp;
-import agh.ics.oop.model.Config;
+import agh.ics.oop.model.util.Config;
 import agh.ics.oop.model.util.CsvConfigHandler;
-import agh.ics.oop.model.util.GenomeType;
-import agh.ics.oop.model.util.MapType;
+import agh.ics.oop.model.genomes.GenomeType;
+import agh.ics.oop.model.maps.MapType;
 import agh.ics.oop.view.util.ConfigValidatorHelper;
 import agh.ics.oop.view.util.ControlHelper;
 import agh.ics.oop.view.util.ValidationResult;
@@ -166,10 +166,9 @@ public class ConfigPresenter {
         return Optional.empty();
     }
 
-
     private void setSpinnerValueFactories() {
-        heightSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(25, 100, 25));
-        widthSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(25, 100, 25));
+        heightSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(10, 80, 10));
+        widthSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(10, 80, 10));
         startGrassSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 1000, 20));
         energyFromGrassSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 100, 25));
         dailyGrassSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 100, 30));

@@ -1,9 +1,7 @@
-package agh.ics.oop.model;
+package agh.ics.oop.model.maps;
 
-import agh.ics.oop.model.mapObjects.Animal;
-import agh.ics.oop.model.maps.BasicRectangularMap;
-import agh.ics.oop.model.maps.WorldMap;
-import agh.ics.oop.model.util.Genome;
+import agh.ics.oop.model.MapObjects.Animal;
+import agh.ics.oop.model.genomes.Genome;
 
 public class MapStatistics {
     private final WorldMap worldMap;
@@ -19,10 +17,10 @@ public class MapStatistics {
 
     public MapStatistics(BasicRectangularMap worldMap){
         this.worldMap = worldMap;
-        int minX = worldMap.getCurrentBounds().leftDownCornerMap().getX();
-        int minY = worldMap.getCurrentBounds().leftDownCornerMap().getY();
-        int maxX = worldMap.getCurrentBounds().rightUpperCornerMap().getX();
-        int maxY = worldMap.getCurrentBounds().rightUpperCornerMap().getY();
+        int minX = worldMap.getCurrentBounds().leftDownCornerMap().x();
+        int minY = worldMap.getCurrentBounds().leftDownCornerMap().y();
+        int maxX = worldMap.getCurrentBounds().rightUpperCornerMap().x();
+        int maxY = worldMap.getCurrentBounds().rightUpperCornerMap().y();
         totalFreeSpace = ((maxX - minX + 1) * (maxY - minY + 1));
     }
 

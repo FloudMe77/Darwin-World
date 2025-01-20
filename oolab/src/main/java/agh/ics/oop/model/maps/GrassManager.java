@@ -1,7 +1,7 @@
 package agh.ics.oop.model.maps;
 
-import agh.ics.oop.model.mapObjects.Grass;
-import agh.ics.oop.model.Vector2d;
+import agh.ics.oop.model.MapObjects.Grass;
+import agh.ics.oop.model.MapObjects.Vector2d;
 import agh.ics.oop.model.util.Boundary;
 
 import java.util.HashMap;
@@ -23,6 +23,9 @@ public class GrassManager {
         if(newPositionOpt.isPresent()){
             var newPosition = newPositionOpt.get();
             var grass = new Grass(newPosition);
+            if(grasses.containsKey(newPosition)){
+                throw new RuntimeException("duplikaty w słowniku");
+            }
             grasses.put(newPosition,grass);
             return true;
         }

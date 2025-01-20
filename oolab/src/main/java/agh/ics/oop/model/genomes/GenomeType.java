@@ -1,4 +1,4 @@
-package agh.ics.oop.model.util;
+package agh.ics.oop.model.genomes;
 
 import java.util.Optional;
 

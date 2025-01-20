@@ -1,11 +1,13 @@
 package agh.ics.oop.model.maps;
 
-import agh.ics.oop.model.*;
-import agh.ics.oop.model.mapObjects.Animal;
+import agh.ics.oop.model.MapObjects.Animal;
+import agh.ics.oop.model.MapObjects.Vector2d;
+import agh.ics.oop.model.MapObjects.WorldElement;
 import agh.ics.oop.model.util.Boundary;
+import agh.ics.oop.model.util.Config;
 import agh.ics.oop.model.util.MapChangeListener;
 import agh.ics.oop.model.util.MapVisualizer;
-import agh.ics.oop.model.util.Genome;
+import agh.ics.oop.model.genomes.Genome;
 
 import java.util.*;
 import java.util.stream.Stream;
@@ -53,10 +55,6 @@ abstract public class BasicRectangularMap implements WorldMap {
         observers.remove(observer);
     }
 
-//    private void notifyMapStatistic(MapStatisticAction mapStatisticAction, int val){
-//        mapStatistics.updateStatistic(mapStatisticAction,val);
-//    }
-
     @Override
     public void place(Animal animal) {
         animalManager.addToAnimals(animal.getPosition(), animal);
@@ -100,12 +98,10 @@ abstract public class BasicRectangularMap implements WorldMap {
     public boolean isGrassAt(Vector2d position){
         return grassManager.isGrassAt(position);
     }
+
     @Override
     public void move(Animal animal, int dailyDeclineValue) {
-//        var oldPosition = animal.getPosition();
         animalManager.move(animal,dailyDeclineValue,this);
-
-//        notifyObservers("Przeniesiono Animal z " + oldPosition + " do " + animal.getPosition());
     }
 
     @Override
@@ -113,13 +109,11 @@ abstract public class BasicRectangularMap implements WorldMap {
         return position.follows(boundary.leftDownCornerMap()) && position.precedes(boundary.rightUpperCornerMap());
     }
 
-    // dziwne
     @Override
     public Vector2d getNewPosition(Vector2d oldPosition, Vector2d newPosition) {
         return newPosition;
     }
 
-    // dziwne
     @Override
     public MapDirection getNewMapDirection(Vector2d newPosition, MapDirection mapDirection) {
         return mapDirection;
@@ -133,9 +127,6 @@ abstract public class BasicRectangularMap implements WorldMap {
         ).toList();
     }
 
-//    public WorldMap getValidator(AbstractAnimal animal) {
-//        return this;
-//    };
 
     @Override
     public String toString() {
@@ -164,9 +155,9 @@ abstract public class BasicRectangularMap implements WorldMap {
         animalManager.feedAnimals(feedVal);
     }
 
-    public List<Animal> reproduceAnimals(Config config){
+    public void reproduceAnimals(Config config){
         notifyObservers("utworzono nowe zwierzeta");
-        return animalManager.reproduceAnimals(config);
+        animalManager.reproduceAnimals(config);
     }
 
     public void removeDepthAnimals(){

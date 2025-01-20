@@ -1,13 +1,13 @@
 package agh.ics.oop;
 
-import agh.ics.oop.model.Config;
-import agh.ics.oop.model.mapObjects.Animal;
-import agh.ics.oop.model.Vector2d;
+import agh.ics.oop.model.util.Config;
+import agh.ics.oop.model.MapObjects.Animal;
+import agh.ics.oop.model.MapObjects.Vector2d;
 
-import agh.ics.oop.model.IncorrectPositionException;
+import agh.ics.oop.model.MapObjects.IncorrectPositionException;
 import agh.ics.oop.model.maps.WorldMap;
 import agh.ics.oop.model.util.RandomPositionGenerator;
-import agh.ics.oop.model.util.Genome;
+import agh.ics.oop.model.genomes.Genome;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 
@@ -46,11 +46,7 @@ public class Simulation implements Runnable {
 
 
     public void run() {
-        // duży for tylko na potrzeby testów
-        // najpierw zwierzęta się poruszają
         setStopped(false);
-
-        // tutaj rzecz jasna refactor musi byc
         try {
             while (running) {
                 synchronized (pauseLock) {
@@ -82,7 +78,6 @@ public class Simulation implements Runnable {
 
 
         } catch (InterruptedException e) {
-            System.out.println("cos");
             Thread.currentThread().interrupt();
         }
     }
@@ -103,9 +98,9 @@ public class Simulation implements Runnable {
         this.setStopped(true);
         synchronized (pauseLock) {
             try {
-                pauseLock.wait(); // Wprowadzenie pauzy
+                pauseLock.wait();
             } catch (InterruptedException e) {
-                Thread.currentThread().interrupt(); // Reakcja na przerwanie w czasie pauzy
+                Thread.currentThread().interrupt();
             }
         }
     }

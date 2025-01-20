@@ -1,15 +1,11 @@
-package agh.ics.oop.model.util;
-
-import agh.ics.oop.model.maps.EarthMap;
-import agh.ics.oop.model.maps.OwlBearMap;
-import agh.ics.oop.model.maps.WorldMap;
+package agh.ics.oop.model.maps;
 
 import java.util.Optional;
 import java.util.function.BiFunction;
 
 public enum MapType {
-    EARTH_MAP("Kula Ziemska", (width, height) -> new EarthMap(width ,height)),
-    OWLBEAR_MAP("Dziki sowoniedźwiedź", (width, height) -> new OwlBearMap(width, height));
+    EARTH_MAP("Kula Ziemska", EarthMap::new),
+    OWLBEAR_MAP("Dziki sowoniedźwiedź", OwlBearMap::new);
 
     private final String displayName;
     private final BiFunction<Integer, Integer, WorldMap> mapCreator;

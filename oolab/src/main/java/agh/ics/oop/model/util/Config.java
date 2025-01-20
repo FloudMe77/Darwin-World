@@ -1,7 +1,7 @@
-package agh.ics.oop.model;
+package agh.ics.oop.model.util;
 
-import agh.ics.oop.model.util.GenomeType;
-import agh.ics.oop.model.util.MapType;
+import agh.ics.oop.model.genomes.GenomeType;
+import agh.ics.oop.model.maps.MapType;
 
 public record Config(
         int height,

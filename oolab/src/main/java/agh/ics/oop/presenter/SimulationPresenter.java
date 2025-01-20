@@ -1,9 +1,10 @@
 package agh.ics.oop.presenter;
 
 import agh.ics.oop.Simulation;
-import agh.ics.oop.model.*;
-import agh.ics.oop.model.mapObjects.Animal;
+import agh.ics.oop.model.MapObjects.Animal;
+import agh.ics.oop.model.maps.MapStatistics;
 import agh.ics.oop.model.maps.WorldMap;
+import agh.ics.oop.model.util.Config;
 import agh.ics.oop.model.util.MapChangeListener;
 import agh.ics.oop.model.util.StatisticsSaveHandler;
 import agh.ics.oop.view.GridDrawer;

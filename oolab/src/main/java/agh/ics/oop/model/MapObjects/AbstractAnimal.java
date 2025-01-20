@@ -1,15 +1,14 @@
-package agh.ics.oop.model.mapObjects;
+package agh.ics.oop.model.MapObjects;
 
-import agh.ics.oop.model.*;
-import agh.ics.oop.model.util.Genome;
+import agh.ics.oop.model.genomes.Genome;
+import agh.ics.oop.model.genomes.GenomeDirection;
+import agh.ics.oop.model.maps.MapDirection;
 
 import java.util.Random;
 
 public abstract class AbstractAnimal implements WorldElement {
     protected MapDirection currentDirection = MapDirection.NORTH;
     protected Vector2d currentPosition;
-    protected int age = 0;
-    protected int eaten = 0;
     protected final Genome genome;
     protected int currentIndexOfGen;
 
@@ -25,34 +24,15 @@ public abstract class AbstractAnimal implements WorldElement {
         currentDirection = currentDirection.getDirection(genomeDirection);
     }
 
-
-    public Vector2d getCurrentPosition() {
-        return currentPosition;
-    }
-
     public Genome getGenome() {
         return genome;
     }
 
-    public int getAge() {
-        return age;
-    }
-
-    public void getOlder() {
-        age += 1;
-    }
 
     public Vector2d getPosition() {
         return currentPosition;
     }
 
-    public int getEaten() {
-        return eaten;
-    }
-
-    public void increaseEaten(){
-        eaten+=1;
-    }
 
     public MapDirection getCurrentDirection() {
         return currentDirection;
@@ -97,6 +77,7 @@ public abstract class AbstractAnimal implements WorldElement {
         currentIndexOfGen = (currentIndexOfGen + 1) % (genome.getGenLength());
         GenomeDirection genomeDirection = genome.getGenVal(currentIndexOfGen);
         currentDirection = currentDirection.getDirection(genomeDirection);
+
 
     }
 }

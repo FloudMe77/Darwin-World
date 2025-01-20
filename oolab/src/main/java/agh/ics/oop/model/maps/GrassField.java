@@ -1,6 +1,6 @@
 package agh.ics.oop.model.maps;
 
-import agh.ics.oop.model.Vector2d;
+import agh.ics.oop.model.MapObjects.Vector2d;
 import agh.ics.oop.model.util.Boundary;
 
 import java.util.ArrayList;
@@ -35,8 +35,8 @@ public class GrassField {
     private List<Vector2d> getAllPositionBetween(Vector2d lowerLeft, Vector2d upperRight){
         List<Vector2d> allPossiblePositions = new ArrayList<>();
 
-        for (int x = lowerLeft.getX(); x < upperRight.getX()+1; x++) {
-            for (int y = lowerLeft.getY(); y < upperRight.getY()+1; y++) {
+        for (int x = lowerLeft.x(); x < upperRight.x()+1; x++) {
+            for (int y = lowerLeft.y(); y < upperRight.y()+1; y++) {
                 allPossiblePositions.add(new Vector2d(x, y));
             }
         }
@@ -69,9 +69,15 @@ public class GrassField {
 
     public void addGrassPosition(Vector2d position){
         if(position.follows(lowerLeftEquator) && position.precedes(upperRightEquator)){
+            if(equator.contains(position)){
+                throw new IllegalArgumentException();
+            }
             equator.add(position);
         }
         else{
+            if(beyondEquator.contains(position)){
+                throw new IllegalArgumentException();
+            }
             beyondEquator.add(position);
         }
     }

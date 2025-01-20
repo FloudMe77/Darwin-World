@@ -1,6 +1,7 @@
 package agh.ics.oop.model.util;
 
-import agh.ics.oop.model.Config;
+import agh.ics.oop.model.genomes.GenomeType;
+import agh.ics.oop.model.maps.MapType;
 
 import java.io.*;
 import java.nio.file.Files;

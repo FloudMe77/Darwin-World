@@ -1,15 +1,15 @@
 package agh.ics.oop.view.util;
 
-import agh.ics.oop.model.Config;
+import agh.ics.oop.model.util.Config;
 
 // tu coś nie do końca dziala, trzeba potestować dalej
 public class ConfigValidatorHelper {
     public static ValidationResult validate(Config config) {
-        if (config.height() < 25 || config.height() > 100) {
+        if (config.height() < 10 || config.height() > 80) {
             return new ValidationResult(false, "Wysokość mapy musi być w zakresie 25-100");
         }
 
-        if (config.width() < 25 || config.width() > 100) {
+        if (config.width() < 10 || config.width() > 80) {
             return new ValidationResult(false, "Szerokość mapy musi być w zakresie 25-100");
         }
 

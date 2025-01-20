@@ -1,8 +1,8 @@
 package agh.ics.oop;
 
-import agh.ics.oop.model.Config;
-import agh.ics.oop.model.util.GenomeType;
-import agh.ics.oop.model.util.MapType;
+import agh.ics.oop.model.util.Config;
+import agh.ics.oop.model.genomes.GenomeType;
+import agh.ics.oop.model.maps.MapType;
 
 // do testowania
 public class main {
@@ -12,23 +12,8 @@ public class main {
 //        MapStatistics statistics = map.getMapStatistics();
 //
 //        map.addObserver(new ConsoleMapDisplay());
-
-        Config config = new Config(10,
-                10,
-                30,
-                10,
-                2,
-                20,
-                10,
-                5,
-                2,
-                4,
-                0,
-                2,
-                GenomeType.FULL_RANDOM_GENOME_CHANGE,
-                5,
-                MapType.EARTH_MAP,
-                false);
+        System.out.println("działam");
+        Config config = new Config(100,100,20,100,30,70,50,1,1,1,1,3,GenomeType.FULL_RANDOM_GENOME_CHANGE,8,MapType.EARTH_MAP,false);
         Simulation simulation = new Simulation(config);
         simulation.run();
 

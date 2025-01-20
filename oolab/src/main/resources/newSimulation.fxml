@@ -40,7 +40,7 @@
     </left>
 
     <center>
-        <GridPane fx:id="mapGrid" gridLinesVisible="true" BorderPane.alignment="CENTER"/>
+        <GridPane prefWidth="850" prefHeight="550" maxWidth="850" maxHeight="550" fx:id="mapGrid" BorderPane.alignment="CENTER"/>
     </center>
 
     <bottom>

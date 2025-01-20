@@ -1,6 +1,4 @@
-package agh.ics.oop.model.util;
-
-import agh.ics.oop.model.GenomeDirection;
+package agh.ics.oop.model.genomes;
 
 import java.util.*;
 

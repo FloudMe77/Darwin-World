@@ -1,6 +1,6 @@
 package agh.ics.oop.model.util;
 
-import agh.ics.oop.model.Vector2d;
+import agh.ics.oop.model.MapObjects.Vector2d;
 
 import java.util.*;
 
@@ -22,8 +22,8 @@ public class RandomPositionGenerator implements Iterable<Vector2d> {
     private List<Vector2d> findAllPositions() {
         List<Vector2d> allPossiblePositions = new ArrayList<>();
 
-        for (int x = lowerLeft.getX(); x < upperRight.getX()+1; x++) {
-            for (int y = lowerLeft.getY(); y < upperRight.getY()+1; y++) {
+        for (int x = lowerLeft.x(); x < upperRight.x()+1; x++) {
+            for (int y = lowerLeft.y(); y < upperRight.y()+1; y++) {
                 allPossiblePositions.add(new Vector2d(x, y));
             }
         }

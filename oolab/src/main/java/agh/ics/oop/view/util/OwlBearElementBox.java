@@ -5,7 +5,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 
 public class OwlBearElementBox extends VBox {
-    public OwlBearElementBox(int cellWidth, int cellHeight) {
+    public OwlBearElementBox(double cellWidth, double cellHeight) {
         this.setPrefSize(cellWidth, cellHeight);
         this.setAlignment(javafx.geometry.Pos.CENTER);
 

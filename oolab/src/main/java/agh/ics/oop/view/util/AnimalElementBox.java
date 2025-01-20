@@ -1,6 +1,6 @@
 package agh.ics.oop.view.util;
 
-import agh.ics.oop.model.mapObjects.Animal;
+import agh.ics.oop.model.MapObjects.Animal;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
@@ -9,14 +9,14 @@ public class AnimalElementBox extends VBox {
     private final Animal animal;
     private final int initialEnergy;
 
-    public AnimalElementBox(Animal animal, int cellWidth, int cellHeight, int initialEnergy) {
+    public AnimalElementBox(Animal animal, double cellWidth, double cellHeight, int initialEnergy) {
         this.animal = animal;
         this.initialEnergy = initialEnergy;
         this.setPrefSize(cellWidth, cellHeight);
         this.setAlignment(javafx.geometry.Pos.CENTER);
 
         Circle circle = new Circle();
-        circle.setRadius(Math.min(cellWidth/2, cellHeight/2));
+        circle.setRadius(Math.min(cellWidth/2.2, cellHeight/2.2));
         circle.setFill(getColor());
         this.getChildren().addAll(circle);
     }

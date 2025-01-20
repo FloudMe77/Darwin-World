@@ -1,4 +1,4 @@
-package agh.ics.oop.model;
+package agh.ics.oop.model.MapObjects;
 
 public interface WorldElement {
 
