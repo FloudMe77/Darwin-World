@@ -23,11 +23,6 @@ public abstract class AbstractAnimal implements WorldElement {
         currentDirection = currentDirection.getDirection(genomeDirection);
     }
 
-
-    public Vector2d getCurrentPosition() {
-        return currentPosition;
-    }
-
     public Genome getGenome() {
         return genome;
     }
