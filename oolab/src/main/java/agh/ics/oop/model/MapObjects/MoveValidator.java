@@ -1,4 +1,6 @@
-package agh.ics.oop.model;
+package agh.ics.oop.model.MapObjects;
+
+import agh.ics.oop.model.maps.MapDirection;
 
 public interface MoveValidator {
 

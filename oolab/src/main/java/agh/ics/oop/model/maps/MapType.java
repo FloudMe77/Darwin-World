@@ -1,8 +1,4 @@
-package agh.ics.oop.model.util;
-
-import agh.ics.oop.model.maps.EarthMap;
-import agh.ics.oop.model.maps.OwlBearMap;
-import agh.ics.oop.model.maps.WorldMap;
+package agh.ics.oop.model.maps;
 
 import java.util.Optional;
 import java.util.function.BiFunction;

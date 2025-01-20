@@ -1,6 +1,6 @@
 package agh.ics.oop.view.util;
 
-import agh.ics.oop.model.Config;
+import agh.ics.oop.model.util.Config;
 
 // tu coś nie do końca dziala, trzeba potestować dalej
 public class ConfigValidatorHelper {

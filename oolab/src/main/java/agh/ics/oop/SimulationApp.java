@@ -1,6 +1,6 @@
 package agh.ics.oop;
 
-import agh.ics.oop.model.Config;
+import agh.ics.oop.model.util.Config;
 import agh.ics.oop.presenter.ConfigPresenter;
 import agh.ics.oop.presenter.SimulationPresenter;
 import javafx.application.Application;

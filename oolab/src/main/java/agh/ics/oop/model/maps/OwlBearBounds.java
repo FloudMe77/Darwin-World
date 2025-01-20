@@ -1,8 +1,7 @@
 package agh.ics.oop.model.maps;
 
-import agh.ics.oop.model.MapDirection;
-import agh.ics.oop.model.MoveValidator;
-import agh.ics.oop.model.Vector2d;
+import agh.ics.oop.model.MapObjects.MoveValidator;
+import agh.ics.oop.model.MapObjects.Vector2d;
 import agh.ics.oop.model.util.Boundary;
 
 public class OwlBearBounds implements MoveValidator {

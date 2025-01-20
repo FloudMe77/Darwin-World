@@ -1,4 +1,4 @@
-package agh.ics.oop.model;
+package agh.ics.oop.model.MapObjects;
 
 public class IncorrectPositionException extends Exception{
     private final Vector2d position;

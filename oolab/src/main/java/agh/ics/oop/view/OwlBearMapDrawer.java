@@ -1,9 +1,8 @@
 package agh.ics.oop.view;
 
-import agh.ics.oop.model.Vector2d;
+import agh.ics.oop.model.MapObjects.Vector2d;
 import agh.ics.oop.model.maps.OwlBearBounds;
 import agh.ics.oop.model.maps.OwlBearMap;
-import agh.ics.oop.model.maps.WorldMap;
 import agh.ics.oop.view.util.OwlBearElementBox;
 import javafx.scene.layout.Pane;
 

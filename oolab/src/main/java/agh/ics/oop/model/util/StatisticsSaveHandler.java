@@ -1,6 +1,6 @@
 package agh.ics.oop.model.util;
 
-import agh.ics.oop.model.MapStatistics;
+import agh.ics.oop.model.maps.MapStatistics;
 
 import java.io.File;
 import java.io.FileWriter;

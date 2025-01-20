@@ -1,4 +1,7 @@
-package agh.ics.oop.model;
+package agh.ics.oop.model.maps;
+
+import agh.ics.oop.model.MapObjects.Vector2d;
+import agh.ics.oop.model.genomes.GenomeDirection;
 
 public enum MapDirection {
     NORTH(new Vector2d(0, 1)),

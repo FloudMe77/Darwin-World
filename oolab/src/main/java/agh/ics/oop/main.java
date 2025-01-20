@@ -1,8 +1,8 @@
 package agh.ics.oop;
 
-import agh.ics.oop.model.Config;
-import agh.ics.oop.model.util.GenomeType;
-import agh.ics.oop.model.util.MapType;
+import agh.ics.oop.model.util.Config;
+import agh.ics.oop.model.genomes.GenomeType;
+import agh.ics.oop.model.maps.MapType;
 
 // do testowania
 public class main {

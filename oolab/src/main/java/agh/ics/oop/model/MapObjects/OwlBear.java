@@ -1,7 +1,6 @@
 package agh.ics.oop.model.MapObjects;
 
-import agh.ics.oop.model.Vector2d;
-import agh.ics.oop.model.util.Genome;
+import agh.ics.oop.model.genomes.Genome;
 
 public class OwlBear extends AbstractAnimal {
 

@@ -1,11 +1,13 @@
 package agh.ics.oop.model.maps;
 
-import agh.ics.oop.model.*;
 import agh.ics.oop.model.MapObjects.Animal;
+import agh.ics.oop.model.MapObjects.Vector2d;
+import agh.ics.oop.model.MapObjects.WorldElement;
 import agh.ics.oop.model.util.Boundary;
+import agh.ics.oop.model.util.Config;
 import agh.ics.oop.model.util.MapChangeListener;
 import agh.ics.oop.model.util.MapVisualizer;
-import agh.ics.oop.model.util.Genome;
+import agh.ics.oop.model.genomes.Genome;
 
 import java.util.*;
 import java.util.stream.Stream;

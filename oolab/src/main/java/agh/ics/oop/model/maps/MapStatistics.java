@@ -1,9 +1,7 @@
-package agh.ics.oop.model;
+package agh.ics.oop.model.maps;
 
 import agh.ics.oop.model.MapObjects.Animal;
-import agh.ics.oop.model.maps.BasicRectangularMap;
-import agh.ics.oop.model.maps.WorldMap;
-import agh.ics.oop.model.util.Genome;
+import agh.ics.oop.model.genomes.Genome;
 
 public class MapStatistics {
     private final WorldMap worldMap;

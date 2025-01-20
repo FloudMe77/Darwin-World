@@ -1,7 +1,8 @@
 package agh.ics.oop.model.MapObjects;
 
-import agh.ics.oop.model.*;
-import agh.ics.oop.model.util.Genome;
+import agh.ics.oop.model.genomes.Genome;
+import agh.ics.oop.model.genomes.GenomeDirection;
+import agh.ics.oop.model.maps.MapDirection;
 
 import java.util.Random;
 

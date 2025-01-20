@@ -1,13 +1,13 @@
 package agh.ics.oop;
 
-import agh.ics.oop.model.Config;
+import agh.ics.oop.model.util.Config;
 import agh.ics.oop.model.MapObjects.Animal;
-import agh.ics.oop.model.Vector2d;
+import agh.ics.oop.model.MapObjects.Vector2d;
 
-import agh.ics.oop.model.IncorrectPositionException;
+import agh.ics.oop.model.MapObjects.IncorrectPositionException;
 import agh.ics.oop.model.maps.WorldMap;
 import agh.ics.oop.model.util.RandomPositionGenerator;
-import agh.ics.oop.model.util.Genome;
+import agh.ics.oop.model.genomes.Genome;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 
