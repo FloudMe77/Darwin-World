@@ -10,15 +10,14 @@ import java.util.Random;
 
 public class Animal extends AbstractAnimal {
     private int energy;
-    private int childrenAmount = 0;
     private int dayOfDeath;
-    private final int startEnergy;
+    private int age = 0;
+    private int eaten = 0;
     private final List<Animal> kids = new ArrayList<>();
 
     public Animal(Vector2d position, Genome genome, int startEnergy) {
         super(position, genome);
         this.energy = startEnergy;
-        this.startEnergy = startEnergy;
     }
 
     public Animal reproduce(Animal other, GenomeChange genomeChange, int minMutationAmount, int maxMutationAmount, int energyToReproduce) {
@@ -26,9 +25,6 @@ public class Animal extends AbstractAnimal {
         var newGenList = shuffleGenomes(other);
         // dokonuje mutacji
         genomeChange.changeGenome(newGenList, minMutationAmount, maxMutationAmount);
-        // zwiększam liczniki dzieci zwierząt
-        increaseChildrenAmount();
-        other.increaseChildrenAmount();
         // tworze nowego zwierzaka
         var child = new Animal(currentPosition, new Genome(newGenList), 2 * energyToReproduce);
         // dodaje zwierzaka do list
@@ -40,11 +36,11 @@ public class Animal extends AbstractAnimal {
         return child;
     }
 
-    public ArrayList<GenomeDirection> shuffleGenomes(Animal other) {
+    private ArrayList<GenomeDirection> shuffleGenomes(Animal other) {
         Random random = new Random();
         int otherEnergy = other.getEnergy();
         int genomeLen = getGenome().getGenLength();
-        // Deklaracja zmiennych przed if/else
+
         Animal betterAnimal;
         Animal worseAnimal;
 
@@ -62,9 +58,7 @@ public class Animal extends AbstractAnimal {
         var newGenList = new ArrayList<GenomeDirection>();
 
         // Obliczenie indeksu podziału
-        int divideIndex = (int) Math.floor(
-                Math.min(genomeLen * (betterAnimal.getEnergy() / (double) (betterAnimal.getEnergy() + worseAnimal.getEnergy())), genomeLen)
-        );
+        int divideIndex = (int) (genomeLen * ((double) betterAnimal.getEnergy() / (betterAnimal.getEnergy() + worseAnimal.getEnergy())));
 
         // Dodawanie genów w zależności od dominującej strony
         if (dominantSide == 0) {
@@ -81,19 +75,15 @@ public class Animal extends AbstractAnimal {
     }
 
     public int getChildrenAmount() {
-        return childrenAmount;
+        return kids.size();
     }
 
-    public void addChild(Animal child) {
+    private void addChild(Animal child) {
         kids.add(child);
     }
 
     public int getDayOfDeath() {
         return dayOfDeath;
-    }
-
-    public void increaseChildrenAmount() {
-        childrenAmount++;
     }
 
     public int getEnergy() {
@@ -103,11 +93,13 @@ public class Animal extends AbstractAnimal {
     public void die() {
         dayOfDeath = age;
     }
-    public List<Animal> getKids(){
-        return kids;
+
+    public List<Animal> getKids() {
+        return new ArrayList<>(kids);
     }
 
     public void eat(int feedVal) {
+        eaten+=1;
         energy += feedVal;
     }
 
@@ -118,7 +110,8 @@ public class Animal extends AbstractAnimal {
     public int getDescendantsAmount(){
         return getDescendants().size();
     }
-    protected List<Animal> getDescendants(){
+
+    private List<Animal> getDescendants(){
         List<Animal> descendants = new ArrayList<>();
         for(var child : kids){
             descendants.add(child);
@@ -129,4 +122,17 @@ public class Animal extends AbstractAnimal {
                 .toList();
     }
 
+    public int getAge() {
+        return age;
+    }
+
+    public int getEaten() {
+        return eaten;
+    }
+
+    @Override
+    public void move(MoveValidator validator){
+        super.move(validator);
+        age+=1;
+    }
 }

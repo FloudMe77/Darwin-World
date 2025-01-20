@@ -70,7 +70,6 @@ public class OwlBearMap extends EarthMap {
         List<Animal> animalsAtPosition = animalManager.getAnimals(owlBear.getPosition());
         if (animalsAtPosition != null) {
             for (var animal : new ArrayList<>(animalsAtPosition)) {
-                // można by to pominąc, jakby animals to po prostu tablica animali
                 animal.die();
                 animalManager.removeFromAnimals(animal.getPosition(), animal);
                 mapStatistics.deathAnimalUpdate(animal);

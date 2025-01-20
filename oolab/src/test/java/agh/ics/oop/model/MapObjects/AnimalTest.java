@@ -28,17 +28,9 @@ class AnimalTest {
         assertEquals(10,animal.getEnergy());
         assertEquals(0,animal.getChildrenAmount());
         assertEquals(new ArrayList<>(),animal.getKids());
+        assertEquals(0,animal.getEaten());
     }
 
-//    @Test
-//    void dieAnimalTest(){
-//        // given
-//        var animal = new Animal(new Vector2d(2,2), new Genome(5),10);
-//        // when
-//        animal.getOlder();
-//        assertFalse(animal.isAlive());
-//        assertEquals(1,animal.getDayOfDeath());
-//    }
 
     @Test
     void reproduceAnimalTest(){
@@ -124,9 +116,12 @@ class AnimalTest {
         } catch (IncorrectPositionException e) {
             System.out.println("Uwaga: " + e.getMessage());
         }
-        Animal child = map.reproduceAnimals(config).getFirst();
+        map.reproduceAnimals(config);
+        Animal child = animal1.getKids().getFirst();
+        System.out.println(animal1.getKids());
 
-        //then
+
+                //then
         assertEquals(81, animal1.getEnergy());
         assertEquals(80, animal2.getEnergy());
         assertEquals(40, child.getEnergy());
@@ -136,20 +131,20 @@ class AnimalTest {
         assertEquals(1, animal1.getChildrenAmount());
         assertEquals(1, animal2.getChildrenAmount());
 
+        assertEquals(1, animal1.getDescendantsAmount());
+        assertEquals(1, animal2.getDescendantsAmount());
+
 
         //when
+        System.out.println(animal1.getEnergy()+ " "+ animal2.getEnergy() + " "+ child.getEnergy());
         for (int i = 0; i < 5; i++) {
-            animal1.reduceEnergy(10);
-            animal1.getOlder();
-            animal2.reduceEnergy(10);
-            animal2.getOlder();
-            child.reduceEnergy(10);
-            child.getOlder();
+            map.moveAllAnimals(10);
         }
+
+
         map.removeDepthAnimals();
 
         //then
-        System.out.println(child.getEnergy());
         assertEquals(6, animal1.getAge());
         assertEquals(5, animal2.getAge());
         assertEquals(5, child.getDayOfDeath());
@@ -162,10 +157,8 @@ class AnimalTest {
         }
 
         map.feedAnimals(20);
-        System.out.println(map );
         //then
         assertEquals(51, animal1.getEnergy());
-        assertEquals(30, animal2.getEnergy());
-
+        assertEquals(50, animal2.getEnergy());
     }
 }

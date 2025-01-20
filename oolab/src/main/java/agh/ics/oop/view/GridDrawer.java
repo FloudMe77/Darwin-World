@@ -106,8 +106,8 @@ public class GridDrawer {
         Vector2d lowerLeft = preferredArea.leftDownCornerMap();
         Vector2d upperRight = preferredArea.rightUpperCornerMap();
 
-        for (int x = lowerLeft.getX(); x <= upperRight.getX(); x++) {
-            for (int y = lowerLeft.getY(); y <= upperRight.getY(); y++) {
+        for (int x = lowerLeft.x(); x <= upperRight.x(); x++) {
+            for (int y = lowerLeft.y(); y <= upperRight.y(); y++) {
                 Vector2d thisPosition = new Vector2d(x, y);
                 Pane cell = gridCells.get(thisPosition);
 
@@ -143,10 +143,10 @@ public class GridDrawer {
 
     private void initializeMapSize() {
         var bounds = map.getCurrentBounds();
-        int minX = bounds.leftDownCornerMap().getX();
-        int minY = bounds.leftDownCornerMap().getY();
-        int maxX = bounds.rightUpperCornerMap().getX();
-        int maxY = bounds.rightUpperCornerMap().getY();
+        int minX = bounds.leftDownCornerMap().x();
+        int minY = bounds.leftDownCornerMap().y();
+        int maxX = bounds.rightUpperCornerMap().x();
+        int maxY = bounds.rightUpperCornerMap().y();
         mapWidth = maxX - minX + 1;
         mapHeight = maxY - minY + 1;
     }
