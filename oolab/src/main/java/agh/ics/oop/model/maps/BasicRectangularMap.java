@@ -113,13 +113,11 @@ abstract public class BasicRectangularMap implements WorldMap {
         return position.follows(boundary.leftDownCornerMap()) && position.precedes(boundary.rightUpperCornerMap());
     }
 
-    // dziwne
     @Override
     public Vector2d getNewPosition(Vector2d oldPosition, Vector2d newPosition) {
         return newPosition;
     }
 
-    // dziwne
     @Override
     public MapDirection getNewMapDirection(Vector2d newPosition, MapDirection mapDirection) {
         return mapDirection;
@@ -132,10 +130,6 @@ abstract public class BasicRectangularMap implements WorldMap {
                 grassManager.getElements().stream()
         ).toList();
     }
-
-//    public WorldMap getValidator(AbstractAnimal animal) {
-//        return this;
-//    };
 
     @Override
     public String toString() {

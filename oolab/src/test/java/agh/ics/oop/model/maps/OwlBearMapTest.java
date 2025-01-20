@@ -5,9 +5,7 @@ import agh.ics.oop.model.GenomeDirection;
 import agh.ics.oop.model.MapObjects.Animal;
 import agh.ics.oop.model.MapStatistics;
 import agh.ics.oop.model.Vector2d;
-import agh.ics.oop.model.util.ConsoleMapDisplay;
-import agh.ics.oop.model.util.FullRandomGenomeChange;
-import agh.ics.oop.model.util.Genome;
+import agh.ics.oop.model.util.*;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -20,68 +18,36 @@ class OwlBearMapTest {
     @Test
     void moveTest(){
         var map = new OwlBearMap(10,10,new Genome(new ArrayList<>(List.of(GenomeDirection.ZERO))));
-        MapStatistics statistics = map.getMapStatistics();
-
+        int maxY = map.getOwlBearMap().getCurrentBounds().rightUpperCornerMap().getY();
+        int x = map.getOwlBear().getPosition().getX();
         map.addObserver(new ConsoleMapDisplay());
 
-        Config config = new Config(10,
-                10,
-                0,
-                10,
-                0,
-                0,
-                10,
-                5,
-                2,
-                4,
-                0,
-                2,
-                new FullRandomGenomeChange(),
-                5,
-                map);
-
-        for(int i=0 ;i<10;i++){
+        for(int i=0; i<10; i++){
             map.moveAllAnimals(0);
-            System.out.println(map);
+//            System.out.println(map);
         }
-        assertTrue(map.isOccupied(new Vector2d(0,3)));
+        assertTrue(map.isOccupied(new Vector2d(x, maxY)));
     }
     @Test
     void eatTest(){
         var map = new OwlBearMap(10,10,new Genome(new ArrayList<>(List.of(GenomeDirection.ZERO))));
-        MapStatistics statistics = map.getMapStatistics();
-        var animal1 = new Animal(new Vector2d(0,2), new Genome(new ArrayList<>(List.of(GenomeDirection.ZERO, GenomeDirection.FOUR))),10);
-        var animal2 = new Animal(new Vector2d(0,2), new Genome(new ArrayList<>(List.of(GenomeDirection.ZERO, GenomeDirection.FOUR))),10);
+        int maxY = map.getOwlBearMap().getCurrentBounds().rightUpperCornerMap().getY();
+        Vector2d owlBearPos = map.getOwlBear().getPosition();
+
+        var animal1 = new Animal(new Vector2d(owlBearPos.getX(), Math.min(owlBearPos.getY() + 2, 9)), new Genome(new ArrayList<>(List.of(GenomeDirection.ZERO, GenomeDirection.FOUR))),10);
+        var animal2 = new Animal(new Vector2d(owlBearPos.getX(), Math.min(owlBearPos.getY() + 2, 9)), new Genome(new ArrayList<>(List.of(GenomeDirection.ZERO, GenomeDirection.FOUR))),10);
 
         map.place(animal1);
         map.place(animal2);
 
         map.addObserver(new ConsoleMapDisplay());
-
-        Config config = new Config(10,
-                10,
-                0,
-                10,
-                0,
-                0,
-                10,
-                5,
-                2,
-                4,
-                0,
-                2,
-                new FullRandomGenomeChange(),
-                5,
-                map);
-
-        for(int i=0 ;i<10;i++){
+        for(int i=0; i<10; i++){
             map.moveAllAnimals(0);
             map.feedAnimals(0);
-            System.out.println(map);
+//            System.out.println(map);
         }
-        var stats= map.getMapStatistics();
-        stats.printStatistic();
-        assertTrue(map.isOccupied(new Vector2d(0,3)));
+
+        assertTrue(map.isOccupied(new Vector2d(owlBearPos.getX(),maxY)));
         assertEquals(1,map.getElements().size());
     }
 }

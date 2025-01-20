@@ -1,6 +1,7 @@
 package agh.ics.oop.view;
 
 import agh.ics.oop.model.Vector2d;
+import agh.ics.oop.model.maps.OwlBearBounds;
 import agh.ics.oop.model.maps.OwlBearMap;
 import agh.ics.oop.model.maps.WorldMap;
 import agh.ics.oop.view.util.OwlBearElementBox;
@@ -10,7 +11,7 @@ import java.util.HashMap;
 
 public class OwlBearMapDrawer {
     private final OwlBearMap owlBearMap;
-    private final WorldMap owlBearBoundsMap;
+    private final OwlBearBounds owlBearBoundsMap;
     private final HashMap<Vector2d, Pane> owlBearMapCache = new HashMap<>();
 
     public OwlBearMapDrawer(OwlBearMap owlBearMap) {

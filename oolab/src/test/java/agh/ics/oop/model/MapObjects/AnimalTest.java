@@ -8,6 +8,8 @@ import agh.ics.oop.model.maps.EarthMap;
 import agh.ics.oop.model.maps.WorldMap;
 import agh.ics.oop.model.util.FullRandomGenomeChange;
 import agh.ics.oop.model.util.Genome;
+import agh.ics.oop.model.util.GenomeType;
+import agh.ics.oop.model.util.MapType;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -91,9 +93,10 @@ class AnimalTest {
                 10,
                 0,
                 0,
-                new FullRandomGenomeChange(),
+                GenomeType.FULL_RANDOM_GENOME_CHANGE,
                 4,
-                map);
+                MapType.EARTH_MAP,
+                false);
 
         //then
 

@@ -3,6 +3,7 @@ package agh.ics.oop.view;
 import agh.ics.oop.model.Config;
 import agh.ics.oop.model.Vector2d;
 import agh.ics.oop.model.MapObjects.Animal;
+import agh.ics.oop.model.maps.OwlBearBounds;
 import agh.ics.oop.model.maps.OwlBearMap;
 import agh.ics.oop.model.maps.WorldMap;
 import agh.ics.oop.model.util.Boundary;
@@ -179,9 +180,9 @@ public class GridDrawer {
 
     private void drawOwlBearMap(Vector2d thisPosition, Pane cell) {
         OwlBearMap owlBearMap = ((OwlBearMap) map);
-        WorldMap owlBearRectangularMap = owlBearMap.getOwlBearMap();
-        Vector2d owlBearMapLowerLeft = owlBearRectangularMap.getCurrentBounds().leftDownCornerMap();
-        Vector2d owlBearMapUpperRight = owlBearRectangularMap.getCurrentBounds().rightUpperCornerMap();
+        OwlBearBounds owlBearBounds = owlBearMap.getOwlBearMap();
+        Vector2d owlBearMapLowerLeft = owlBearBounds.getCurrentBounds().leftDownCornerMap();
+        Vector2d owlBearMapUpperRight = owlBearBounds.getCurrentBounds().rightUpperCornerMap();
         Vector2d owlBearPosition = owlBearMap.getOwlBearPosition();
 
         if (thisPosition.equals(owlBearPosition)) {
