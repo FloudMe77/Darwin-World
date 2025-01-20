@@ -39,18 +39,13 @@ public class GridDrawer {
         this.config = config;
         this.simulationRunningStatus = simulationRunningStatus;
         this.statisticsUpdater = statisticsUpdater;
-        initializeMapSize();
-        calculateCellSizes();
         initializeGrid();
     }
 
     private void initializeGrid() {
-        for (int x = 0; x < mapWidth; x++) {
-            mapGrid.getColumnConstraints().add(new ColumnConstraints(cellWidth));
-        }
-        for (int y = 0; y < mapHeight; y++) {
-            mapGrid.getRowConstraints().add(new RowConstraints(cellHeight));
-        }
+        initializeMapSize();
+        calculateCellSizes();
+        setGridCells();
 
         for (int x = 0; x < mapWidth; x++) {
             for (int y = 0; y < mapHeight; y++) {
@@ -74,21 +69,23 @@ public class GridDrawer {
         }
     }
 
+    private void setGridCells() {
+        for (int x = 0; x < mapWidth; x++) {
+            mapGrid.getColumnConstraints().add(new ColumnConstraints(cellWidth));
+        }
+
+        for (int y = 0; y < mapHeight; y++) {
+            mapGrid.getRowConstraints().add(new RowConstraints(cellHeight));
+        }
+    }
+
     public void draw() {
-        clearGrid();
         drawWorldElementsOnGrid();
         statisticsUpdater.updateMapStatistics();
         if (trackedAnimal.isPresent()) {
             statisticsUpdater.updateAnimalStatistics(trackedAnimal.get());
         }
         handleHighlights();
-        calculateCellSizes();
-        for (int x = 0; x < mapWidth; x++) {
-            mapGrid.getColumnConstraints().add(new ColumnConstraints(cellWidth));
-        }
-        for (int y = 0; y < mapHeight; y++) {
-            mapGrid.getRowConstraints().add(new RowConstraints(cellHeight));
-        }
     }
 
     private void handleHighlights() {
@@ -149,26 +146,11 @@ public class GridDrawer {
         mapHeight = maxY - minY + 1;
     }
 
-    private void clearGrid() {
-        mapGrid.getColumnConstraints().clear();
-        mapGrid.getRowConstraints().clear();
-    }
-
     private void calculateCellSizes() {
         double availableWidth = rootPane.getCenter().getBoundsInParent().getWidth();
         double availableHeight = rootPane.getCenter().getBoundsInParent().getHeight();
-        cellWidth = Math.round((availableWidth / mapWidth) * 10) / 10.0;
-        cellHeight = Math.round((availableHeight / mapHeight) * 10) / 10.0;
-    }
-
-    private void setGridCells() {
-        for (int x = 0; x < mapWidth; x++) {
-            mapGrid.getColumnConstraints().add(new ColumnConstraints(cellWidth));
-        }
-
-        for (int y = 0; y < mapHeight; y++) {
-            mapGrid.getRowConstraints().add(new RowConstraints(cellHeight));
-        }
+        cellWidth = availableWidth / mapWidth;
+        cellHeight = availableHeight / mapHeight;
     }
 
     private void drawWorldElementsOnGrid() {
@@ -188,7 +170,7 @@ public class GridDrawer {
             });
 
             if (config.mapType() == MapType.OWLBEAR_MAP) {
-                drawOwlBearMap(thisPosition, cell);
+                drawOwlBearMap(new Vector2d(thisPosition.getX(), (int) mapHeight - thisPosition.getY() - 1), cell);
             }
         }
     }

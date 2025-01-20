@@ -63,12 +63,15 @@ public class Animal extends AbstractAnimal {
 
         // Obliczenie indeksu podziału
         int divideIndex = (int) Math.floor(
-                genomeLen * (betterAnimal.getEnergy() / (double) (betterAnimal.getEnergy() + worseAnimal.getEnergy()))
+                Math.min(genomeLen * (betterAnimal.getEnergy() / (double) (betterAnimal.getEnergy() + worseAnimal.getEnergy())), genomeLen)
         );
 
         // Dodawanie genów w zależności od dominującej strony
         if (dominantSide == 0) {
             // Dominująca strona po lewej
+            System.out.println(genomeLen);
+            System.out.println(divideIndex);
+            System.out.println(worseAnimal.getGenome().getGenLength());
             newGenList.addAll(betterAnimal.getGenome().getGenList().subList(0, divideIndex));
             newGenList.addAll(worseAnimal.getGenome().getGenList().subList(divideIndex, worseAnimal.getGenome().getGenLength()));
         } else {
