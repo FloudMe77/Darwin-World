@@ -72,7 +72,6 @@ public class Simulation implements Runnable {
                         worldMap.addGrass();
                     }
 
-//                    System.out.println(worldMap);
                     Thread.sleep(100);
                 }
             }

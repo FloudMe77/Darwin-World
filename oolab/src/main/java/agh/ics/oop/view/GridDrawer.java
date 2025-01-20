@@ -24,11 +24,12 @@ public class GridDrawer {
     private final Supplier<Boolean> simulationRunningStatus;
     private double mapWidth, mapHeight, cellWidth, cellHeight;
     private Optional<Animal> trackedAnimal = Optional.empty();
+    private Optional<OwlBearMapDrawer> owlBearMapDrawer;
     private final StatisticsUpdater statisticsUpdater;
     private boolean highlightPreferredGrassArea = false, highlightDominantGenomeAnimals = false;
 
     private final Map<Vector2d, Pane> gridCells = new HashMap<>(); //  Cache cellów
-    private final Set<Vector2d> highlightedGrassCells = new HashSet<>();
+    private final Map<Vector2d, Pane> highlightedGrassCells = new HashMap<>();
 
     public GridDrawer(BorderPane rootPane, GridPane mapGrid, WorldMap map,
                       Config config, Supplier<Boolean> simulationRunningStatus,
@@ -40,6 +41,7 @@ public class GridDrawer {
         this.simulationRunningStatus = simulationRunningStatus;
         this.statisticsUpdater = statisticsUpdater;
         initializeGrid();
+        owlBearMapDrawer = config.mapType() == MapType.OWLBEAR_MAP ? Optional.of(new OwlBearMapDrawer((OwlBearMap) map)) : Optional.empty();
     }
 
     private void initializeGrid() {
@@ -89,7 +91,7 @@ public class GridDrawer {
     }
 
     private void handleHighlights() {
-        if (highlightPreferredGrassArea && highlightedGrassCells.isEmpty()) {
+        if (highlightPreferredGrassArea) {
             highlightPreferredGrassCells(map.getEquatorBoundary());
         } else {
             highlightedGrassCells.clear();
@@ -108,13 +110,15 @@ public class GridDrawer {
                 Vector2d thisPosition = new Vector2d(x, y);
                 Pane cell = gridCells.get(thisPosition);
 
-                if (!highlightedGrassCells.contains(thisPosition)) {
+                if (!highlightedGrassCells.containsKey(thisPosition)) {
                     Pane highlightLayer = new Pane();
                     highlightLayer.setStyle("-fx-background-color: rgba(255,183,0,0.25);");
                     highlightLayer.setMouseTransparent(true);
                     highlightLayer.setPrefSize(cellWidth, cellHeight);
-                    highlightedGrassCells.add(thisPosition);
+                    highlightedGrassCells.put(thisPosition, highlightLayer);
                     cell.getChildren().add(highlightLayer);
+                } else {
+                    cell.getChildren().add(highlightedGrassCells.get(thisPosition));
                 }
             }
         }
@@ -169,9 +173,7 @@ public class GridDrawer {
                 cell.getChildren().add(AnimalBox);
             });
 
-            if (config.mapType() == MapType.OWLBEAR_MAP) {
-                drawOwlBearMap(new Vector2d(thisPosition.getX(), (int) mapHeight - thisPosition.getY() - 1), cell);
-            }
+            owlBearMapDrawer.ifPresent(bearMapDrawer -> bearMapDrawer.drawCell(thisPosition, cell, cellWidth, cellHeight));
         }
     }
 
