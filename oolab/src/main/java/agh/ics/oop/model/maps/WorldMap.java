@@ -59,7 +59,7 @@ public interface WorldMap extends MoveValidator {
 
     void feedAnimals(int feedVal);
 
-    List<Animal> reproduceAnimals(Config config);
+    void reproduceAnimals(Config config);
 
     void removeDepthAnimals();
 

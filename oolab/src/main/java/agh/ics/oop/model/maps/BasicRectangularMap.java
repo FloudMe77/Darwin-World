@@ -53,10 +53,6 @@ abstract public class BasicRectangularMap implements WorldMap {
         observers.remove(observer);
     }
 
-//    private void notifyMapStatistic(MapStatisticAction mapStatisticAction, int val){
-//        mapStatistics.updateStatistic(mapStatisticAction,val);
-//    }
-
     @Override
     public void place(Animal animal) {
         animalManager.addToAnimals(animal.getPosition(), animal);
@@ -100,12 +96,10 @@ abstract public class BasicRectangularMap implements WorldMap {
     public boolean isGrassAt(Vector2d position){
         return grassManager.isGrassAt(position);
     }
+
     @Override
     public void move(Animal animal, int dailyDeclineValue) {
-//        var oldPosition = animal.getPosition();
         animalManager.move(animal,dailyDeclineValue,this);
-
-//        notifyObservers("Przeniesiono Animal z " + oldPosition + " do " + animal.getPosition());
     }
 
     @Override
@@ -133,9 +127,6 @@ abstract public class BasicRectangularMap implements WorldMap {
         ).toList();
     }
 
-//    public WorldMap getValidator(AbstractAnimal animal) {
-//        return this;
-//    };
 
     @Override
     public String toString() {
@@ -164,9 +155,9 @@ abstract public class BasicRectangularMap implements WorldMap {
         animalManager.feedAnimals(feedVal);
     }
 
-    public List<Animal> reproduceAnimals(Config config){
+    public void reproduceAnimals(Config config){
         notifyObservers("utworzono nowe zwierzeta");
-        return animalManager.reproduceAnimals(config);
+        animalManager.reproduceAnimals(config);
     }
 
     public void removeDepthAnimals(){

@@ -63,7 +63,6 @@ public class OwlBearMap extends EarthMap {
         List<Animal> animalsAtPosition = animalManager.getAnimals(owlBear.getPosition());
         if (animalsAtPosition != null) {
             for (var animal : new ArrayList<>(animalsAtPosition)) {
-                // można by to pominąc, jakby animals to po prostu tablica animali
                 animal.die();
                 animalManager.removeFromAnimals(animal.getPosition(), animal);
                 mapStatistics.deathAnimalUpdate(animal);
@@ -78,11 +77,5 @@ public class OwlBearMap extends EarthMap {
         owlBear.move(owlBearMap);
         super.moveAllAnimals(dailyDeclineValue);
     }
-
-    // trzeba się zastanowić nad sensem tego
-//    @Override
-//    public WorldMap getValidator(AbstractAnimal animal) {
-//        return animal.getClass() == OwlBear.class ? owlBearMap : this;
-//    }
 }
 
