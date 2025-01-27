@@ -20,7 +20,7 @@ public class Animal extends AbstractAnimal {
         this.energy = startEnergy;
     }
 
-    public Animal reproduce(Animal other, GenomeChange genomeChange, int minMutationAmount, int maxMutationAmount, int energyToReproduce) {
+    public Animal reproduce(Animal other, GenomeChange genomeChange, int minMutationAmount, int maxMutationAmount, int energyToReproduce) { // nie lepiej z tego zrobić metodę statyczną?
         // tworze liste genów
         var newGenList = shuffleGenomes(other);
         // dokonuje mutacji
@@ -37,7 +37,7 @@ public class Animal extends AbstractAnimal {
     }
 
     private ArrayList<GenomeDirection> shuffleGenomes(Animal other) {
-        Random random = new Random();
+        Random random = new Random(); // nowy obiekt co wywołanie?
         int otherEnergy = other.getEnergy();
         int genomeLen = getGenome().getGenLength();
 
@@ -67,15 +67,15 @@ public class Animal extends AbstractAnimal {
             newGenList.addAll(worseAnimal.getGenome().getGenList().subList(divideIndex, worseAnimal.getGenome().getGenLength()));
         } else {
             // Dominująca strona po prawej
-            newGenList.addAll(worseAnimal.getGenome().getGenList().subList(0, genomeLen-divideIndex));
-            newGenList.addAll(betterAnimal.getGenome().getGenList().subList(genomeLen-divideIndex, betterAnimal.getGenome().getGenLength()));
+            newGenList.addAll(worseAnimal.getGenome().getGenList().subList(0, genomeLen - divideIndex));
+            newGenList.addAll(betterAnimal.getGenome().getGenList().subList(genomeLen - divideIndex, betterAnimal.getGenome().getGenLength()));
         }
 
         return newGenList;
     }
 
     public int getChildrenAmount() {
-        return kids.size();
+        return kids.size(); // używanie synonimów wcale nie jest pomocne - albo kids, albo children, nie zamiennie
     }
 
     private void addChild(Animal child) {
@@ -99,27 +99,27 @@ public class Animal extends AbstractAnimal {
     }
 
     public void eat(int feedVal) {
-        eaten+=1;
+        eaten += 1;
         energy += feedVal;
     }
 
-    public void reduceEnergy(int val){
+    public void reduceEnergy(int val) {
         energy -= val;
     }
 
-    public int getDescendantsAmount(){
+    public int getDescendantsAmount() {
         return getDescendants().size();
     }
 
-    private List<Animal> getDescendants(){
+    private List<Animal> getDescendants() {
         List<Animal> descendants = new ArrayList<>();
-        for(var child : kids){
+        for (var child : kids) {
             descendants.add(child);
             descendants.addAll(child.getDescendants());
         }
         return descendants.stream()
                 .distinct()
-                .toList();
+                .toList(); // nie lepiej od razu użyć... zbioru?
     }
 
     public int getAge() {
@@ -131,8 +131,8 @@ public class Animal extends AbstractAnimal {
     }
 
     @Override
-    public void move(MoveValidator validator){
+    public void move(MoveValidator validator) {
         super.move(validator);
-        age+=1;
+        age += 1;
     }
 }

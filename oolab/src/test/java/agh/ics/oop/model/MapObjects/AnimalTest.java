@@ -16,59 +16,60 @@ import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+
 class AnimalTest {
     @Test
-    void constructorAndGetterTest(){
+    void constructorAndGetterTest() {
         // when
-        var animal = new Animal(new Vector2d(2,2), new Genome(5),10);
+        var animal = new Animal(new Vector2d(2, 2), new Genome(5), 10);
         // then
-        assertEquals(new Vector2d(2,2),animal.getPosition());
-        assertEquals(5,animal.getGenome().getGenLength());
-        assertEquals(10,animal.getEnergy());
-        assertEquals(0,animal.getChildrenAmount());
-        assertEquals(new ArrayList<>(),animal.getKids());
-        assertEquals(0,animal.getEaten());
+        assertEquals(new Vector2d(2, 2), animal.getPosition());
+        assertEquals(5, animal.getGenome().getGenLength());
+        assertEquals(10, animal.getEnergy());
+        assertEquals(0, animal.getChildrenAmount());
+        assertEquals(new ArrayList<>(), animal.getKids());
+        assertEquals(0, animal.getEaten());
     }
 
 
     @Test
-    void reproduceAnimalTest(){
+    void reproduceAnimalTest() {
         // given
 
-        var animal1 = new Animal(new Vector2d(2,2), new Genome(new ArrayList<>(List.of(GenomeDirection.ONE, GenomeDirection.TWO, GenomeDirection.THREE))),10);
-        var animal2 = new Animal(new Vector2d(2,2), new Genome(new ArrayList<>(List.of(GenomeDirection.FOUR, GenomeDirection.FIVE, GenomeDirection.SIX))),0);
+        var animal1 = new Animal(new Vector2d(2, 2), new Genome(new ArrayList<>(List.of(GenomeDirection.ONE, GenomeDirection.TWO, GenomeDirection.THREE))), 10);
+        var animal2 = new Animal(new Vector2d(2, 2), new Genome(new ArrayList<>(List.of(GenomeDirection.FOUR, GenomeDirection.FIVE, GenomeDirection.SIX))), 0);
         // when
-        var animal3 = animal1.reproduce(animal2,new FullRandomGenomeChange(),0,0,3);
+        var animal3 = animal1.reproduce(animal2, new FullRandomGenomeChange(), 0, 0, 3);
         // then
-        assertEquals(new ArrayList<>(List.of(GenomeDirection.ONE, GenomeDirection.TWO, GenomeDirection.THREE)),animal3.getGenome().getGenList());
-        assertEquals(1,animal1.getChildrenAmount());
-        assertEquals(1,animal2.getChildrenAmount());
-        assertEquals(List.of(animal3),animal1.getKids());
-        assertEquals(List.of(animal3),animal2.getKids());
-        assertEquals(6,animal3.getEnergy());
+        assertEquals(new ArrayList<>(List.of(GenomeDirection.ONE, GenomeDirection.TWO, GenomeDirection.THREE)), animal3.getGenome().getGenList());
+        assertEquals(1, animal1.getChildrenAmount());
+        assertEquals(1, animal2.getChildrenAmount());
+        assertEquals(List.of(animal3), animal1.getKids());
+        assertEquals(List.of(animal3), animal2.getKids());
+        assertEquals(6, animal3.getEnergy());
     }
 
     @Test
-    void moveTest(){
+    void moveTest() {
         // given
-        var map = new EarthMap(10,10);
-        var animal1 = new Animal(new Vector2d(2,2), new Genome(new ArrayList<>(List.of(GenomeDirection.ZERO, GenomeDirection.ZERO, GenomeDirection.ZERO))),10);
-        var animal2 = new Animal(new Vector2d(2,2), new Genome(new ArrayList<>(List.of(GenomeDirection.ONE, GenomeDirection.THREE, GenomeDirection.FIVE, GenomeDirection.SEVEN))),10);
+        var map = new EarthMap(10, 10);
+        var animal1 = new Animal(new Vector2d(2, 2), new Genome(new ArrayList<>(List.of(GenomeDirection.ZERO, GenomeDirection.ZERO, GenomeDirection.ZERO))), 10);
+        var animal2 = new Animal(new Vector2d(2, 2), new Genome(new ArrayList<>(List.of(GenomeDirection.ONE, GenomeDirection.THREE, GenomeDirection.FIVE, GenomeDirection.SEVEN))), 10);
         // when
         map.place(animal1);
 
         //then
-        for(int i=0;i<3;i++) {
-            map.move(animal1,0);
-            assertTrue(animal1.isAt(new Vector2d(2,2+i+1)));
-            map.move(animal2,0);
+        for (int i = 0; i < 3; i++) {
+            map.move(animal1, 0);
+            assertTrue(animal1.isAt(new Vector2d(2, 2 + i + 1)));
+            map.move(animal2, 0);
         }
-        map.move(animal2,0);
-        assertTrue(animal2.isAt(new Vector2d(2,2)));
+        map.move(animal2, 0);
+        assertTrue(animal2.isAt(new Vector2d(2, 2)));
     }
 
     @Test
-    public void integrationTest(){
+    public void integrationTest() {
         //given
         ArrayList<GenomeDirection> genotype = new ArrayList<>(List.of(GenomeDirection.FIVE, GenomeDirection.FIVE, GenomeDirection.FIVE, GenomeDirection.FIVE));
         Animal animal1 = new Animal(new Vector2d(5, 5), new Genome(genotype), 101);
@@ -99,7 +100,7 @@ class AnimalTest {
             System.out.println("Uwaga: " + e.getMessage());
         }
 
-        map.move(animal1,0);
+        map.move(animal1, 0);
 
 
         //then
@@ -136,7 +137,7 @@ class AnimalTest {
 
 
         //when
-        System.out.println(animal1.getEnergy()+ " "+ animal2.getEnergy() + " "+ child.getEnergy());
+        System.out.println(animal1.getEnergy() + " " + animal2.getEnergy() + " " + child.getEnergy());
         for (int i = 0; i < 5; i++) {
             map.moveAllAnimals(10);
         }
@@ -152,7 +153,7 @@ class AnimalTest {
 
 
         //when
-        for(int i=0 ;i <121;i++){
+        for (int i = 0; i < 121; i++) {
             map.addGrass();
         }
 

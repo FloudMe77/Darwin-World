@@ -16,7 +16,7 @@ public class AnimalElementBox extends VBox {
         this.setAlignment(javafx.geometry.Pos.CENTER);
 
         Circle circle = new Circle();
-        circle.setRadius(Math.min(cellWidth/2.2, cellHeight/2.2));
+        circle.setRadius(Math.min(cellWidth / 2.2, cellHeight / 2.2));
         circle.setFill(getColor());
         this.getChildren().addAll(circle);
     }

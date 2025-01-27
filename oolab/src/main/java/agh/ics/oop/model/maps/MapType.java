@@ -23,7 +23,7 @@ public enum MapType {
         return switch (displayName) {
             case "Kula Ziemska" -> Optional.of(MapType.EARTH_MAP);
             case "Dziki sowoniedźwiedź" -> Optional.of(MapType.OWLBEAR_MAP);
-            default -> Optional.empty();
+            default -> Optional.empty(); // czy wyjątek nie byłby lepszy?
         };
     }
 

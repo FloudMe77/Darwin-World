@@ -42,7 +42,10 @@ public class Simulation implements Runnable {
     public List<Animal> getAnimals() {
         return worldMap.getAnimals();
     }
-    public WorldMap getWorldMap() { return worldMap; }
+
+    public WorldMap getWorldMap() {
+        return worldMap;
+    }
 
 
     public void run() {
@@ -55,7 +58,7 @@ public class Simulation implements Runnable {
                     }
 
                     // usuwanie zdechłych zwierząt
-                    worldMap.removeDepthAnimals();
+                    worldMap.removeDepthAnimals(); // Depth to głębokość; jak to się ma do tematu?
 
                     // można przemyśleć, żeby tą metodę umieścić w samej mapie
                     worldMap.moveAllAnimals(config.dailyDeclineValue());
@@ -78,7 +81,7 @@ public class Simulation implements Runnable {
 
 
         } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
+            Thread.currentThread().interrupt(); // jaki jest sens wysyłać interrupt sobie samemu?
         }
     }
 
@@ -100,7 +103,7 @@ public class Simulation implements Runnable {
             try {
                 pauseLock.wait();
             } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
+                Thread.currentThread().interrupt(); // i to wystarczy?
             }
         }
     }

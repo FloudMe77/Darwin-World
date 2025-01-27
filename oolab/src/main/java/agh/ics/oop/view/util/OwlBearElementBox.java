@@ -10,7 +10,7 @@ public class OwlBearElementBox extends VBox {
         this.setAlignment(javafx.geometry.Pos.CENTER);
 
         Circle circle = new Circle();
-        circle.setRadius(Math.min(cellWidth/2, cellHeight/2));
+        circle.setRadius(Math.min(cellWidth / 2, cellHeight / 2));
         circle.setFill(Color.RED);
         this.getChildren().addAll(circle);
     }

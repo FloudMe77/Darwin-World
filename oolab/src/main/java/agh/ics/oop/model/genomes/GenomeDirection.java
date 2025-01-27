@@ -19,6 +19,7 @@ public enum GenomeDirection {
         int randomIndex = RANDOM.nextInt(directions.length);
         return directions[randomIndex];
     }
+
     @Override
     public String toString() {
         // Może być bardziej złożona logika formatowania

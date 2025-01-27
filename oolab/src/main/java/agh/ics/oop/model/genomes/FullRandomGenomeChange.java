@@ -14,12 +14,13 @@ public class FullRandomGenomeChange implements GenomeChange {
             genomeList.set(index, GenomeDirection.getRandomGenome());
         }
     }
-    private List<Integer> getIndexes(int length, int mutationAmount){
+
+    private List<Integer> getIndexes(int length, int mutationAmount) {
         ArrayList<Integer> indexTab = new ArrayList<>();
-        for(int i=0;i<length;i++){
+        for (int i = 0; i < length; i++) {
             indexTab.add(i);
         }
         Collections.shuffle(indexTab);
-        return indexTab.subList(0,mutationAmount);
+        return indexTab.subList(0, mutationAmount);
     }
 }

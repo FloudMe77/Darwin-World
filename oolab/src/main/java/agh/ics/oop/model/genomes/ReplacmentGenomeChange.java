@@ -11,10 +11,10 @@ public class ReplacmentGenomeChange implements GenomeChange {
         Random random = new Random();
         int mutationAmount = random.nextInt(minMutationAmount, maxMutationAmount + 1);
         int genomeLen = GenomeList.size();
-        var allPossiblePairs = findAllPairs(genomeLen,mutationAmount);
+        var allPossiblePairs = findAllPairs(genomeLen, mutationAmount);
         Collections.shuffle(allPossiblePairs);
 
-        for(var pair : allPossiblePairs) {
+        for (var pair : allPossiblePairs) {
             int index1 = pair.getFirst();
             int index2 = pair.getLast();
             GenomeDirection buffer = GenomeList.get(index1);
@@ -30,6 +30,6 @@ public class ReplacmentGenomeChange implements GenomeChange {
                 allPossiblePairs.add(List.of(x, y));
             }
         }
-        return allPossiblePairs.subList(0,mutationAmount);
+        return allPossiblePairs.subList(0, mutationAmount);
     }
 }

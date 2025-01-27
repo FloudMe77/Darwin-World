@@ -12,12 +12,12 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 class EarthMapTest {
-    WorldMap map = new EarthMap(5,5);
+    WorldMap map = new EarthMap(5, 5);
     Genome dummyGenome = new Genome(1);
     int dummyStartEnergy = 5;
 
     @Test
-    void isOccupiedTwoPlacesAndPlaceCorrect(){
+    void isOccupiedTwoPlacesAndPlaceCorrect() {
         // given
         var vector11 = new Vector2d(1, 1);
         var vector12 = new Vector2d(1, 2);
@@ -25,33 +25,34 @@ class EarthMapTest {
         var a1 = new Animal(vector11, dummyGenome, dummyStartEnergy);
         var a2 = new Animal(vector12, dummyGenome, dummyStartEnergy);
         // when
-        assertDoesNotThrow(()->map.place(a1));
-        assertDoesNotThrow(()->map.place(a2));
+        assertDoesNotThrow(() -> map.place(a1));
+        assertDoesNotThrow(() -> map.place(a2));
 
         // then
         assertTrue(map.isOccupied(vector11));
         assertTrue(map.isOccupied(vector12));
         assertFalse(map.isOccupied(vector13));
     }
+
     @Test
-    void objectAtForTwoAnimals(){
+    void objectAtForTwoAnimals() {
         // given
         var vector11 = new Vector2d(1, 1);
         var vector12 = new Vector2d(1, 2);
         var a1 = new Animal(vector11, dummyGenome, dummyStartEnergy);
         var a2 = new Animal(vector12, dummyGenome, dummyStartEnergy);
         // when
-        assertDoesNotThrow(()->map.place(a1));
-        assertDoesNotThrow(()->map.place(a2));
+        assertDoesNotThrow(() -> map.place(a1));
+        assertDoesNotThrow(() -> map.place(a2));
         // then
-        assertEquals(a1,map.objectsAt(vector11).getFirst());
-        assertEquals(a2,map.objectsAt(vector12).getFirst());
-        assertTrue(map.objectsAt(new Vector2d(2,2)).isEmpty());
+        assertEquals(a1, map.objectsAt(vector11).getFirst());
+        assertEquals(a2, map.objectsAt(vector12).getFirst());
+        assertTrue(map.objectsAt(new Vector2d(2, 2)).isEmpty());
     }
 
     @Test
     void goingOutOfBoundToPolesWorksCorrectly() {
-        WorldMap map = new EarthMap(5,5);
+        WorldMap map = new EarthMap(5, 5);
         var animal1Genome = new Genome(new ArrayList<>(List.of(GenomeDirection.ZERO)));
         var animal2Genome = new Genome(new ArrayList<>(List.of(GenomeDirection.ONE)));
         var animal3Genome = new Genome(new ArrayList<>(List.of(GenomeDirection.TWO)));
@@ -71,10 +72,10 @@ class EarthMapTest {
             map.place(animal4);
         });
 
-        map.move(animal1,0);
-        map.move(animal2,0);
-        map.move(animal3,0);
-        map.move(animal4,0);
+        map.move(animal1, 0);
+        map.move(animal2, 0);
+        map.move(animal3, 0);
+        map.move(animal4, 0);
 
         assertEquals(MapDirection.NORTH, animal1.getCurrentDirection());
         assertEquals(MapDirection.NORTHEAST, animal2.getCurrentDirection());
@@ -84,7 +85,7 @@ class EarthMapTest {
 
     @Test
     void canPlaceTwoAnimalsOnTheSamePosition() {
-        WorldMap map = new EarthMap(2,2);
+        WorldMap map = new EarthMap(2, 2);
         var position = new Vector2d(2, 2);
         var animal1 = new Animal(position, dummyGenome, dummyStartEnergy);
         var animal2 = new Animal(position, dummyGenome, dummyStartEnergy);

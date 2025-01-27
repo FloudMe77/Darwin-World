@@ -13,26 +13,26 @@ public class GrassManager {
     private final Map<Vector2d, Grass> grasses = new HashMap<>();
     private final GrassField grassField;
 
-    public GrassManager(int height,int width) {
-        this.grassField = new GrassField(height,width);
+    public GrassManager(int height, int width) {
+        this.grassField = new GrassField(height, width);
     }
 
     public boolean addGrass() {
         Optional<Vector2d> newPositionOpt = grassField.getNewGrassPosition();
 
-        if(newPositionOpt.isPresent()){
+        if (newPositionOpt.isPresent()) {
             var newPosition = newPositionOpt.get();
             var grass = new Grass(newPosition);
-            if(grasses.containsKey(newPosition)){
+            if (grasses.containsKey(newPosition)) {
                 throw new RuntimeException("duplikaty w słowniku");
             }
-            grasses.put(newPosition,grass);
+            grasses.put(newPosition, grass);
             return true;
         }
         return false;
     }
 
-    public Grass getGrass(Vector2d position){
+    public Grass getGrass(Vector2d position) {
         return grasses.get(position);
     }
 

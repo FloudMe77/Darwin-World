@@ -82,8 +82,7 @@ public class AnimalManager {
 
                 if (animal2.getEnergy() >= config.energyRequiredToReproduce()) {
                     reproduceTwoAnimals(config, animal1, animal2);
-                }
-                else {
+                } else {
                     break;
                 }
             }

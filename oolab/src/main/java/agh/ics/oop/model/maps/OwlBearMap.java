@@ -15,11 +15,11 @@ public class OwlBearMap extends EarthMap {
     private final OwlBear owlBear; // add final
     private final OwlBearBounds owlBearMap;
 
-    public OwlBearMap(int height, int width, Genome genome) {
+    public OwlBearMap(int height, int width, Genome genome) { // czemu mapa dostaje genom?
         super(height, width);
         int bearSideLength = (int) Math.floor(Math.sqrt(height * width * 0.2));
 
-        Random random = new Random();
+        Random random = new Random(); // nowy obiekt co wywołanie?
         int startX = random.nextInt(bearSideLength);
         int startY = random.nextInt(bearSideLength);
         Vector2d lowerLeftOwlBearMap = new Vector2d(startX, startY);
@@ -30,7 +30,7 @@ public class OwlBearMap extends EarthMap {
     }
 
     public OwlBearMap(int height, int width) {
-        this(height,width,new Genome(100));
+        this(height, width, new Genome(100));
     }
 
     public OwlBearBounds getOwlBearMap() {
@@ -67,7 +67,7 @@ public class OwlBearMap extends EarthMap {
     }
 
     @Override
-    public void feedAnimals(int feedVal){
+    public void feedAnimals(int feedVal) {
         List<Animal> animalsAtPosition = animalManager.getAnimals(owlBear.getPosition());
         if (animalsAtPosition != null) {
             for (var animal : new ArrayList<>(animalsAtPosition)) {
@@ -81,7 +81,7 @@ public class OwlBearMap extends EarthMap {
     }
 
     @Override
-    public void moveAllAnimals(int dailyDeclineValue){
+    public void moveAllAnimals(int dailyDeclineValue) {
         owlBear.move(owlBearMap);
         super.moveAllAnimals(dailyDeclineValue);
     }

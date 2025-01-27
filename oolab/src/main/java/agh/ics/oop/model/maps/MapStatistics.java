@@ -8,14 +8,14 @@ public class MapStatistics {
 
     private int totalAnimalAmount = 0;
     private int totalGrasAmount = 0;
-    private int totalEnergy =0 ;
+    private int totalEnergy = 0;
     private int totalLifeTime = 0;
     private int totalChildrenAmount = 0;
     private int totalDeathAmount = 0;
-    private final int totalFreeSpace;
+    private final int totalFreeSpace; // jak rozumiemy słowo "free"?
 
 
-    public MapStatistics(BasicRectangularMap worldMap){
+    public MapStatistics(BasicRectangularMap worldMap) {
         this.worldMap = worldMap;
         int minX = worldMap.getCurrentBounds().leftDownCornerMap().x();
         int minY = worldMap.getCurrentBounds().leftDownCornerMap().y();
@@ -52,35 +52,35 @@ public class MapStatistics {
         return totalGrasAmount;
     }
 
-    public void grassUpdate(int val){
+    public void grassUpdate(int val) {
         totalGrasAmount += val;
     }
 
-    public void energyUpdate(int val){
+    public void energyUpdate(int val) {
         totalEnergy += val;
     }
 
 
-    public void newAnimalUpdate(Animal animal){
+    public void newAnimalUpdate(Animal animal) {
         totalAnimalAmount += 1;
         totalEnergy += animal.getEnergy();
     }
 
-    public void newBornUpdate(){
+    public void newBornUpdate() {
         totalAnimalAmount += 1;
         totalChildrenAmount += 2;
     }
 
-    public void deathAnimalUpdate(Animal animal){
+    public void deathAnimalUpdate(Animal animal) { // nazwa
         totalAnimalAmount -= 1;
         totalLifeTime += animal.getAge();
-        totalEnergy-=animal.getEnergy();
-        totalChildrenAmount-=animal.getChildrenAmount();
-        totalDeathAmount+=1;
+        totalEnergy -= animal.getEnergy();
+        totalChildrenAmount -= animal.getChildrenAmount();
+        totalDeathAmount += 1;
     }
 
-    public void feedAnimalUpdate(int feedVal){
-        totalEnergy+=feedVal;
-        totalGrasAmount-=1;
+    public void feedAnimalUpdate(int feedVal) {
+        totalEnergy += feedVal;
+        totalGrasAmount -= 1;
     }
 }

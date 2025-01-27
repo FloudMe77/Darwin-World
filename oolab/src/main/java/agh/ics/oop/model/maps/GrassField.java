@@ -15,28 +15,28 @@ public class GrassField {
     private final Vector2d lowerLeftEquator;
     private final Vector2d upperRightEquator;
 
-    public GrassField(int height,int width){
+    public GrassField(int height, int width) {
         Vector2d lowerLeftBelowEquator = new Vector2d(0, 0);
-        Vector2d upperRightBelowEquator = new Vector2d(width, (int) ((1.0/3) * height));
+        Vector2d upperRightBelowEquator = new Vector2d(width, (int) ((1.0 / 3) * height));
 
-        lowerLeftEquator = new Vector2d(0, (int) ((1.0/3) * height)+1);
-        upperRightEquator = new Vector2d(width, (int) ((2.0/3) * height));
+        lowerLeftEquator = new Vector2d(0, (int) ((1.0 / 3) * height) + 1);
+        upperRightEquator = new Vector2d(width, (int) ((2.0 / 3) * height));
 
-        Vector2d lowerLeftAboveEquator = new Vector2d(0, (int) ((2.0/3) * height)+1);
+        Vector2d lowerLeftAboveEquator = new Vector2d(0, (int) ((2.0 / 3) * height) + 1);
         Vector2d upperRightAboveEquator = new Vector2d(width, height);
 
 
-        equator = getAllPositionBetween(lowerLeftEquator,upperRightEquator);
+        equator = getAllPositionBetween(lowerLeftEquator, upperRightEquator);
 
-        beyondEquator = getAllPositionBetween(lowerLeftBelowEquator,upperRightBelowEquator);
-        beyondEquator.addAll(getAllPositionBetween(lowerLeftAboveEquator,upperRightAboveEquator));
+        beyondEquator = getAllPositionBetween(lowerLeftBelowEquator, upperRightBelowEquator);
+        beyondEquator.addAll(getAllPositionBetween(lowerLeftAboveEquator, upperRightAboveEquator));
     }
 
-    private List<Vector2d> getAllPositionBetween(Vector2d lowerLeft, Vector2d upperRight){
+    private List<Vector2d> getAllPositionBetween(Vector2d lowerLeft, Vector2d upperRight) {
         List<Vector2d> allPossiblePositions = new ArrayList<>();
 
-        for (int x = lowerLeft.x(); x < upperRight.x()+1; x++) {
-            for (int y = lowerLeft.y(); y < upperRight.y()+1; y++) {
+        for (int x = lowerLeft.x(); x < upperRight.x() + 1; x++) {
+            for (int y = lowerLeft.y(); y < upperRight.y() + 1; y++) {
                 allPossiblePositions.add(new Vector2d(x, y));
             }
         }
@@ -67,15 +67,14 @@ public class GrassField {
         return Optional.empty();
     }
 
-    public void addGrassPosition(Vector2d position){
-        if(position.follows(lowerLeftEquator) && position.precedes(upperRightEquator)){
-            if(equator.contains(position)){
+    public void addGrassPosition(Vector2d position) {
+        if (position.follows(lowerLeftEquator) && position.precedes(upperRightEquator)) {
+            if (equator.contains(position)) {
                 throw new IllegalArgumentException();
             }
             equator.add(position);
-        }
-        else{
-            if(beyondEquator.contains(position)){
+        } else {
+            if (beyondEquator.contains(position)) {
                 throw new IllegalArgumentException();
             }
             beyondEquator.add(position);

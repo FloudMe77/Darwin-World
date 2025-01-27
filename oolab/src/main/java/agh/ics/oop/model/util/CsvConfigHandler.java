@@ -9,10 +9,12 @@ import java.nio.file.Paths;
 import java.util.Optional;
 
 public class CsvConfigHandler {
-    public static final String DIRECTORY_PATH = Paths.get(System.getProperty("user.dir"), "src", "main", "resources", "configs").toString();;
+    public static final String DIRECTORY_PATH = Paths.get(System.getProperty("user.dir"), "src", "main", "resources", "configs").toString();
+    ;
     private static final String HEADER = "height,width,startGrassAmount,energyFromGrass,everyDayGrassAmount,startAnimalAmount,"
             + "startEnergy,energyRequireToReproduce,offspringEnergyCost,dailyDeclineValue,minimalMutationAmount,"
             + "maximalMutationAmount,genomeChange,genomeLength,worldMap,saveStatsToCsv";
+
     static {
         try {
             Files.createDirectories(Paths.get(DIRECTORY_PATH));

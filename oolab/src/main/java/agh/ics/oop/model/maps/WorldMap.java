@@ -70,6 +70,7 @@ public interface WorldMap extends MoveValidator {
     void removeObserver(MapChangeListener observer);
 
     Genome getDominantGenome();
+
     MapStatistics getMapStatistics();
 
     public Optional<Animal> animalAt(Vector2d position);

@@ -19,7 +19,7 @@ public class StatisticsUpdater {
         statisticsLabels.freeSpace().textProperty().set(String.format("Liczba wolny miejsc: %d", mapStatistics.getTotalFreeSpace()));
         statisticsLabels.dominantGenome().textProperty().set(String.format("Najpopularniejszy genom: \n %s", mapStatistics.getDominantGenome()));
         statisticsLabels.avgEnergy().textProperty().set(String.format("Średni poziom energii: %.2f", mapStatistics.getAverageEnergy()));
-        statisticsLabels.avgLifespan().textProperty().set(String.format("Średnia długość życia: %.2f",mapStatistics.getAverageLifeTime()));
+        statisticsLabels.avgLifespan().textProperty().set(String.format("Średnia długość życia: %.2f", mapStatistics.getAverageLifeTime()));
         statisticsLabels.avgChildrenCount().textProperty().set(String.format("Średnia liczba dzieci: %.2f", mapStatistics.getAverageChildrenAmount()));
 
     }
@@ -33,7 +33,7 @@ public class StatisticsUpdater {
         // tmp
         statisticsLabels.descendants().textProperty().set(String.format("Liczba potomstwa: %d", animal.getDescendantsAmount()));
 
-        statisticsLabels.daysLived().textProperty().set(String.format("Długość życia: %d",animal.getAge()));
+        statisticsLabels.daysLived().textProperty().set(String.format("Długość życia: %d", animal.getAge()));
         statisticsLabels.dayOfDeath().textProperty().set(String.format("Dzień śmierci: %d", animal.getDayOfDeath()));
 
     }

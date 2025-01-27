@@ -30,7 +30,7 @@ abstract public class BasicRectangularMap implements WorldMap {
         var upperRight = new Vector2d(width - 1, height - 1);
         boundary = new Boundary(lowerLeft, upperRight);
 
-        this.grassManager = new GrassManager( height-1,width -1);
+        this.grassManager = new GrassManager(height - 1, width - 1);
         mapStatistics = new MapStatistics(this);
         this.animalManager = new AnimalManager(mapStatistics, grassManager);
     }
@@ -65,7 +65,7 @@ abstract public class BasicRectangularMap implements WorldMap {
 
     @Override
     public void addGrass() {
-        if(grassManager.addGrass()){
+        if (grassManager.addGrass()) {
             mapStatistics.grassUpdate(1);
         }
     }
@@ -95,13 +95,13 @@ abstract public class BasicRectangularMap implements WorldMap {
                 : Optional.empty();
     }
 
-    public boolean isGrassAt(Vector2d position){
+    public boolean isGrassAt(Vector2d position) {
         return grassManager.isGrassAt(position);
     }
 
     @Override
     public void move(Animal animal, int dailyDeclineValue) {
-        animalManager.move(animal,dailyDeclineValue,this);
+        animalManager.move(animal, dailyDeclineValue, this);
     }
 
     @Override
@@ -145,7 +145,7 @@ abstract public class BasicRectangularMap implements WorldMap {
     }
 
     @Override
-    public Genome getDominantGenome(){
+    public Genome getDominantGenome() {
         return animalManager.getDominantGenome();
     }
 
@@ -155,12 +155,12 @@ abstract public class BasicRectangularMap implements WorldMap {
         animalManager.feedAnimals(feedVal);
     }
 
-    public void reproduceAnimals(Config config){
+    public void reproduceAnimals(Config config) {
         notifyObservers("utworzono nowe zwierzeta");
         animalManager.reproduceAnimals(config);
     }
 
-    public void removeDepthAnimals(){
+    public void removeDepthAnimals() {
         notifyObservers("usunieto zwierzeta");
         animalManager.removeDeadAnimals();
     }
@@ -170,7 +170,7 @@ abstract public class BasicRectangularMap implements WorldMap {
         notifyObservers("poruszono zwierzeta");
     }
 
-    public List<Animal> getAnimals(){
+    public List<Animal> getAnimals() {
         return animalManager.getElements();
     }
 

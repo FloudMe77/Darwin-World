@@ -40,7 +40,8 @@
     </left>
 
     <center>
-        <GridPane prefWidth="850" prefHeight="550" maxWidth="850" maxHeight="550" fx:id="mapGrid" BorderPane.alignment="CENTER"/>
+        <GridPane prefWidth="850" prefHeight="550" maxWidth="850" maxHeight="550" fx:id="mapGrid"
+                  BorderPane.alignment="CENTER"/>
     </center>
 
     <bottom>
@@ -50,8 +51,10 @@
                 <Button text="Zatrzymaj" fx:id="stopButton" onAction="#handlePauseSimulation"/>
             </HBox>
             <HBox spacing="10" alignment="CENTER">
-                <Button text="Wyświetl zwierzęta z najpopularniejszym genotypem" fx:id="highlightGenomeButton" onAction="#handleHighlightGenome"/>
-                <Button text="Wyświetl preferowane przez rośliny pola" fx:id="highlightPreferredGrassButton" onAction="#highlightPreferredGrassCells" />
+                <Button text="Wyświetl zwierzęta z najpopularniejszym genotypem" fx:id="highlightGenomeButton"
+                        onAction="#handleHighlightGenome"/>
+                <Button text="Wyświetl preferowane przez rośliny pola" fx:id="highlightPreferredGrassButton"
+                        onAction="#highlightPreferredGrassCells"/>
             </HBox>
         </VBox>
     </bottom>

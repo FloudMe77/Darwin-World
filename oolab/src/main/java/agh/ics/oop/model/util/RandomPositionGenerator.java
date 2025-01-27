@@ -10,7 +10,7 @@ public class RandomPositionGenerator implements Iterable<Vector2d> {
     private final int count;
     private final List<Vector2d> allPossiblePositions;
 
-    public RandomPositionGenerator(Vector2d lowerLeft, Vector2d upperRight,int count ) {
+    public RandomPositionGenerator(Vector2d lowerLeft, Vector2d upperRight, int count) {
         this.lowerLeft = lowerLeft;
         this.upperRight = upperRight;
         this.count = count;
@@ -22,8 +22,8 @@ public class RandomPositionGenerator implements Iterable<Vector2d> {
     private List<Vector2d> findAllPositions() {
         List<Vector2d> allPossiblePositions = new ArrayList<>();
 
-        for (int x = lowerLeft.x(); x < upperRight.x()+1; x++) {
-            for (int y = lowerLeft.y(); y < upperRight.y()+1; y++) {
+        for (int x = lowerLeft.x(); x < upperRight.x() + 1; x++) {
+            for (int y = lowerLeft.y(); y < upperRight.y() + 1; y++) {
                 allPossiblePositions.add(new Vector2d(x, y));
             }
         }

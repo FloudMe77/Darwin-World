@@ -1,4 +1,4 @@
-package agh.ics.oop.model.MapObjects;
+package agh.ics.oop.model.MapObjects; // nazwy pakietów małymi literami
 
 import agh.ics.oop.model.genomes.Genome;
 import agh.ics.oop.model.genomes.GenomeDirection;
@@ -19,7 +19,7 @@ public abstract class AbstractAnimal implements WorldElement {
         // losowy kierunek początkowy
         Random random = new Random();
 
-        currentIndexOfGen = random.nextInt(0,genome.getGenLength());
+        currentIndexOfGen = random.nextInt(0, genome.getGenLength());
         GenomeDirection genomeDirection = genome.getGenVal(currentIndexOfGen);
         currentDirection = currentDirection.getDirection(genomeDirection);
     }
@@ -38,7 +38,7 @@ public abstract class AbstractAnimal implements WorldElement {
         return currentDirection;
     }
 
-    public GenomeDirection getCurrentGenome(){
+    public GenomeDirection getCurrentGenome() { // raczej Gene
         return genome.getGenVal(currentIndexOfGen);
     }
 
