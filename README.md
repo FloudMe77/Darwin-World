@@ -1,4 +1,4 @@
-# Projekt: Darwin-World
+# Project: Darwin-World
 
 A Java desktop application that simulates an ecosystem based on 
 Charles Darwin's theory of natural selection. Users can customize map,
@@ -14,8 +14,8 @@ Paweł Gadomski [[Magmusacy]](https://github.com/Magmusacy)
 
 the project was carried out as part of the "Object-Oriented Programming" course at the AGH University of Krakow.
 
-The full content of the task being carried out is available [here](https://github.com/Soamid/obiektowe-lab/tree/master/proj) 
-(variant D4).
+The full content of the task being carried out is available [here](https://github.com/Soamid/obiektowe-lab/tree/master/proj).
+(variant D2).
 
 ![image1](vis/board.png)
 
@@ -137,5 +137,5 @@ To run the project locally, follow these steps:
 4. Run the application:
 
    ```bash
-   ./gradlew run --args="fileInName fileOutName"
+   ./gradlew run
    ```
