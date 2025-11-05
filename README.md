@@ -119,7 +119,7 @@ To run the project locally, follow these steps:
 1. Clone the repository:
 
    ```bash
-   git clone https://github.com/FloudMe77/traffic_lights_system.git
+   git clone https://github.com/FloudMe77/Darwin-World.git
    ```
 
 2. Navigate to the project directory:
